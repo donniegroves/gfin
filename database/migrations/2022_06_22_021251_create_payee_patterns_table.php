@@ -13,17 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('payee_patterns', function (Blueprint $table) {
             $table->id();
-            $table->date('trans_date');
             $table->foreignId('payee_id')
-                ->nullable()
                 ->constrained()
                 ->onUpdate('cascade')
-                ->onDelete('set null');
-            $table->string('description')->default('');
-            $table->decimal('amount');
-            $table->boolean('verified')->default(false);
+                ->onDelete('cascade');
+            $table->string('pattern')->default('');
             $table->timestamps();
         });
     }
@@ -35,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transactions');
+        Schema::dropIfExists('payee_patterns');
     }
 };
