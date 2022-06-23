@@ -38,8 +38,10 @@ class TransactionController extends Controller
         $new_trans = new Transaction;
         $new_trans->trans_date = $request->transaction["trans_date"];
         $new_trans->payee_id = $request->transaction["payee_id"];
-        $new_trans->description = $request->transaction["description"];
-        $new_trans->amount = $request->transaction["amount"];
+        $new_trans->orig_detail = $request->transaction["orig_detail"];
+        $new_trans->new_detail = $request->transaction["new_detail"];
+        $new_trans->orig_amt = $request->transaction["orig_amt"];
+        $new_trans->new_amt = $request->transaction["new_amt"];
         $new_trans->verified = $request->transaction["verified"];
         $new_trans->save();
 
@@ -77,7 +79,20 @@ class TransactionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $existing_trans = Transaction::find($id);
+
+        if ($existing_trans){
+            $existing_trans->trans_date = !empty($request->transaction['trans_date']) ? $request->transaction['trans_date'] : $existing_trans->trans_date;
+            $existing_trans->payee_id = !empty($request->transaction['payee_id']) ? $request->transaction['payee_id'] : $existing_trans->payee_id;
+            $existing_trans->new_detail = !empty($request->transaction['new_detail']) ? $request->transaction['new_detail'] : $existing_trans->new_detail;
+            $existing_trans->new_amt = !empty($request->transaction['new_amt']) ? $request->transaction['new_amt'] : $existing_trans->new_amt;
+            $existing_trans->verified = isset($request->transaction['verified']) ? (bool) $request->transaction['verified'] : $existing_trans->verified;
+            $existing_trans->save();
+
+            return $existing_trans;
+        }
+
+        return 'Transaction not found.';
     }
 
     /**
@@ -88,6 +103,13 @@ class TransactionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $existing_trans = Transaction::find($id);
+
+        if ($existing_trans){
+            $existing_trans->delete();
+            return 'Transaction deleted.';
+        }
+
+        return 'Transaction not found.';
     }
 }

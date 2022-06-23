@@ -21,8 +21,10 @@ return new class extends Migration
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('set null');
-            $table->string('description')->default('');
-            $table->decimal('amount');
+            $table->string('orig_detail')->default('');
+            $table->string('new_detail')->nullable()->default(null);
+            $table->decimal('orig_amt');
+            $table->decimal('new_amt')->nullable()->default(null);
             $table->boolean('verified')->default(false);
             $table->timestamps();
         });

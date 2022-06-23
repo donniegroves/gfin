@@ -23,8 +23,8 @@ class TransactionFactory extends Factory
         return [
             'trans_date' => $rand_date,
             'payee_id' => Payee::all()->random()->id,
-            'description' => rtrim(strtoupper($this->faker->text(32)),'.'),
-            'amount' => $this->faker->numberBetween(0,1000) . '.' . $this->faker->numerify('##'),
+            'orig_detail' => rtrim(strtoupper($this->faker->text(32)),'.'),
+            'orig_amt' => $this->faker->numberBetween(0,1000) . '.' . $this->faker->numerify('##'),
             'verified' => rand(0,1),
         ];
     }
