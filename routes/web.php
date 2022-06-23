@@ -13,6 +13,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/welcome', function(){
     return view('welcome');
 });
+
+Route::get('/', function () {
+    return view('vue');
+});
+
+/*
+1. Go to localhost:8000/test
+2. web.php routes are checked for a get('/test'). If found, looks at the parameter in view('xxxx').
+3. looks in /resources/views/xxxx.blade.php
+4. looks in xxxx.blade.php for a div with an id (example <div id="yyyy"></div>)
+5. gets html from Yyyy.vue
+*/

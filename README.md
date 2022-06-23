@@ -14,3 +14,9 @@ sudo update-alternatives --config iptables (EDIT: enter 1)
 
 # Starting dev server
 `php artisan serve`
+
+# Starting vue
+`npm run hot`
+
+# Problems with loading vue
+Referred to https://www.webdesignvista.com/vue-hot-reload-with-laravel-mix/
