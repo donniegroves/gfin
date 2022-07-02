@@ -36,13 +36,15 @@ class TransactionController extends Controller
     public function store(Request $request)
     {
         $new_trans = new Transaction;
+        // required input
         $new_trans->trans_date = $request->transaction["trans_date"];
-        $new_trans->payee_id = $request->transaction["payee_id"];
         $new_trans->orig_detail = $request->transaction["orig_detail"];
-        $new_trans->new_detail = $request->transaction["new_detail"];
         $new_trans->orig_amt = $request->transaction["orig_amt"];
-        $new_trans->new_amt = $request->transaction["new_amt"];
-        $new_trans->verified = $request->transaction["verified"];
+
+        // optional input
+        $new_trans->payee_id = $request->transaction["payee_id"] ?? null;
+        $new_trans->verified = $request->transaction["verified"] ?? 0;
+        
         $new_trans->save();
 
         return $new_trans;
