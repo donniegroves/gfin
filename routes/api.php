@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\PayeeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +26,5 @@ Route::prefix('/transaction')->group(function(){
     Route::put('{id}', [TransactionController::class, 'update']);
     Route::delete('{id}', [TransactionController::class, 'destroy']);
 });
+
+Route::get('/payees',[PayeeController::class, 'index']);
