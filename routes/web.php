@@ -28,3 +28,6 @@ Route::get('/inside', function () {
 4. looks in xxxx.blade.php for a div with an id (example <div id="yyyy"></div>)
 5. gets html from Yyyy.vue
 */
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

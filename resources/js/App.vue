@@ -1,12 +1,11 @@
 <template>
-    <div class="appContainer">
+    <div class="container-fluid">
         <div class="heading">
             <h2 id="title">GFin (App.vue)</h2>
         </div>
         <transactions-list />
         <transaction-add />
     </div>
-    
 </template>
 
 <script>
