@@ -3,8 +3,8 @@ require('./bootstrap');
 import {createApp} from 'vue'
 import App from './App.vue'
 import * as VueRouter from 'vue-router'
-import ViewSettings from './ViewSettings.vue'
-import ViewTList from './ViewTList.vue'
+import ViewSettings from '../views/ViewSettings.vue'
+import ViewTList from '../views/ViewTList.vue'
 
 
 /* import the fontawesome core */

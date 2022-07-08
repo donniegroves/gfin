@@ -8,7 +8,7 @@
     />
 </template>
 <script>
-import TransactionRow from "./TransactionRow";
+import TransactionRow from "../components/TransactionRow.vue";
 
 export default{
     data: function(){
