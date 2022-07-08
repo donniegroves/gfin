@@ -8,7 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="{{ mix('css/base.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ mix('css/sba2.css') }}">
 </head>
-<body>
+<body id="page-top">
 	<div id="app"></div>
 	<script src="{{ mix('js/app.js') }}"></script>
 </body>
