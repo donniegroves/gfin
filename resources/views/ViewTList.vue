@@ -1,4 +1,5 @@
 <template>
+    <TransactionAdd />
     <TransactionRow v-for="(tran, index) in transactions" 
         :key="index" 
         :date="tran.trans_date"
@@ -9,6 +10,7 @@
 </template>
 <script>
 import TransactionRow from "../components/TransactionRow.vue";
+import TransactionAdd from "../components/TransactionAdd.vue";
 
 export default{
     data: function(){
@@ -19,6 +21,7 @@ export default{
     },
     components: {
         TransactionRow,
+        TransactionAdd,
     },
     methods: {
         getTransactions(){

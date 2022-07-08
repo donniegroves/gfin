@@ -4,11 +4,11 @@
         <input type="text" v-model="transaction.payee"/>
         <input type="text" v-model="transaction.orig_detail"/>
         <input type="number" min="1" step="any" v-model="transaction.orig_amt"/>
-        <font-awesome-icon
+        <button
             icon="plus-square"
             @click="addTransaction()"
-            :class="[ transaction.trans_date && transaction.orig_detail && transaction.orig_amt ? 'active' : 'inactive', 'plus']"
-        />
+            :class="[ transaction.trans_date && transaction.orig_detail && transaction.orig_amt ? 'active' : 'inactive', 'addtrans']"
+        >Add Transaction</button>
     </div>
 </template>
 
@@ -49,7 +49,7 @@ export default{
 </script>
 
 <style scoped>
-.plus{
+.addtrans{
     font-size: 20px;
 }
 .active {
