@@ -1,5 +1,5 @@
 <template>
-    <div class="topbar">TopBar</div>
+    <div class="topbar"><code>TopBar</code></div>
 </template>
 
 <script>

@@ -5,7 +5,8 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>GFin</title>
-	<link rel="stylesheet" type="text/css" href="{{ mix('css/app.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ mix('css/base.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ mix('css/sba2.css') }}">
 </head>
 <body>
 	<div id="app"></div>
