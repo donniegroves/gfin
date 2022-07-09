@@ -22,6 +22,10 @@ const routes = [
         path: '/settings',
         name: 'ViewSettings',
         component: ViewSettings
+    },
+    {
+        path: '/inside',
+        component: ViewDashboard
     }
 ];
 
