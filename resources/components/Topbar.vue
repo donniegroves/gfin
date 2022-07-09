@@ -25,7 +25,7 @@
                 <span class="badge badge-danger badge-counter">{{ notifs_quant }}</span>
             </a>
             <!-- Dropdown - Alerts -->
-            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in show">
+            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in">
                 <h6 class="dropdown-header">
                     Alerts Center
                 </h6>
@@ -76,7 +76,7 @@
                     src="img/undraw_profile.svg">
             </a>
             <!-- Dropdown - User Information -->
-            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in show">
+            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in">
                 <a class="dropdown-item" href="#">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile

@@ -5,7 +5,7 @@
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
-
+                <Dashboard />
             </div>
         </div>
     </div>
@@ -13,13 +13,15 @@
 
 <script>
     import Topbar from './Topbar.vue';
+    import Dashboard from './Dashboard.vue';
     export default {
         data: function(){
             return {
             }
         },
         components: {
-            Topbar
+            Topbar,
+            Dashboard
         }
     }
 </script>
