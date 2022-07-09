@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper">
-        <Sidebar />
+        <Sidebar :author="this.author"/>
         <Topbar />
         <p>
             <!-- use the router-link component for navigation. -->
@@ -18,12 +18,24 @@
 </template>
 
 <script>
+import * as $ from 'jquery'; 
 import Sidebar from './components/Sidebar.vue';
 import Topbar from './components/Topbar.vue';
 export default{
+    data: function(){
+        return {
+            author: 'Donnie Groves'
+        }
+    },
     components: {
         Sidebar,
         Topbar
+    },
+    mounted(){
+        $("#sidebarToggle, #sidebarToggleTop").on('click', function(e) {
+            $("body").toggleClass("sidebar-toggled");
+            $(".sidebar").toggleClass("toggled");
+        });
     }
 }
 </script>
