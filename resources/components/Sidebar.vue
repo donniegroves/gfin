@@ -19,18 +19,18 @@
         <div class="sidebar-heading">Main</div>
 
         <li class="nav-item active">
-            <a class="nav-link" href="#">
+            <router-link to="/dashboard" class="nav-link">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Dashboard</span>
-            </a>
+            </router-link>
         </li>
 
         
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <router-link to="/tlist" class="nav-link">
                 <i class="fa-regular fa-fw fa-rectangle-list"></i>
                 <span>Transactions</span>
-            </a>
+            </router-link>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#">
@@ -51,10 +51,10 @@
         <div class="sidebar-heading">Settings</div>
 
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <router-link to="/settings" class="nav-link">
                 <i class="fa-solid fa-fw fa-gear"></i>
                 <span>General</span>
-            </a>
+            </router-link>
         </li>
 
         <!-- Nav Item - Charts -->

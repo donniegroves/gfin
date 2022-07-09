@@ -5,17 +5,23 @@ import App from '../App.vue'
 import * as VueRouter from 'vue-router'
 import ViewSettings from '../views/ViewSettings.vue'
 import ViewTList from '../views/ViewTList.vue'
+import ViewDashboard from '../views/ViewDashboard.vue'
 
 const routes = [
     {
-        path: '/settings',
-        name: 'ViewSettings',
-        component: ViewSettings
+        path: '/dashboard',
+        name: 'ViewDashboard',
+        component: ViewDashboard
     },
     {
         path: '/tlist',
         name: 'ViewTList',
         component: ViewTList
+    },
+    {
+        path: '/settings',
+        name: 'ViewSettings',
+        component: ViewSettings
     }
 ];
 

@@ -5,7 +5,7 @@
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
-                <Dashboard />
+                <router-view></router-view>
             </div>
         </div>
     </div>
