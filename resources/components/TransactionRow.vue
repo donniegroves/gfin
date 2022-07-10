@@ -1,11 +1,13 @@
 <template>
-    <div class="transactionRow">
-        <div class="field">{{ date }}</div>
-        <div class="field">{{ payee.name }}</div>
-        <div class="field">{{ desc }}</div>
-        <div class="field">{{ amt }}</div>
-        <div class="field col-12"><button>Edit</button></div>
-        <div class="field"><button>Delete</button></div>
+    <div class="transactionRow row pt-1 pb-1 align-items-center">
+        <div class="col-2">{{ date }}</div>
+        <div class="col-3 transactionRow-payee">{{ payee.name }}</div>
+        <div class="col-4 transactionRow-desc">{{ desc }}</div>
+        <div class="col-1">{{ amt }}</div>
+        <div class="col-2 text-right p-0">
+                <button>Edit</button>
+                <button class="ml-2">Delete</button>
+        </div>
     </div>
 </template>
 
@@ -22,11 +24,12 @@ export default{
 
 <style scoped>
 .transactionRow{
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 10px;
-    height: 25px;
+    border-bottom: grey;
+    border-bottom-width: thin;
+    border-bottom-style: solid;
+}
+.transactionRow-desc, .transactionRow-payee{
+    overflow: hidden;
+    white-space: nowrap;
 }
 </style>

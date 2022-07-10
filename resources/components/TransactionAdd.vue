@@ -1,14 +1,24 @@
 <template>
-    <div class="transactionAdd">
-        <input type="date" v-model="transaction.trans_date"/>
-        <input type="text" v-model="transaction.payee"/>
-        <input type="text" v-model="transaction.orig_detail"/>
-        <input type="number" min="1" step="any" v-model="transaction.orig_amt"/>
-        <button
-            icon="plus-square"
-            @click="addTransaction()"
-            :class="[ transaction.trans_date && transaction.orig_detail && transaction.orig_amt ? 'active' : 'inactive', 'addtrans']"
-        >Add Transaction</button>
+    <div class="row pt-1 pb-1 align-items-center">
+        <div class="col-2 pl-0">
+            <input type="date" v-model="transaction.trans_date"/>
+        </div>
+        <div class="col-3 pl-2">
+            <input type="text" v-model="transaction.payee"/>
+        </div>
+        <div class="col-4 pl-2">
+            <input type="text" v-model="transaction.orig_detail"/>
+        </div>
+        <div class="col-1 p-0">
+            <input type="number" min="1" step="any" v-model="transaction.orig_amt"/>
+        </div>
+        <div class="col-2 pl-2 pr-0 text-right">
+            <button
+                icon="plus-square"
+                @click="addTransaction()"
+                :class="[ transaction.trans_date && transaction.orig_detail && transaction.orig_amt ? 'active' : 'inactive']"
+            >Add</button>
+        </div>
     </div>
 </template>
 
@@ -49,9 +59,9 @@ export default{
 </script>
 
 <style scoped>
-.addtrans{
-    font-size: 20px;
-}
+input{
+    width: 100%;
+} 
 .active {
     color: #00ce25;
 }
