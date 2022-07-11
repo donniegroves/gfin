@@ -1,5 +1,6 @@
 {
     "/js/app.js": "/js/app.js",
     "/css/base.css": "/css/base.css",
-    "/css/sba2.css": "/css/sba2.css"
+    "/css/sba2.css": "/css/sba2.css",
+    "/css/vue_select.css": "/css/vue_select.css"
 }

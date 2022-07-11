@@ -6,6 +6,7 @@ import * as VueRouter from 'vue-router'
 import ViewSettings from '../views/ViewSettings.vue'
 import ViewTList from '../views/ViewTList.vue'
 import ViewDashboard from '../views/ViewDashboard.vue'
+import vSelect from 'vue-select'
 
 const routes = [
     {
@@ -35,5 +36,6 @@ const router = VueRouter.createRouter({
 })
 
 createApp(App)
+.component('v-select', vSelect)
 .use(router)
 .mount('#app')

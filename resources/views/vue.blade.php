@@ -7,6 +7,7 @@
 	<title>GFin</title>
 	<link rel="stylesheet" type="text/css" href="{{ mix('css/base.css') }}">
 	<link rel="stylesheet" type="text/css" href="{{ mix('css/sba2.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ mix('css/vue_select.css') }}">
 </head>
 <body id="page-top">
 	<div id="app"></div>

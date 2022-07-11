@@ -16,4 +16,7 @@ mix.js('resources/js/app.js', 'public/js').vue()
     .styles([
         'resources/css/sba2.css'
     ], 'public/css/sba2.css')
+    .styles([
+        'node_modules/vue-select/dist/vue-select.css'
+    ], 'public/css/vue_select.css')
     .sourceMaps();
