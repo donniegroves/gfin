@@ -1,12 +1,16 @@
 <template>
-    <TransactionAdd />
-    <TransactionRow v-for="(tran, index) in transactions" 
+    <TransactionAdd 
+        :all_payees_arr="this.all_payees_arr"
+    />
+
+    <!-- <TransactionRow v-for="(tran, index) in transactions" 
         :key="index" 
         :date="tran.trans_date"
-        :payee="payees[tran.payee_id] ?? ''"
         :desc="tran.orig_detail"
         :amt="tran.orig_amt"
-    />
+    /> -->
+    <!-- :payee="payee_name_hashmap[tran.payee_id] ?? ''" -->
+
 </template>
 <script>
 import TransactionRow from "../components/TransactionRow.vue";
@@ -16,7 +20,12 @@ export default{
     data: function(){
         return {
             transactions: {},
-            payees: {}
+            all_payees_arr: [
+                {
+                    id: 0,
+                    name: 'N/A'
+                }
+            ]
         }
     },
     components: {
@@ -43,13 +52,17 @@ export default{
             })
             .then ( response => {
                 if( response.status == 200 ){
-                    this.payees = response.data;
+                    this.all_payees_arr = Object.values(response.data);
+                    this.all_payees_arr.unshift({
+                        id: 0,
+                        name: 'N/A'
+                    });
                 }
             })
             .catch( error => {
                 console.log(error);
             });
-        },
+        }
     },
     created: function(){
         this.getTransactions();
@@ -59,4 +72,22 @@ export default{
 </script>
 
 <style scoped>
+#topbar{
+    height: 50px;
+    border-bottom-style: solid;
+    border-color: gray;
+}
+#trans-title-row{
+    background: darkgray
+}
+#trans-title{
+    color: black;
+}
+#trans-id-text{
+    color: white;
+}
+.charge-section input{
+    max-width: 100px;
+    text-align: center;
+}
 </style>
