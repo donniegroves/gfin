@@ -5,10 +5,13 @@
 </template>
 
 <script>
+import {store} from '../js/store.js'
+
 export default{
     data: function(){
         return {
-            author: 'Donnie Groves'
+            author: 'Donnie Groves',
+            store
         }
     }
 }
