@@ -1,48 +1,30 @@
 <template>
-    <TransactionAdd @transactionAdded="refreshView"/>
+
+    <PayeeAdd @payeeAdded="refreshView"/>
     <hr />
-    <TransactionRow v-for="(tran, index) in transactions" 
-        :tran_id="tran.id" 
-        :date="tran.trans_date"
+
+    <!-- <PayeeRow v-for="(payee, index) in payees" 
+        :name="tran.name" 
         :payee_id="tran.payee_id"
-        :desc="tran.new_detail == null ? tran.orig_detail : tran.new_detail"
-        :amt="tran.new_amt == null ? tran.orig_amt : tran.new_amt"
-        @transactionDeleted="refreshView"
-    />
+        @payeeDeleted="refreshView"
+    /> -->
 
 </template>
 <script>
 import {store} from '../js/store.js'
-import TransactionRow from "../components/TransactionRow.vue";
-import TransactionAdd from "../components/TransactionAdd.vue";
-
+import PayeeAdd from "../components/PayeeAdd.vue";
 export default{
     data: function(){
         return {
-            transactions: {},
             store
         }
     },
     components: {
-        TransactionRow,
-        TransactionAdd,
+        PayeeAdd
     },
     methods: {
         refreshView(){
-            this.getTransactions();
-        },
-        getTransactions(){
-            console.log('getTransactions');
-            axios.get('api/transactions', {
-            })
-            .then ( response => {
-                if( response.status == 200 ){
-                    this.transactions = response.data;
-                }
-            })
-            .catch( error => {
-                console.log(error);
-            })
+            this.getPayees();
         },
         getPayees(){
             console.log('getPayees');
@@ -63,7 +45,6 @@ export default{
         }
     },
     created: function(){
-        this.getTransactions();
         this.getPayees();
     }
 }

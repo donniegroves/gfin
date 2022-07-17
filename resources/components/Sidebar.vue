@@ -57,11 +57,12 @@
             </router-link>
         </li>
 
-        <!-- Nav Item - Charts -->
+        <!-- Nav Item - Payees -->
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <router-link to="/plist" class="nav-link">
                 <i class="fa-regular fa-fw fa-building"></i>
-                <span>Payees</span></a>
+                <span>Payees</span>
+            </router-link>
         </li>
 
         <!-- Nav Item - Tables -->
