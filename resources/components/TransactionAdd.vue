@@ -44,7 +44,7 @@ export default{
         addTransaction(){
             axios.post('api/transaction/store', {
                 transaction: {
-                    payee_id: this.transaction.payee.id,
+                    payee_id: this.transaction.payee.id >= 1 ? this.transaction.payee.id : null,
                     orig_amt: this.transaction.orig_amt,
                     trans_date: this.transaction.trans_date,
                     orig_detail: this.transaction.orig_detail

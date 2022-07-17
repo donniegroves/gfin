@@ -14,7 +14,7 @@ class PayeeController extends Controller
      */
     public function index()
     {
-        return Payee::orderBy('name', 'ASC')->get()->keyBy('id');
+        return Payee::orderBy('name', 'ASC')->get();
     }
 
     /**
