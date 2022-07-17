@@ -5,8 +5,8 @@
         <div class="col-4 transactionRow-desc">{{ desc }}</div>
         <div class="col-1">{{ amt }}</div>
         <div class="col-2 text-right p-0">
-                <button>Edit</button>
-                <button class="ml-2">Delete</button>
+            <button>Edit</button>
+            <button @click="deleteTransaction()" class="ml-2">Delete</button>
         </div>
     </div>
 </template>
@@ -21,10 +21,20 @@ export default{
             all_payees: store.all_payees
         }
     },
+    methods: {
+        deleteTransaction(){
+            axios.delete('api/transaction/' + this.tran_id)
+            .then (response => {
+                if( response.status == 200 ){
+                    this.$emit('transactionDeleted');
+                }
+            })
+            .catch( error => {
+                console.log(error);
+            });
+        }
+    },
     computed: {
-        now() {
-            return Date.now();
-        },
         getPayeeName(){
             let found = this.all_payees.find(element => element.id == this.payee_id);
             return found ? found.name : '';

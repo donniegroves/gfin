@@ -7,6 +7,7 @@
         :payee_id="tran.payee_id"
         :desc="tran.new_detail == null ? tran.orig_detail : tran.new_detail"
         :amt="tran.new_amt == null ? tran.orig_amt : tran.new_amt"
+        @transactionDeleted="refreshView"
     />
 
 </template>

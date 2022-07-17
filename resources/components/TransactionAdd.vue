@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import {store} from '../js/store.js'
 
 export default{
