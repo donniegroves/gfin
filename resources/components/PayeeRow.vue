@@ -3,10 +3,11 @@
         <div class="col-3">
             <input type="text" :value="this.payee_name" @change="setPayeeName">
         </div>
-        <div class="col-2 text-left">
+        <div class="col-3 text-left">
             <button v-if="this.payee_name !== payee.name" @click="confirmPayeeChange()">Confirm</button>
             <button v-if="this.payee_name !== payee.name" @click="revertChange()">Revert</button>
             <button @click="deletePayee()">Delete</button>
+            <button @click="showPatterns()">Show Patterns</button>
         </div>
     </div>
 </template>

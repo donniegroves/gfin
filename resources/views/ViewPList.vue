@@ -43,6 +43,9 @@ export default{
             .catch( error => {
                 console.log(error);
             });
+        },
+        getPatterns(){
+            console.log('ViewPList getPatterns');
         }
     },
     created: function(){
