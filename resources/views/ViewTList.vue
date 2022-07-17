@@ -1,5 +1,5 @@
 <template>
-    <TransactionAdd />
+    <TransactionAdd @transactionAdded="refreshView"/>
 
     <TransactionRow v-for="(tran, index) in transactions" 
         :tran_id="tran.id" 
@@ -27,6 +27,9 @@ export default{
         TransactionAdd,
     },
     methods: {
+        refreshView(){
+            this.getTransactions();
+        },
         getTransactions(){
             console.log('getTransactions');
             axios.get('api/transactions', {

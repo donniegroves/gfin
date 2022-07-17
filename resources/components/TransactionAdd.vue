@@ -54,6 +54,7 @@ export default{
                 if( response.status == 201 ){
                     this.transaction.trans_date = this.transaction.orig_detail = this.transaction.orig_amt = "";
                     this.transaction.payee = store.all_payees[0];
+                    this.$emit('transactionAdded');
                 }
             })
             .catch( error => {
