@@ -1,18 +1,17 @@
 <template>
-
     <PayeeAdd @payeeAdded="refreshView"/>
     <hr />
-
-    <!-- <PayeeRow v-for="(payee, index) in payees" 
-        :name="tran.name" 
-        :payee_id="tran.payee_id"
+    <PayeeRow v-for="(payee, index) in store.all_payees"
+        :payee="payee"
+        :key="payee.id"
+        @editPayee="refreshView"
         @payeeDeleted="refreshView"
-    /> -->
-
+    />
 </template>
 <script>
 import {store} from '../js/store.js'
 import PayeeAdd from "../components/PayeeAdd.vue";
+import PayeeRow from "../components/PayeeRow.vue";
 export default{
     data: function(){
         return {
@@ -20,14 +19,16 @@ export default{
         }
     },
     components: {
-        PayeeAdd
+        PayeeAdd,
+        PayeeRow
     },
     methods: {
         refreshView(){
+            console.log('refreshView');
             this.getPayees();
         },
         getPayees(){
-            console.log('getPayees');
+            console.log('ViewPList - getPayees');
             axios.get('api/payees', {
             })
             .then ( response => {

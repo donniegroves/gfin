@@ -30,4 +30,6 @@ Route::prefix('/transaction')->group(function(){
 Route::get('/payees',[PayeeController::class, 'index']);
 Route::prefix('/payee')->group(function(){
     Route::post('/store', [PayeeController::class, 'store']);
+    Route::put('{id}', [PayeeController::class, 'update']);
+    Route::delete('{id}', [PayeeController::class, 'destroy']);
 });
