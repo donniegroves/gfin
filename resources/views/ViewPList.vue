@@ -1,6 +1,8 @@
 <template>
+    <h2>Add a Payee:</h2>
     <PayeeAdd @payeeAdded="refreshView"/>
     <hr />
+    <h2>Payees:</h2>
     <PayeeRow v-for="(payee, index) in store.all_payees"
         :payee="payee"
         :key="payee.id"

@@ -1,13 +1,14 @@
 <template>
     <div class="row pt-1 pb-1 align-items-center">
         <div class="col-3">
-            <input type="text" v-model="payee" placeholder="Company Name...">
+            <input class="form-control" id="addPayeeInput" type="text" v-model="payee" placeholder="Company Name..." />
         </div>
         <div class="col-2 text-left">
             <button
                 icon="plus-square"
                 @click="addPayee()"
-                :class="[ payee ? 'active' : 'inactive']"
+                :class="['btn', 'btn-primary']"
+                :disabled="!payee"
             >Add</button>
         </div>
     </div>

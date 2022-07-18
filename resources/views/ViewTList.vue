@@ -1,6 +1,8 @@
 <template>
+    <h2>Add a Transaction:</h2>
     <TransactionAdd @transactionAdded="refreshView"/>
     <hr />
+    <h2>Transactions:</h2>
     <TransactionRow v-for="(tran, index) in transactions" 
         :tran_id="tran.id" 
         :date="tran.trans_date"

@@ -1,15 +1,19 @@
 <template>
-    <div class="row pt-1 pb-1 align-items-center">
-        <div class="col-3">
-            <input type="text" :value="this.payee_name" @change="setPayeeName">
+    <div class="row pb-2 align-items-center">
+        <div class="col-6">
+            <div class="row">
+                <div class="col-9">
+                    <input class="form-control" type="text" :value="this.payee_name" @change="setPayeeName" />
+                </div>
+                <div class="col-3">
+                    <button v-if="this.payee_name !== payee.name" @click="confirmPayeeChange()" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-check"></i></button>
+                    <button v-if="this.payee_name !== payee.name" @click="revertChange()" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-rotate-left"></i></button>
+                    <button @click="deletePayee()" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
+                    <button @click="showPatterns()" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+                </div>
+            </div>
         </div>
-        <div class="col-3 text-left">
-            <button v-if="this.payee_name !== payee.name" @click="confirmPayeeChange()">Confirm</button>
-            <button v-if="this.payee_name !== payee.name" @click="revertChange()">Revert</button>
-            <button @click="deletePayee()">Delete</button>
-            <button @click="showPatterns()">Show Patterns</button>
-        </div>
-        <div class="col-3">
+        <div class="col-6">
             Patterns: {{ this.payee_patterns }}
         </div>
     </div>
@@ -76,12 +80,7 @@ export default{
 </script>
 
 <style scoped>
-.row{
-    border-bottom: rgb(201, 201, 201);
-    border-bottom-width: thin;
-    border-bottom-style: solid;
-}
-input{
-    width: 100%;
+button{
+    margin: 0 3px;
 }
 </style>
