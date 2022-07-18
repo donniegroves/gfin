@@ -9,6 +9,9 @@
             <button @click="deletePayee()">Delete</button>
             <button @click="showPatterns()">Show Patterns</button>
         </div>
+        <div class="col-3">
+            Patterns: {{ this.payee_patterns }}
+        </div>
     </div>
 </template>
 
@@ -17,7 +20,8 @@ export default{
     props: ['payee'],
     data: function(){
         return {
-            payee_name: this.payee.name
+            payee_name: this.payee.name,
+            payee_patterns: []
         }
     },
     methods: {
@@ -48,6 +52,19 @@ export default{
             .then (response => {
                 if( response.status == 200 ){
                     this.$emit('payeeDeleted');
+                }
+            })
+            .catch( error => {
+                console.log(error);
+            });
+        },
+        showPatterns(){
+            console.log('PayeeRow showPatterns');
+            axios.get('api/patterns/' + this.payee.id, {
+            })
+            .then ( response => {
+                if( response.status == 200 ){
+                    this.payee_patterns = Object.values(response.data);
                 }
             })
             .catch( error => {

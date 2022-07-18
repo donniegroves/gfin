@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PayeeController;
+use App\Http\Controllers\PayeePatternsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,3 +34,5 @@ Route::prefix('/payee')->group(function(){
     Route::put('{id}', [PayeeController::class, 'update']);
     Route::delete('{id}', [PayeeController::class, 'destroy']);
 });
+
+Route::get('/patterns/{payee_id?}',[PayeePatternsController::class, 'index']);
