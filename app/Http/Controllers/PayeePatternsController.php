@@ -69,7 +69,16 @@ class PayeePatternsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $existing_pattern = PayeePattern::find($id);
+
+        if ($existing_pattern){
+            $existing_pattern->pattern = !empty($request->pattern['pattern']) ? $request->pattern['pattern'] : $existing_pattern->pattern;
+            $existing_pattern->save();
+
+            return $existing_pattern;
+        }
+
+        return 'Pattern not found.';
     }
 
     /**
@@ -80,6 +89,13 @@ class PayeePatternsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $existing_pattern = PayeePattern::find($id);
+
+        if ($existing_pattern){
+            $existing_pattern->delete();
+            return 'Pattern deleted.';
+        }
+
+        return 'Pattern not found.';
     }
 }

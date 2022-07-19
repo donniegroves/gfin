@@ -35,4 +35,9 @@ Route::prefix('/payee')->group(function(){
     Route::delete('{id}', [PayeeController::class, 'destroy']);
 });
 
-Route::get('/patterns/{payee_id?}',[PayeePatternsController::class, 'index']);
+Route::get('/payeepatterns/{payee_id?}',[PayeePatternsController::class, 'index']);
+Route::prefix('/payeepattern')->group(function(){
+    Route::put('{id}',[PayeePatternsController::class, 'update']);
+    Route::delete('{id}', [PayeePatternsController::class, 'destroy']);
+});
+

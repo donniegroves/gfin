@@ -1,37 +1,44 @@
 <template>
-    <div class="row pb-2 align-items-center">
+    <div class="row pb-2 align-items-baseline">
         <div class="col-6">
-            <div class="row">
-                <div class="col-9">
-                    <input class="form-control" type="text" :value="this.payee_name" @change="setPayeeName" />
+            <div class="row align-items-center">
+                <div class="col-8 pr-0">
+                    <input class="form-control" type="text" v-model="cur_payee_name" />
                 </div>
-                <div class="col-3">
-                    <button v-if="this.payee_name !== payee.name" @click="confirmPayeeChange()" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-check"></i></button>
-                    <button v-if="this.payee_name !== payee.name" @click="revertChange()" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-rotate-left"></i></button>
+                <div class="col-4 pl-1">
+                    <button v-if="cur_payee_name !== orig_payee_name" @click="confirmPayeeChange()" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-check"></i></button>
+                    <button v-if="cur_payee_name !== orig_payee_name" @click="revertChange()" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-rotate-left"></i></button>
                     <button @click="deletePayee()" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
                     <button @click="showPatterns()" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
                 </div>
             </div>
         </div>
         <div class="col-6">
-            Patterns: {{ this.payee_patterns }}
+            <PatternRow v-for="(pattern, index) in payee_patterns" 
+                :key="pattern.id"
+                :pattern="pattern"
+                @editPattern="showPatterns"
+                @patternDeleted="showPatterns"
+            />
         </div>
     </div>
 </template>
 
 <script>
+import PatternRow from "../components/PatternRow.vue";
 export default{
     props: ['payee'],
+    components: {
+        PatternRow
+    },
     data: function(){
         return {
-            payee_name: this.payee.name,
+            cur_payee_name: this.payee.name,
+            orig_payee_name: this.payee.name,
             payee_patterns: []
         }
     },
     methods: {
-        setPayeeName(x){
-            this.payee_name = x.target.value
-        },
         confirmPayeeChange(){
             axios.put('api/payee/' + this.payee.id,{
                 payee: {
@@ -40,7 +47,6 @@ export default{
             })
             .then (response => {
                 if( response.status == 200 ){
-                    console.log(response.data);
                     this.$emit('editPayee');
                 }
             })
@@ -49,7 +55,7 @@ export default{
             });
         },
         revertChange(){
-            this.payee_name = this.payee.name
+            this.cur_payee_name = this.orig_payee_name
         },
         deletePayee(){
             axios.delete('api/payee/' + this.payee.id)
@@ -64,7 +70,7 @@ export default{
         },
         showPatterns(){
             console.log('PayeeRow showPatterns');
-            axios.get('api/patterns/' + this.payee.id, {
+            axios.get('api/payeepatterns/' + this.payee.id, {
             })
             .then ( response => {
                 if( response.status == 200 ){
