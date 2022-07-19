@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PayeeController;
 use App\Http\Controllers\PayeePatternsController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,5 +41,12 @@ Route::prefix('/payeepattern')->group(function(){
     Route::post('/store', [PayeePatternsController::class, 'store']);
     Route::put('{id}',[PayeePatternsController::class, 'update']);
     Route::delete('{id}', [PayeePatternsController::class, 'destroy']);
+});
+
+Route::get('/categories',[CategoryController::class, 'index']);
+Route::prefix('/category')->group(function(){
+    Route::post('/store', [CategoryController::class, 'store']);
+    Route::put('{id}', [CategoryController::class, 'update']);
+    Route::delete('{id}', [CategoryController::class, 'destroy']);
 });
 

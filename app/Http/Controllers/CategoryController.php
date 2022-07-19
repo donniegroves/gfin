@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Category;
 
 class CategoryController extends Controller
 {
@@ -13,7 +14,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        return Category::orderBy('name', 'ASC')->get();
     }
 
     /**
@@ -34,7 +35,11 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $new_cat = new Category;
+        $new_cat->name = $request->category["name"];
+        $new_cat->save();
+
+        return $new_cat;
     }
 
     /**
@@ -68,7 +73,16 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $existing_cat = Category::find($id);
+
+        if ($existing_cat){
+            $existing_cat->name = !empty($request->category['name']) ? $request->category['name'] : $existing_cat->name;
+            $existing_cat->save();
+
+            return $existing_cat;
+        }
+
+        return 'Category not found.';
     }
 
     /**
@@ -79,6 +93,13 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $existing_cat = Category::find($id);
+
+        if ($existing_cat){
+            $existing_cat->delete();
+            return 'Category deleted.';
+        }
+
+        return 'Category not found.';
     }
 }
