@@ -35,7 +35,12 @@ class PayeePatternsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $pattern = new PayeePattern;
+        $pattern->pattern = $request->pattern["pattern"];
+        $pattern->payee_id = $request->pattern["payee_id"];
+        $pattern->save();
+
+        return $pattern;
     }
 
     /**

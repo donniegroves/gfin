@@ -1,5 +1,5 @@
 <template>
-    <div class="row pb-2 align-items-center">
+    <div class="row align-items-center">
         <div class="col-8 pr-0">
             <input class="form-control" type="text" v-model="cur_pattern" />
         </div>

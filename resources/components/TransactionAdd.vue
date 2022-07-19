@@ -14,7 +14,6 @@
         </div>
         <div class="col-2 pl-2 pr-0 text-right">
             <button
-                icon="plus-square"
                 @click="addTransaction()"
                 :class="['btn', 'btn-primary']"
                 :disabled="!transaction.trans_date || !transaction.orig_detail || !transaction.orig_amt"

@@ -13,8 +13,13 @@
                 </div>
             </div>
         </div>
-        <div class="col-6">
+        <div v-if="show_patterns" class="col-6">
+            <PatternAdd 
+                :payee_id="payee.id"
+                @patternAdded="showPatterns"
+            />
             <PatternRow v-for="(pattern, index) in payee_patterns" 
+                class="pt-2"
                 :key="pattern.id"
                 :pattern="pattern"
                 @editPattern="showPatterns"
@@ -22,20 +27,24 @@
             />
         </div>
     </div>
+    <hr class="mt-0 mb-2" />
 </template>
 
 <script>
 import PatternRow from "../components/PatternRow.vue";
+import PatternAdd from "../components/PatternAdd.vue";
 export default{
     props: ['payee'],
     components: {
-        PatternRow
+        PatternRow,
+        PatternAdd
     },
     data: function(){
         return {
             cur_payee_name: this.payee.name,
             orig_payee_name: this.payee.name,
-            payee_patterns: []
+            payee_patterns: [],
+            show_patterns: false
         }
     },
     methods: {
@@ -75,6 +84,7 @@ export default{
             .then ( response => {
                 if( response.status == 200 ){
                     this.payee_patterns = Object.values(response.data);
+                    this.show_patterns = true;
                 }
             })
             .catch( error => {
@@ -86,6 +96,9 @@ export default{
 </script>
 
 <style scoped>
+hr {
+    border-color: gray;
+}
 button{
     margin: 0 3px;
 }

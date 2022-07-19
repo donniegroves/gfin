@@ -37,6 +37,7 @@ Route::prefix('/payee')->group(function(){
 
 Route::get('/payeepatterns/{payee_id?}',[PayeePatternsController::class, 'index']);
 Route::prefix('/payeepattern')->group(function(){
+    Route::post('/store', [PayeePatternsController::class, 'store']);
     Route::put('{id}',[PayeePatternsController::class, 'update']);
     Route::delete('{id}', [PayeePatternsController::class, 'destroy']);
 });

@@ -1,15 +1,14 @@
 <template>
     <div class="row pt-1 pb-1 align-items-center">
-        <div class="col-3">
+        <div class="col-3 pr-1">
             <input class="form-control" id="addPayeeInput" type="text" v-model="payee" placeholder="Company Name..." />
         </div>
-        <div class="col-2 text-left">
+        <div class="col-2 pl-1 text-left">
             <button
-                icon="plus-square"
                 @click="addPayee()"
-                :class="['btn', 'btn-primary']"
+                :class="['btn', 'btn-outline-primary', 'btn-sm']"
                 :disabled="!payee"
-            >Add</button>
+            ><i class="fa-solid fa-plus"></i></button>
         </div>
     </div>
 </template>
@@ -43,9 +42,6 @@ export default{
 </script>
 
 <style scoped>
-input{
-    width: 100%;
-} 
 .active {
     color: #00ce25;
 }
