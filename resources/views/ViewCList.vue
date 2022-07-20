@@ -1,6 +1,6 @@
 <template>
     <h2>Add a Category:</h2>
-    <!-- <PayeeAdd @payeeAdded="refreshView"/> -->
+    <CategoryAdd @categoryAdded="refreshView"/>
     <hr />
     <h2>Categories:</h2>
     <!-- <PayeeRow v-for="(payee, index) in store.all_payees"
@@ -12,7 +12,7 @@
 </template>
 <script>
 import {store} from '../js/store.js'
-// import PayeeAdd from "../components/PayeeAdd.vue";
+import CategoryAdd from "../components/CategoryAdd.vue";
 // import PayeeRow from "../components/PayeeRow.vue";
 export default{
     data: function(){
@@ -21,17 +21,17 @@ export default{
         }
     },
     components: {
-        // PayeeAdd,
+        CategoryAdd,
         // PayeeRow
     },
     methods: {
         refreshView(){
             console.log('refreshView');
-            this.getPayees();
+            this.getCategories();
         },
-        getPayees(){
-            console.log('ViewPList - getPayees');
-            axios.get('api/payees', {
+        getCategories(){
+            console.log('ViewCList - getCategories');
+            axios.get('api/categories', {
             })
             .then ( response => {
                 if( response.status == 200 ){
@@ -47,11 +47,11 @@ export default{
             });
         },
         getPatterns(){
-            console.log('ViewPList getPatterns');
+            console.log('ViewCList getPatterns');
         }
     },
     created: function(){
-        // this.getPayees();
+        // this.getCategories();
     }
 }
 </script>
