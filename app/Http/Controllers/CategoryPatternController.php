@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\CategoryPattern;
 
 class CategoryPatternController extends Controller
 {
@@ -11,9 +12,9 @@ class CategoryPatternController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(int $cat_id)
     {
-        //
+        return CategoryPattern::orderBy('updated_at', 'ASC')->where('category_id', $cat_id)->get();
     }
 
     /**
@@ -34,7 +35,12 @@ class CategoryPatternController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $pattern = new CategoryPattern;
+        $pattern->pattern = $request->pattern["pattern"];
+        $pattern->payee_id = $request->pattern["category_id"];
+        $pattern->save();
+
+        return $pattern;
     }
 
     /**
@@ -68,7 +74,16 @@ class CategoryPatternController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $existing_pattern = CategoryPattern::find($id);
+
+        if ($existing_pattern){
+            $existing_pattern->pattern = !empty($request->pattern['pattern']) ? $request->pattern['pattern'] : $existing_pattern->pattern;
+            $existing_pattern->save();
+
+            return $existing_pattern;
+        }
+
+        return 'Pattern not found.';
     }
 
     /**
@@ -79,6 +94,13 @@ class CategoryPatternController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $existing_pattern = CategoryPattern::find($id);
+
+        if ($existing_pattern){
+            $existing_pattern->delete();
+            return 'Pattern deleted.';
+        }
+
+        return 'Pattern not found.';
     }
 }

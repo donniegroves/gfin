@@ -3,17 +3,19 @@
     <CategoryAdd @categoryAdded="refreshView"/>
     <hr />
     <h2>Categories:</h2>
-    <!-- <PayeeRow v-for="(payee, index) in store.all_payees"
-        :payee="payee"
-        :key="payee.id"
-        @editPayee="refreshView"
-        @payeeDeleted="refreshView"
-    /> -->
+    <CategoryRow v-for="(category, index) in store.all_categories"
+        :category="category"
+        :key="category.id"
+        @editCategory="refreshView"
+        @categoryDeleted="refreshView"
+    />
+    <!-- 
+         -->
 </template>
 <script>
 import {store} from '../js/store.js'
 import CategoryAdd from "../components/CategoryAdd.vue";
-// import PayeeRow from "../components/PayeeRow.vue";
+import CategoryRow from "../components/CategoryRow.vue";
 export default{
     data: function(){
         return {
@@ -22,7 +24,7 @@ export default{
     },
     components: {
         CategoryAdd,
-        // PayeeRow
+        CategoryRow
     },
     methods: {
         refreshView(){
@@ -35,8 +37,8 @@ export default{
             })
             .then ( response => {
                 if( response.status == 200 ){
-                    this.store.all_payees = Object.values(response.data);
-                    this.store.all_payees.unshift({
+                    this.store.all_categories = Object.values(response.data);
+                    this.store.all_categories.unshift({
                         id: 0,
                         name: 'N/A'
                     });
@@ -51,7 +53,7 @@ export default{
         }
     },
     created: function(){
-        // this.getCategories();
+        this.getCategories();
     }
 }
 </script>

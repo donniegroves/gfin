@@ -6,6 +6,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\PayeeController;
 use App\Http\Controllers\PayeePatternsController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CategoryPatternController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,3 +51,9 @@ Route::prefix('/category')->group(function(){
     Route::delete('{id}', [CategoryController::class, 'destroy']);
 });
 
+Route::get('/categorypatterns/{category_id?}',[CategoryPatternController::class, 'index']);
+Route::prefix('/categorypattern')->group(function(){
+    Route::post('/store', [CategoryPatternController::class, 'store']);
+    Route::put('{id}',[CategoryPatternController::class, 'update']);
+    Route::delete('{id}', [CategoryPatternController::class, 'destroy']);
+});
