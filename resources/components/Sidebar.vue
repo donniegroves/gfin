@@ -67,9 +67,10 @@
 
         <!-- Nav Item - Tables -->
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <router-link to="/clist" class="nav-link">
                 <i class="fa-solid fa-wand-magic-sparkles"></i>
-                <span>Patterns</span></a>
+                <span>Categories</span>
+            </router-link>
         </li>
 
         <!-- Divider -->

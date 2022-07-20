@@ -4,6 +4,7 @@ import {createApp} from 'vue'
 import App from '../App.vue'
 import * as VueRouter from 'vue-router'
 import ViewSettings from '../views/ViewSettings.vue'
+import ViewCList from '../views/ViewCList.vue'
 import ViewPList from '../views/ViewPList.vue'
 import ViewTList from '../views/ViewTList.vue'
 import ViewDashboard from '../views/ViewDashboard.vue'
@@ -14,6 +15,11 @@ const routes = [
         path: '/dashboard',
         name: 'ViewDashboard',
         component: ViewDashboard
+    },
+    {
+        path: '/clist',
+        name: 'ViewCList',
+        component: ViewCList
     },
     {
         path: '/plist',
