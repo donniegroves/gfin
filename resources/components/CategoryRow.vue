@@ -14,10 +14,10 @@
             </div>
         </div>
         <div v-if="show_patterns" class="col-6">
-            <!-- <PatternAdd 
+            <CategoryPatternAdd 
                 :category_id="category.id"
                 @patternAdded="showPatterns"
-            /> -->
+            />
             <CategoryPatternRow v-for="(pattern, index) in category_patterns" 
                 class="pt-2"
                 :key="pattern.id"
@@ -32,12 +32,12 @@
 
 <script>
 import CategoryPatternRow from "../components/CategoryPatternRow.vue";
-// import CategoryPatternAdd from "../components/CategoryPatternAdd.vue";
+import CategoryPatternAdd from "../components/CategoryPatternAdd.vue";
 export default{
     props: ['category'],
     components: {
-        CategoryPatternRow
-        // CategoryPatternAdd
+        CategoryPatternRow,
+        CategoryPatternAdd
     },
     data: function(){
         return {

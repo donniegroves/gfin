@@ -37,7 +37,7 @@ class CategoryPatternController extends Controller
     {
         $pattern = new CategoryPattern;
         $pattern->pattern = $request->pattern["pattern"];
-        $pattern->payee_id = $request->pattern["category_id"];
+        $pattern->category_id = $request->pattern["category_id"];
         $pattern->save();
 
         return $pattern;
