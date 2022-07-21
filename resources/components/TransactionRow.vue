@@ -1,10 +1,20 @@
 <template>
     <div class="transactionRow row pt-1 pb-1 align-items-center">
-        <div class="col-2">{{ date }}</div>
-        <div class="col-3 transactionRow-payee">{{ getPayeeName }}</div>
-        <div class="col-2 transactionRow-category">{{ getCategoryName }}</div>
-        <div class="col-3 transactionRow-desc">{{ desc }}</div>
-        <div class="col-1">{{ amt }}</div>
+        <div class="col-2">
+            <!-- {{ date }} -->
+        </div>
+        <div class="col-3 transactionRow-payee">
+            <!-- {{ getPayeeName }} -->
+        </div>
+        <div class="col-2 transactionRow-category">
+            <!-- {{ getCategoryName }} -->
+        </div>
+        <div class="col-3 transactionRow-desc">
+            <!-- {{ desc }} -->
+        </div>
+        <div class="col-1">
+            <!-- {{ amt }} -->
+        </div>
         <div class="col-1 text-right p-0">
             <button @click="editTransaction()" class="btn btn-outline-info btn-sm"><i :class="['fas', edit_mode ? 'fa-check' : 'fa-edit']"></i></button>
             <button @click="deleteTransaction()" class="btn btn-outline-danger btn-sm ml-1"><i class="fa-solid fa-trash"></i></button>
