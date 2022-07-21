@@ -1,24 +1,31 @@
 <template>
     <h2>Add a Payee:</h2>
-    <PayeeAdd @payeeAdded="refreshView"/>
+    <PayeeAdd 
+        @payeeAdded="refreshView"
+    />
     <hr />
     <h2>Payees:</h2>
-    <PayeeRow v-for="(payee, index) in store.all_payees"
+    <PayeeRow v-for="(payee, index) in all_payees"
         :payee="payee"
+        :all_payees="all_payees"
         :key="payee.id"
         @editPayee="refreshView"
         @payeeDeleted="refreshView"
     />
 </template>
 <script>
-import {store} from '../js/store.js'
+import axios from "axios";
 import PayeeAdd from "../components/PayeeAdd.vue";
 import PayeeRow from "../components/PayeeRow.vue";
 export default{
-    data: function(){
+    data(){
         return {
-            store
+            all_payees: null
         }
+    },
+    created(){
+        console.log('created ViewPList');
+        this.refreshPayees();
     },
     components: {
         PayeeAdd,
@@ -27,27 +34,15 @@ export default{
     methods: {
         refreshView(){
             console.log('refreshView');
-            this.setPayees();
+            this.refreshPayees();
         },
-        setPayees(){
-            console.log('ViewPList - getPayees');
-            axios.get('api/payees', {
-            })
-            .then ( response => {
-                if( response.status == 200 ){
-                    this.store.all_payees = Object.values(response.data);
-                }
-            })
-            .catch( error => {
-                console.log(error);
-            });
-        },
-        getPatterns(){
-            console.log('ViewPList getPatterns');
+        async refreshPayees(){
+            console.log('refreshPayees');
+            const response = await axios.get('api/payees', {});
+            if (response.status == 200){
+                this.all_payees = response.data;
+            }
         }
-    },
-    created: function(){
-        this.setPayees();
     }
 }
 </script>

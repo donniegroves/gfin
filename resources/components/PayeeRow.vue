@@ -14,10 +14,10 @@
             </div>
         </div>
         <div v-if="show_patterns" class="col-6">
-            <PatternAdd 
+            <!-- <PatternAdd 
                 :payee_id="payee.id"
                 @patternAdded="showPatterns"
-            />
+            /> -->
             <PatternRow v-for="(pattern, index) in payee_patterns" 
                 class="pt-2"
                 :key="pattern.id"
@@ -34,18 +34,21 @@
 import PatternRow from "../components/PatternRow.vue";
 import PatternAdd from "../components/PatternAdd.vue";
 export default{
-    props: ['payee'],
+    props: ['payee','all_payees'],
     emits: ['editPayee','payeeDeleted'],
+    created(){
+        console.log('created PayeeRow');
+    },
     components: {
         PatternRow,
         PatternAdd
     },
-    data: function(){
+    data(){
         return {
             cur_payee_name: this.payee.name,
             orig_payee_name: this.payee.name,
             payee_patterns: [],
-            show_patterns: false
+            show_patterns: true
         }
     },
     methods: {
