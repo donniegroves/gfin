@@ -1,7 +1,7 @@
 <template>
     <div class="transactionRow row pt-1 pb-1 align-items-center">
         <div class="col-2">
-            <!-- {{ date }} -->
+            <input class="form-control" type="date" v-model="row_date"/>
         </div>
         <div class="col-3 transactionRow-payee">
             <!-- {{ getPayeeName }} -->
@@ -10,10 +10,10 @@
             <!-- {{ getCategoryName }} -->
         </div>
         <div class="col-3 transactionRow-desc">
-            <!-- {{ desc }} -->
+            <input class="form-control" type="text" v-model="row_desc"/>
         </div>
         <div class="col-1">
-            <!-- {{ amt }} -->
+            <input class="form-control" type="number" min="1" step="any" v-model="row_amt"/>
         </div>
         <div class="col-1 text-right p-0">
             <button @click="editTransaction()" class="btn btn-outline-info btn-sm"><i :class="['fas', edit_mode ? 'fa-check' : 'fa-edit']"></i></button>
@@ -23,14 +23,15 @@
 </template>
 
 <script>
-import {store} from '../js/store.js';
 export default{
-    props: ['tran_id','date','payee_id','category_id','desc','amt'],
+    props: ['transaction','all_payees','all_categories'],
     data: function(){
         return {
-            transaction: null,
-            all_payees: store.all_payees,
-            all_categories: store.all_categories,
+            row_date: this.transaction.trans_date,
+            row_payee: [],
+            row_cat: [],
+            row_desc: this.transaction.new_detail?.length > 0 ? this.transaction.new_detail : this.transaction.orig_detail,
+            row_amt: this.transaction.new_amt?.length > 0 ? this.transaction.new_amt : this.transaction.orig_amt,
             edit_mode: false
         }
     },

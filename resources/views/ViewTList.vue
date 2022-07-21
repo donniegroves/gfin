@@ -7,14 +7,14 @@
     />
     <hr />
     <h2>Transactions:</h2>
-    <!-- <TransactionRow v-for="(tran, index) in all_trans" 
-        :transaction="tran" 
+    <TransactionRow v-for="(tran, index) in all_trans" 
+        :transaction="tran"
         :all_payees="all_payees"
         :all_categories="all_categories"
         :key="tran.id"
         @editTransaction="refreshView"
         @transactionDeleted="refreshView"
-    /> -->
+    />
 
 </template>
 <script>
