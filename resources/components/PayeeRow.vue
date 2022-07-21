@@ -14,10 +14,10 @@
             </div>
         </div>
         <div v-if="show_patterns" class="col-6">
-            <!-- <PatternAdd 
+            <PatternAdd 
                 :payee_id="payee.id"
                 @patternAdded="refreshPatterns"
-            /> -->
+            />
             <PatternRow v-for="(pattern, index) in row_patterns" 
                 class="pt-2"
                 :key="pattern.id"
@@ -52,14 +52,16 @@ export default{
     },
     methods: {
         confirmPayeeChange(){
+            console.log('PayeeRow - confirmPayeeChange');
             axios.put('api/payee/' + this.payee.id,{
                 payee: {
-                    name: this.payee_name
+                    name: this.cur_payee_name
                 }
             })
             .then (response => {
                 if( response.status == 200 ){
                     this.$emit('editPayee');
+                    this.orig_payee_name = this.cur_payee_name;
                 }
             })
             .catch( error => {

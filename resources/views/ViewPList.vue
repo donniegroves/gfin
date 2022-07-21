@@ -28,8 +28,7 @@ export default{
     },
     created(){
         console.log('created ViewPList');
-        this.refreshPayees();
-        this.refreshPayeePatterns();
+        this.refreshView();
     },
     components: {
         PayeeAdd,
