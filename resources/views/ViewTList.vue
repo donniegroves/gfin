@@ -1,6 +1,8 @@
 <template>
     <h2>Add a Transaction:</h2>
     <TransactionAdd
+        :all_payees="all_payees"
+        :all_categories="all_categories"
         @transactionAdded="refreshView"
     />
     <hr />
@@ -23,8 +25,9 @@ import TransactionAdd from "../components/TransactionAdd.vue";
 export default{
     data(){
         return {
-            all_trans: null,
-            all_payees: null
+            all_trans: [],
+            all_payees: [],
+            all_categories: []
         }
     },
     created(){
@@ -65,40 +68,6 @@ export default{
                 console.log('received ' + response.data.length + ' categories.');
                 this.all_categories = response.data;
             }
-        },
-        getPayees(){
-            console.log('getPayees');
-            axios.get('api/payees', {
-            })
-            .then ( response => {
-                if( response.status == 200 ){
-                    this.store.all_payees = Object.values(response.data);
-                    this.store.all_payees.unshift({
-                        id: 0,
-                        name: 'N/A'
-                    });
-                }
-            })
-            .catch( error => {
-                console.log(error);
-            });
-        },
-        getCategories(){
-            console.log('getCategories');
-            axios.get('api/categories', {
-            })
-            .then ( response => {
-                if( response.status == 200 ){
-                    this.store.all_categories = Object.values(response.data);
-                    this.store.all_categories.unshift({
-                        id: 0,
-                        name: 'N/A'
-                    });
-                }
-            })
-            .catch( error => {
-                console.log(error);
-            });
         }
     }
 }

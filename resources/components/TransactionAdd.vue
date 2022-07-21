@@ -1,63 +1,60 @@
 <template>
     <div class="row pt-1 pb-1 align-items-center">
         <div class="col-2 pl-0">
-            <input class="form-control" type="date" v-model="transaction.trans_date"/>
+            <input class="form-control" type="date" v-model="add_date"/>
         </div>
         <div class="col-3 pl-2">
-            <v-select label="name" v-model="transaction.payee" :options="store.all_payees"></v-select>
+            <v-select label="name" v-model="add_payee" :options="all_payees"></v-select>
         </div>
+        
         <div class="col-2 pl-2">
-            <v-select label="name" v-model="transaction.category" :options="store.all_categories"></v-select>
+            <v-select label="name" v-model="add_cat" :options="all_categories"></v-select>
         </div>
+        
         <div class="col-3 pl-2">
-            <input class="form-control" type="text" v-model="transaction.orig_detail"/>
+            <input class="form-control" type="text" v-model="add_desc"/>
         </div>
         <div class="col-1 p-0">
-            <input class="form-control" type="number" min="1" step="any" v-model="transaction.orig_amt"/>
+            <input class="form-control" type="number" min="1" step="any" v-model="add_amt"/>
         </div>
         <div class="col-1 pl-2 pr-0 text-right">
             <button
                 @click="addTransaction()"
                 :class="['btn', 'btn-primary']"
-                :disabled="!transaction.trans_date || !transaction.orig_detail || !transaction.orig_amt"
+                :disabled="!add_date || !add_desc || !add_amt"
             >Add</button>
         </div>
     </div>
 </template>
 
 <script>
-import {store} from '../js/store.js'
-
 export default{
-    data: function(){
+    props: ['all_payees','all_categories'],
+    data(){
         return{
-            transaction: {
-                trans_date: "",
-                payee: store.all_payees[0],
-                category: store.all_categories[0],
-                orig_detail: "",
-                orig_amt: ""
-            },
-            store
+            add_date: '1983-05-27',
+            add_payee: [],
+            add_cat: [],
+            add_desc: null,
+            add_amt: null
         }
-    },
-    props: {
     },
     methods: {
         addTransaction(){
+            console.log('addTransaction');
             axios.post('api/transaction/store', {
                 transaction: {
-                    payee_id: this.transaction.payee.id >= 1 ? this.transaction.payee.id : null,
-                    category_id: this.transaction.category.id >= 1 ? this.transaction.category.id : null,
-                    orig_amt: this.transaction.orig_amt,
-                    trans_date: this.transaction.trans_date,
-                    orig_detail: this.transaction.orig_detail
+                    payee_id: this.add_payee.id >= 1 ? this.add_payee.id : null,
+                    category_id: this.add_cat.id >= 1 ? this.add_cat.id : null,
+                    orig_amt: this.add_amt,
+                    trans_date: this.add_date,
+                    orig_detail: this.add_desc
                     }
             })
             .then ( response => {
                 if( response.status == 201 ){
-                    this.transaction.trans_date = this.transaction.orig_detail = this.transaction.orig_amt = "";
-                    this.transaction.payee = store.all_payees[0];
+                    this.add_date = this.add_desc = this.add_amt = "";
+                    this.add_payee = this.add_cat = [];
                     this.$emit('transactionAdded');
                 }
             })
