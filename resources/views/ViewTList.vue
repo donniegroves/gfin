@@ -1,30 +1,35 @@
 <template>
     <h2>Add a Transaction:</h2>
-    <TransactionAdd @transactionAdded="refreshView"/>
+    <TransactionAdd
+        @transactionAdded="refreshView"
+    />
     <hr />
     <h2>Transactions:</h2>
-    <TransactionRow v-for="(tran, index) in transactions" 
-        :tran_id="tran.id" 
-        :date="tran.trans_date"
-        :payee_id="tran.payee_id"
-        :category_id="tran.category_id"
-        :desc="tran.new_detail == null ? tran.orig_detail : tran.new_detail"
-        :amt="tran.new_amt == null ? tran.orig_amt : tran.new_amt"
+    <!-- <TransactionRow v-for="(tran, index) in all_trans" 
+        :transaction="tran" 
+        :all_payees="all_payees"
+        :all_categories="all_categories"
+        :key="tran.id"
+        @editTransaction="refreshView"
         @transactionDeleted="refreshView"
-    />
+    /> -->
 
 </template>
 <script>
-import {store} from '../js/store.js'
+import axios from "axios";
 import TransactionRow from "../components/TransactionRow.vue";
 import TransactionAdd from "../components/TransactionAdd.vue";
 
 export default{
-    data: function(){
+    data(){
         return {
-            transactions: {},
-            store
+            all_trans: null,
+            all_payees: null
         }
+    },
+    created(){
+        console.log('created ViewTList');
+        this.refreshView();
     },
     components: {
         TransactionRow,
@@ -32,20 +37,34 @@ export default{
     },
     methods: {
         refreshView(){
-            this.getTransactions();
+            console.log('refreshView');
+            this.refreshTransactions();
+            this.refreshPayees();
+            this.refreshCategories();
         },
-        getTransactions(){
-            console.log('getTransactions');
-            axios.get('api/transactions', {
-            })
-            .then ( response => {
-                if( response.status == 200 ){
-                    this.transactions = response.data;
-                }
-            })
-            .catch( error => {
-                console.log(error);
-            })
+        async refreshTransactions(){
+            console.log('refreshTransactions');
+            const response = await axios.get('api/transactions', {});
+            if (response.status == 200){
+                console.log('received ' + response.data.length + ' transactions.');
+                this.all_trans = response.data;
+            }
+        },
+        async refreshPayees(){
+            console.log('refreshPayees');
+            const response = await axios.get('api/payees', {});
+            if (response.status == 200){
+                console.log('received ' + response.data.length + ' payees.');
+                this.all_payees = response.data;
+            }
+        },
+        async refreshCategories(){
+            console.log('refreshCategories');
+            const response = await axios.get('api/categories', {});
+            if (response.status == 200){
+                console.log('received ' + response.data.length + ' categories.');
+                this.all_categories = response.data;
+            }
         },
         getPayees(){
             console.log('getPayees');
@@ -81,11 +100,6 @@ export default{
                 console.log(error);
             });
         }
-    },
-    created: function(){
-        this.getTransactions();
-        this.getPayees();
-        this.getCategories();
     }
 }
 </script>
