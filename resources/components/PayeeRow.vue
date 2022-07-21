@@ -34,10 +34,11 @@
 import PatternRow from "../components/PatternRow.vue";
 import PatternAdd from "../components/PatternAdd.vue";
 export default{
-    props: ['payee','all_payees'],
+    props: ['payee','all_payees','all_payee_patterns'],
     emits: ['editPayee','payeeDeleted'],
     created(){
         console.log('created PayeeRow');
+        this.setRowPatterns();
     },
     components: {
         PatternRow,
@@ -52,6 +53,9 @@ export default{
         }
     },
     methods: {
+        setRowPatterns(){
+            console.log('setRowPatterns');
+        },
         confirmPayeeChange(){
             axios.put('api/payee/' + this.payee.id,{
                 payee: {

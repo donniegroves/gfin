@@ -12,9 +12,9 @@ class PayeePatternsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(int $payee_id)
+    public function index()
     {
-        return PayeePattern::orderBy('updated_at', 'ASC')->where('payee_id', $payee_id)->get();
+        return PayeePattern::orderBy('updated_at', 'ASC')->get();
     }
 
     /**
