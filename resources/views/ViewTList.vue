@@ -7,6 +7,7 @@
         :tran_id="tran.id" 
         :date="tran.trans_date"
         :payee_id="tran.payee_id"
+        :category_id="tran.category_id"
         :desc="tran.new_detail == null ? tran.orig_detail : tran.new_detail"
         :amt="tran.new_amt == null ? tran.orig_amt : tran.new_amt"
         @transactionDeleted="refreshView"
@@ -62,11 +63,29 @@ export default{
             .catch( error => {
                 console.log(error);
             });
+        },
+        getCategories(){
+            console.log('getCategories');
+            axios.get('api/categories', {
+            })
+            .then ( response => {
+                if( response.status == 200 ){
+                    this.store.all_categories = Object.values(response.data);
+                    this.store.all_categories.unshift({
+                        id: 0,
+                        name: 'N/A'
+                    });
+                }
+            })
+            .catch( error => {
+                console.log(error);
+            });
         }
     },
     created: function(){
         this.getTransactions();
         this.getPayees();
+        this.getCategories();
     }
 }
 </script>

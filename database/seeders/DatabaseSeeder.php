@@ -21,8 +21,8 @@ class DatabaseSeeder extends Seeder
     {
         Payee::factory(7)->create();
         PayeePattern::factory(3)->create();
-        Transaction::factory(100)->create();
         Category::factory(12)->create();
         CategoryPattern::factory(4)->create();
+        Transaction::factory(5)->create();
     }
 }

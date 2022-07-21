@@ -21,6 +21,11 @@ return new class extends Migration
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('set null');
+            $table->foreignId('category_id')
+                ->nullable()
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('set null');
             $table->string('orig_detail')->default('');
             $table->string('new_detail')->nullable()->default(null);
             $table->decimal('orig_amt');
