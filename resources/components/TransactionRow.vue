@@ -6,8 +6,8 @@
         <div class="col-3 transactionRow-desc">{{ desc }}</div>
         <div class="col-1">{{ amt }}</div>
         <div class="col-1 text-right p-0">
-            <button>Edit</button>
-            <button @click="deleteTransaction()" class="ml-2">Delete</button>
+            <button @click="editTransaction()" class="btn btn-outline-info btn-sm"><i :class="['fas', edit_mode ? 'fa-check' : 'fa-edit']"></i></button>
+            <button @click="deleteTransaction()" class="btn btn-outline-danger btn-sm ml-1"><i class="fa-solid fa-trash"></i></button>
         </div>
     </div>
 </template>
@@ -20,7 +20,8 @@ export default{
         return {
             transaction: null,
             all_payees: store.all_payees,
-            all_categories: store.all_categories
+            all_categories: store.all_categories,
+            edit_mode: false
         }
     },
     methods: {
@@ -34,6 +35,9 @@ export default{
             .catch( error => {
                 console.log(error);
             });
+        },
+        editTransaction(){
+            this.edit_mode = !this.edit_mode;
         }
     },
     computed: {
