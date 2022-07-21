@@ -27,19 +27,15 @@ export default{
     methods: {
         refreshView(){
             console.log('refreshView');
-            this.getPayees();
+            this.setPayees();
         },
-        getPayees(){
+        setPayees(){
             console.log('ViewPList - getPayees');
             axios.get('api/payees', {
             })
             .then ( response => {
                 if( response.status == 200 ){
                     this.store.all_payees = Object.values(response.data);
-                    this.store.all_payees.unshift({
-                        id: 0,
-                        name: 'N/A'
-                    });
                 }
             })
             .catch( error => {
@@ -51,7 +47,7 @@ export default{
         }
     },
     created: function(){
-        this.getPayees();
+        this.setPayees();
     }
 }
 </script>

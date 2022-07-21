@@ -35,6 +35,7 @@ import PatternRow from "../components/PatternRow.vue";
 import PatternAdd from "../components/PatternAdd.vue";
 export default{
     props: ['payee'],
+    emits: ['editPayee','payeeDeleted'],
     components: {
         PatternRow,
         PatternAdd
