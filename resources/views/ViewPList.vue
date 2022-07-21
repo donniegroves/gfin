@@ -8,10 +8,11 @@
     <PayeeRow v-for="(payee, index) in all_payees"
         :payee="payee"
         :all_payees="all_payees"
-        :all_payee_patterns="all_payee_patterns"
+        :row_patterns="filtered(payee.id)"
         :key="payee.id"
         @editPayee="refreshView"
         @payeeDeleted="refreshView"
+        @refreshPatterns="refreshView"
     />
 </template>
 <script>
@@ -35,9 +36,24 @@ export default{
         PayeeRow
     },
     methods: {
+        filtered(search_payee_id){
+            console.log('filtered');
+            let final_arr = [];
+            if (this.all_payee_patterns == null){
+                return final_arr;
+            }
+            
+            this.all_payee_patterns.forEach(function(payee){
+                if (payee.payee_id == search_payee_id){
+                    final_arr.push(payee);
+                }
+            });
+            return final_arr;
+        },
         refreshView(){
             console.log('refreshView');
             this.refreshPayees();
+            this.refreshPayeePatterns();
         },
         async refreshPayees(){
             console.log('refreshPayees');

@@ -9,21 +9,21 @@
                     <button v-if="cur_payee_name !== orig_payee_name" @click="confirmPayeeChange()" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-check"></i></button>
                     <button v-if="cur_payee_name !== orig_payee_name" @click="revertChange()" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-rotate-left"></i></button>
                     <button @click="deletePayee()" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
-                    <button @click="showPatterns()" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+                    <button @click="toggleShowPatterns()" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
                 </div>
             </div>
         </div>
         <div v-if="show_patterns" class="col-6">
             <!-- <PatternAdd 
                 :payee_id="payee.id"
-                @patternAdded="showPatterns"
+                @patternAdded="refreshPatterns"
             /> -->
-            <PatternRow v-for="(pattern, index) in payee_patterns" 
+            <PatternRow v-for="(pattern, index) in row_patterns" 
                 class="pt-2"
                 :key="pattern.id"
                 :pattern="pattern"
-                @editPattern="showPatterns"
-                @patternDeleted="showPatterns"
+                @editPattern="refreshPatterns"
+                @patternDeleted="refreshPatterns" 
             />
         </div>
     </div>
@@ -34,11 +34,10 @@
 import PatternRow from "../components/PatternRow.vue";
 import PatternAdd from "../components/PatternAdd.vue";
 export default{
-    props: ['payee','all_payees','all_payee_patterns'],
-    emits: ['editPayee','payeeDeleted'],
+    props: ['payee','all_payees','row_patterns'],
+    emits: ['editPayee','payeeDeleted','refreshPatterns'],
     created(){
         console.log('created PayeeRow');
-        this.setRowPatterns();
     },
     components: {
         PatternRow,
@@ -48,14 +47,10 @@ export default{
         return {
             cur_payee_name: this.payee.name,
             orig_payee_name: this.payee.name,
-            payee_patterns: [],
-            show_patterns: true
+            show_patterns: false,
         }
     },
     methods: {
-        setRowPatterns(){
-            console.log('setRowPatterns');
-        },
         confirmPayeeChange(){
             axios.put('api/payee/' + this.payee.id,{
                 payee: {
@@ -85,19 +80,13 @@ export default{
                 console.log(error);
             });
         },
-        showPatterns(){
-            console.log('PayeeRow showPatterns');
-            axios.get('api/payeepatterns/' + this.payee.id, {
-            })
-            .then ( response => {
-                if( response.status == 200 ){
-                    this.payee_patterns = Object.values(response.data);
-                    this.show_patterns = true;
-                }
-            })
-            .catch( error => {
-                console.log(error);
-            });
+        toggleShowPatterns(){
+            console.log('PayeeRow toggleShowPatterns');
+            this.show_patterns = !this.show_patterns;
+        },
+        refreshPatterns(){
+            console.log('PayeeRow - refreshPatterns');
+            this.$emit('refreshPatterns');
         }
     }
 }
