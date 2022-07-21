@@ -18,8 +18,7 @@ export default{
     props: ['category_id'],
     data: function(){
         return {
-            cur_input: null,
-            category_id: this.category_id
+            cur_input: null
         }
     },
     methods: {

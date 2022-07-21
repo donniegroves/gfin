@@ -18,8 +18,7 @@ export default{
     props: ['payee_id'],
     data: function(){
         return {
-            cur_input: null,
-            payee_id: this.payee_id
+            cur_input: null
         }
     },
     methods: {

@@ -83,7 +83,7 @@ export default{
             });
         },
         toggleShowPatterns(){
-            console.log('PayeeRow toggleShowPatterns');
+            console.log('PayeeRow - toggleShowPatterns');
             this.show_patterns = !this.show_patterns;
         },
         refreshPatterns(){

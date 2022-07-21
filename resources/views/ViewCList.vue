@@ -1,59 +1,75 @@
 <template>
     <h2>Add a Category:</h2>
-    <CategoryAdd @categoryAdded="refreshView"/>
+    <CategoryAdd
+        @categoryAdded="refreshView"
+    />
     <hr />
     <h2>Categories:</h2>
-    <CategoryRow v-for="(category, index) in store.all_categories"
+    <CategoryRow v-for="(category, index) in all_categories"
         :category="category"
+        :all_categories="all_categories"
+        :row_patterns="filtered(category.id)"
         :key="category.id"
         @editCategory="refreshView"
         @categoryDeleted="refreshView"
+        @refreshPatterns="refreshView"
     />
-    <!-- 
-         -->
 </template>
 <script>
-import {store} from '../js/store.js'
+import axios from "axios";
 import CategoryAdd from "../components/CategoryAdd.vue";
 import CategoryRow from "../components/CategoryRow.vue";
 export default{
-    data: function(){
+    data(){
         return {
-            store
+            all_categories: null,
+            all_category_patterns: null
         }
+    },
+    created(){
+        console.log('created ViewCList');
+        this.refreshView();
     },
     components: {
         CategoryAdd,
         CategoryRow
     },
     methods: {
+        filtered(search_category_id){
+            console.log('filtered');
+            let final_arr = [];
+            if (this.all_category_patterns == null){
+                return final_arr;
+            }
+            
+            this.all_category_patterns.forEach(function(category){
+                if (category.category_id == search_category_id){
+                    final_arr.push(category);
+                }
+            });
+            return final_arr;
+        },
         refreshView(){
             console.log('refreshView');
-            this.getCategories();
+            this.refreshCategories();
+            this.refreshCategoryPatterns();
         },
-        getCategories(){
-            console.log('ViewCList - getCategories');
-            axios.get('api/categories', {
-            })
-            .then ( response => {
-                if( response.status == 200 ){
-                    this.store.all_categories = Object.values(response.data);
-                    this.store.all_categories.unshift({
-                        id: 0,
-                        name: 'N/A'
-                    });
-                }
-            })
-            .catch( error => {
-                console.log(error);
-            });
+        async refreshCategories(){
+            console.log('refreshCategories');
+            const response = await axios.get('api/categories', {});
+            if (response.status == 200){
+                console.log('received ' + response.data.length + ' categories.');
+                this.all_categories = response.data;
+            }
         },
-        getPatterns(){
-            console.log('ViewCList getPatterns');
+        async refreshCategoryPatterns(){
+            console.log('refreshCategoryPatterns');
+            const response = await axios.get('api/categorypatterns', {});
+            if (response.status == 200){
+                console.log('received ' + response.data.length + ' category patterns.');
+                this.all_category_patterns = response.data;
+            }
         }
-    },
-    created: function(){
-        this.getCategories();
     }
 }
 </script>

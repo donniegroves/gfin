@@ -9,21 +9,21 @@
                     <button v-if="cur_cat_name !== orig_cat_name" @click="confirmCategoryChange()" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-check"></i></button>
                     <button v-if="cur_cat_name !== orig_cat_name" @click="revertChange()" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-rotate-left"></i></button>
                     <button @click="deleteCategory()" class="btn btn-outline-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
-                    <button @click="showPatterns()" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+                    <button @click="toggleShowPatterns()" class="btn btn-outline-info btn-sm"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
                 </div>
             </div>
         </div>
         <div v-if="show_patterns" class="col-6">
             <CategoryPatternAdd 
                 :category_id="category.id"
-                @patternAdded="showPatterns"
+                @patternAdded="refreshPatterns"
             />
-            <CategoryPatternRow v-for="(pattern, index) in category_patterns" 
+            <CategoryPatternRow v-for="(pattern, index) in row_patterns" 
                 class="pt-2"
                 :key="pattern.id"
                 :pattern="pattern"
-                @editPattern="showPatterns"
-                @patternDeleted="showPatterns"
+                @editPattern="refreshPatterns"
+                @patternDeleted="refreshPatterns"
             />
         </div>
     </div>
@@ -34,22 +34,25 @@
 import CategoryPatternRow from "../components/CategoryPatternRow.vue";
 import CategoryPatternAdd from "../components/CategoryPatternAdd.vue";
 export default{
-    props: ['category'],
+    props: ['category','all_categories','row_patterns'],
+    emits: ['editCategory','categoryDeleted','refreshPatterns'],
+    created(){
+        console.log('created CategoryRow');
+    },
     components: {
         CategoryPatternRow,
         CategoryPatternAdd
     },
-    data: function(){
+    data(){
         return {
             cur_cat_name: this.category.name,
             orig_cat_name: this.category.name,
-            category_patterns: [],
             show_patterns: false
         }
     },
     methods: {
         confirmCategoryChange(){
-            console.log(this.category.id);
+            console.log('CategoryRow - confirmCategoryChange');
             axios.put('api/category/' + this.category.id,{
                 category: {
                     name: this.cur_cat_name
@@ -58,6 +61,7 @@ export default{
             .then (response => {
                 if( response.status == 200 ){
                     this.$emit('editCategory');
+                    this.orig_cat_name = this.cur_cat_name;
                 }
             })
             .catch( error => {
@@ -78,19 +82,13 @@ export default{
                 console.log(error);
             });
         },
-        showPatterns(){
-            console.log('CategoryRow showPatterns');
-            axios.get('api/categorypatterns/' + this.category.id, {
-            })
-            .then ( response => {
-                if( response.status == 200 ){
-                    this.category_patterns = Object.values(response.data);
-                    this.show_patterns = true;
-                }
-            })
-            .catch( error => {
-                console.log(error);
-            });
+        toggleShowPatterns(){
+            console.log('CategoryRow - toggleShowPatterns');
+            this.show_patterns = !this.show_patterns;
+        },
+        refreshPatterns(){
+            console.log('CategoryRow - refreshPatterns');
+            this.$emit('refreshPatterns');
         }
     }
 }

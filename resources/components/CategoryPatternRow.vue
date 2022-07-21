@@ -33,6 +33,7 @@ export default{
             .then (response => {
                 if( response.status == 200 ){
                     this.$emit('editPattern');
+                    this.orig_pattern = this.cur_pattern;
                 }
             })
             .catch( error => {

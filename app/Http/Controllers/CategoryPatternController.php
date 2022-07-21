@@ -12,9 +12,9 @@ class CategoryPatternController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(int $cat_id)
+    public function index()
     {
-        return CategoryPattern::orderBy('updated_at', 'ASC')->where('category_id', $cat_id)->get();
+        return CategoryPattern::orderBy('updated_at', 'ASC')->get();
     }
 
     /**
