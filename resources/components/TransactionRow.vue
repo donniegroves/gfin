@@ -4,10 +4,10 @@
             <input class="form-control" type="date" v-model="row_date"/>
         </div>
         <div class="col-3 transactionRow-payee">
-            <v-select appendToBody="true" label="name" v-model="row_payee" :options="all_payees"></v-select>
+            <v-select appendToBody label="name" v-model="selected_payee" :options="all_payees"></v-select>
         </div>
         <div class="col-2 transactionRow-category">
-            <v-select appendToBody="true" label="name" v-model="row_cat" :options="all_categories"></v-select>
+            <v-select appendToBody label="name" v-model="selected_category" :options="all_categories"></v-select>
         </div>
         <div class="col-3 transactionRow-desc">
             <input class="form-control" type="text" v-model="row_desc"/>
@@ -24,12 +24,10 @@
 
 <script>
 export default{
-    props: ['transaction','all_payees','all_categories'],
+    props: ['transaction','all_payees','all_categories','selected_payee','selected_category'],
     data: function(){
         return {
             row_date: this.transaction.trans_date,
-            row_payee: [],
-            row_cat: [],
             row_desc: this.transaction.new_detail?.length > 0 ? this.transaction.new_detail : this.transaction.orig_detail,
             row_amt: this.transaction.new_amt?.length > 0 ? this.transaction.new_amt : this.transaction.orig_amt,
             edit_mode: false
@@ -49,16 +47,6 @@ export default{
         },
         editTransaction(){
             this.edit_mode = !this.edit_mode;
-        }
-    },
-    computed: {
-        getPayeeName(){
-            let found = this.all_payees.find(element => element.id == this.payee_id);
-            return found ? found.name : '';
-        },
-        getCategoryName(){
-            let found = this.all_categories.find(element => element.id == this.category_id);
-            return found ? found.name : '';
         }
     }
 }

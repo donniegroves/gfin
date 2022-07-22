@@ -11,6 +11,8 @@
         :transaction="tran"
         :all_payees="all_payees"
         :all_categories="all_categories"
+        :selected_payee="filteredPayee(tran.payee_id)"
+        :selected_category="filteredCategory(tran.category_id)"
         :key="tran.id"
         @editTransaction="refreshView"
         @transactionDeleted="refreshView"
@@ -68,7 +70,35 @@ export default{
                 console.log('received ' + response.data.length + ' categories.');
                 this.all_categories = response.data;
             }
-        }
+        },
+        filteredPayee(search_payee_id){
+            console.log('filtered');
+            let final_arr = [];
+            if (this.all_payees == null){
+                return final_arr;
+            }
+            
+            this.all_payees.forEach(function(payee){
+                if (payee.id == search_payee_id){
+                    final_arr.push(payee);
+                }
+            });
+            return final_arr[0];
+        },
+        filteredCategory(search_category_id){
+            console.log('filtered');
+            let final_arr = [];
+            if (this.all_categories == null){
+                return final_arr;
+            }
+            
+            this.all_categories.forEach(function(category){
+                if (category.id == search_category_id){
+                    final_arr.push(category);
+                }
+            });
+            return final_arr[0];
+        },
     }
 }
 </script>
