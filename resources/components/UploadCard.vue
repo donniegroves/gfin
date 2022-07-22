@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default{
     props: ['bprofile'],
     data: function(){
@@ -30,8 +32,21 @@ export default{
     },
     methods: {
         onFileChange(event){
-            console.log(event);
             console.log(event.target.files[0]);
+            let data = new FormData();
+            data.append('file', event.target.files[0]);
+            axios.post('api/transactions/import', data)
+            .then ( response => {
+                console.log(response);
+                if( response.status == 200 ){
+                    console.log('good response received');
+                    // this.category_name = '';
+                    // this.$emit('fileUploaded');
+                }
+            })
+            .catch( error => {
+                console.log(error);
+            });
         }
     },
     computed: {

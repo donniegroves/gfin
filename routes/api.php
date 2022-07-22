@@ -24,6 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/transactions',[TransactionController::class, 'index']);
+Route::post('/transactions/import',[TransactionController::class, 'import']);
 Route::prefix('/transaction')->group(function(){
     Route::post('/store', [TransactionController::class, 'store']);
     Route::put('{id}', [TransactionController::class, 'update']);
