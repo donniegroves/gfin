@@ -17,15 +17,12 @@
 
         <!-- Main -->
         <div class="sidebar-heading">Main</div>
-
         <li class="nav-item active">
             <router-link to="/dashboard" class="nav-link">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Dashboard</span>
             </router-link>
         </li>
-
-        
         <li class="nav-item">
             <router-link to="/tlist" class="nav-link">
                 <i class="fa-regular fa-fw fa-rectangle-list"></i>
@@ -33,10 +30,10 @@
             </router-link>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <router-link to="/import" class="nav-link">
                 <i class="fa-solid fa-file-import"></i>
                 <span>Import</span>
-            </a>
+            </router-link>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#">

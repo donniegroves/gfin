@@ -19,8 +19,8 @@
         @editTransaction="refreshView"
         @transactionDeleted="refreshView"
     />
-
 </template>
+
 <script>
 import axios from "axios";
 import TransactionRow from "../components/TransactionRow.vue";
