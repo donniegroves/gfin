@@ -1,22 +1,27 @@
 <template>
     <div class="transactionRow row pt-1 pb-1 align-items-center">
         <div class="col-2">
-            <input class="form-control" type="date" v-model="row_date"/>
+            <input v-if="edit_mode" class="form-control" type="date" v-model="row_date"/>
+            <span v-else v-text="row_date"></span>
         </div>
         <div class="col-3 transactionRow-payee">
-            <v-select appendToBody label="name" v-model="selected_payee" :options="all_payees"></v-select>
+            <v-select v-if="edit_mode" appendToBody label="name" v-model="selected_payee" :options="all_payees"></v-select>
+            <span v-else v-text="selected_payee_name"></span>
         </div>
         <div class="col-2 transactionRow-category">
-            <v-select appendToBody label="name" v-model="selected_category" :options="all_categories"></v-select>
+            <v-select v-if="edit_mode" appendToBody label="name" v-model="selected_category" :options="all_categories"></v-select>
+            <span v-else v-text="selected_category_name"></span>
         </div>
         <div class="col-3 transactionRow-desc">
-            <input class="form-control" type="text" v-model="row_desc"/>
+            <input v-if="edit_mode" class="form-control" type="text" v-model="row_desc"/>
+            <span v-else>{{ row_desc }}</span>
         </div>
         <div class="col-1">
-            <input class="form-control" type="number" min="1" step="any" v-model="row_amt"/>
+            <input v-if="edit_mode" class="form-control" type="number" min="1" step="any" v-model="row_amt"/>
+            <span v-else>{{ row_amt }}</span>
         </div>
         <div class="col-1 text-right p-0">
-            <button @click="editTransaction()" class="btn btn-outline-info btn-sm"><i :class="['fas', edit_mode ? 'fa-check' : 'fa-edit']"></i></button>
+            <button @click="toggleEdit()" class="btn btn-outline-info btn-sm"><i :class="['fas', edit_mode ? 'fa-check' : 'fa-edit']"></i></button>
             <button @click="deleteTransaction()" class="btn btn-outline-danger btn-sm ml-1"><i class="fa-solid fa-trash"></i></button>
         </div>
     </div>
@@ -24,7 +29,7 @@
 
 <script>
 export default{
-    props: ['transaction','all_payees','all_categories','selected_payee','selected_category'],
+    props: ['transaction','all_payees','all_categories','selected_payee','selected_category','selected_payee_name','selected_category_name'],
     data: function(){
         return {
             row_date: this.transaction.trans_date,
@@ -35,7 +40,7 @@ export default{
     },
     methods: {
         deleteTransaction(){
-            axios.delete('api/transaction/' + this.tran_id)
+            axios.delete('api/transaction/' + this.transaction.id)
             .then (response => {
                 if( response.status == 200 ){
                     this.$emit('transactionDeleted');
@@ -45,8 +50,30 @@ export default{
                 console.log(error);
             });
         },
-        editTransaction(){
+        toggleEdit(){
+            if (this.edit_mode){
+                this.editTransaction();
+            }
             this.edit_mode = !this.edit_mode;
+        },
+        editTransaction(){
+            axios.put('api/transaction/' + this.transaction.id,{
+                transaction: {
+                    trans_date: this.row_date,
+                    payee_id: this.selected_payee.id,
+                    category_id: this.selected_category.id,
+                    new_detail: this.row_desc,
+                    new_amt: this.row_amt
+                }
+            })
+            .then (response => {
+                if( response.status == 200 ){
+                    this.$emit('editTransaction');
+                }
+            })
+            .catch( error => {
+                console.log(error);
+            });
         }
     }
 }
