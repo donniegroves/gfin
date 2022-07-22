@@ -4,10 +4,10 @@
             <input class="form-control" type="date" v-model="row_date"/>
         </div>
         <div class="col-3 transactionRow-payee">
-            <!-- {{ getPayeeName }} -->
+            <v-select appendToBody="true" label="name" v-model="row_payee" :options="all_payees"></v-select>
         </div>
         <div class="col-2 transactionRow-category">
-            <!-- {{ getCategoryName }} -->
+            <v-select appendToBody="true" label="name" v-model="row_cat" :options="all_categories"></v-select>
         </div>
         <div class="col-3 transactionRow-desc">
             <input class="form-control" type="text" v-model="row_desc"/>
