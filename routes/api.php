@@ -7,6 +7,7 @@ use App\Http\Controllers\PayeeController;
 use App\Http\Controllers\PayeePatternsController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CategoryPatternController;
+use App\Http\Controllers\PlaidController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,4 +58,11 @@ Route::prefix('/categorypattern')->group(function(){
     Route::post('/store', [CategoryPatternController::class, 'store']);
     Route::put('{id}',[CategoryPatternController::class, 'update']);
     Route::delete('{id}', [CategoryPatternController::class, 'destroy']);
+});
+
+Route::prefix('/plaid')->group(function(){
+    Route::get('/create_link_token',[PlaidController::class, 'create_link_token']);
+    Route::post('/exchange_public_token',[PlaidController::class, 'exchange_public_token']);
+    Route::get('/is_account_connected',[PlaidController::class, 'is_account_connected']);
+    Route::get('/get_trans',[PlaidController::class, 'get_trans']);
 });
