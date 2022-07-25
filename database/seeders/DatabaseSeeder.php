@@ -2,13 +2,14 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Payee;
 use App\Models\PayeePattern;
 use App\Models\Transaction;
 use App\Models\Category;
 use App\Models\CategoryPattern;
+use App\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,6 +20,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        User::factory(10)->create();
         Payee::factory(7)->create();
         PayeePattern::factory(3)->create();
         Category::factory(12)->create();

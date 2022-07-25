@@ -1,7 +1,8 @@
 <?php
 
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,21 +15,47 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', function(){
-    return view('welcome');
+Route::get('/', function () {
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
 });
 
-Route::get('/inside', function () {
-    return view('vue');
-});
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-/*
-1. Go to localhost:8000/test
-2. web.php routes are checked for a get('/test'). If found, looks at the parameter in view('xxxx').
-3. looks in /resources/views/xxxx.blade.php
-4. looks in xxxx.blade.php for a div with an id (example <div id="yyyy"></div>)
-5. gets html from Yyyy.vue
-*/
-Auth::routes();
+/* BEGIN INSIDE */
+Route::get('/overview', function () {
+    return Inertia::render('Overview');
+})->middleware(['auth', 'verified'])->name('overview');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/transactions', function () {
+    return Inertia::render('Transactions');
+})->middleware(['auth', 'verified'])->name('transactions');
+
+Route::get('/import', function () {
+    return Inertia::render('Import');
+})->middleware(['auth', 'verified'])->name('import');
+
+Route::get('/payees', function () {
+    return Inertia::render('Payees');
+})->middleware(['auth', 'verified'])->name('payees');
+
+Route::get('/categories', function () {
+    return Inertia::render('Categories');
+})->middleware(['auth', 'verified'])->name('categories');
+
+Route::get('/settings', function () {
+    return Inertia::render('Settings');
+})->middleware(['auth', 'verified'])->name('settings');
+
+/* END INSIDE */
+
+// Route::inertia('settings', 'Settings');
+// Route::inertia('overview', 'Overview');
+
+require __DIR__.'/auth.php';

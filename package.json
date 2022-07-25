@@ -1,36 +1,28 @@
 {
     "private": true,
     "scripts": {
-        "dev": "npm run development",
-        "development": "mix",
-        "watch": "mix watch",
-        "watch-poll": "mix watch -- --watch-options-poll=1000",
-        "hot": "mix watch --hot",
-        "prod": "npm run production",
-        "production": "mix --production"
+        "dev": "vite",
+        "build": "vite build"
+    },
+    "devDependencies": {
+        "@inertiajs/inertia": "^0.11.0",
+        "@inertiajs/inertia-vue3": "^0.6.0",
+        "@inertiajs/progress": "^0.2.7",
+        "@tailwindcss/forms": "^0.5.2",
+        "@vitejs/plugin-vue": "^3.0.0",
+        "autoprefixer": "^10.4.2",
+        "axios": "^0.27",
+        "laravel-vite-plugin": "^0.5.0",
+        "lodash": "^4.17.19",
+        "postcss": "^8.4.6",
+        "tailwindcss": "^3.1.0",
+        "vite": "^3.0.0",
+        "vue": "^3.2.31"
+    },
+    "overrides": {
+        "rollup": "2.74.1"
     },
     "dependencies": {
-        "@fortawesome/fontawesome-free": "^6.1.1",
-        "@popperjs/core": "^2.10.2",
-        "@types/jquery": "^3.5.14",
-        "@types/vue-select": "^3.16.0",
-        "@vue/devtools": "^6.2.0",
-        "axios": "^0.25",
-        "bootstrap": "^5.1.3",
-        "bootstrap-vue": "^2.22.0",
-        "chart.js": "^2.9.4",
-        "datatables.net-bs4": "^1.10.24",
-        "jquery": "^3.6.0",
-        "jquery-ui": "^1.13.1",
-        "laravel-mix": "^6.0.6",
-        "lodash": "^4.17.19",
-        "postcss": "^8.1.14",
-        "resolve-url-loader": "^5.0.0",
-        "sass": "^1.32.11",
-        "sass-loader": "^11.0.1",
-        "vue": "^3.2.37",
-        "vue-loader": "^17.0.0",
-        "vue-router": "^4.1.1",
         "vue-select": "^4.0.0-beta.3"
     }
 }
