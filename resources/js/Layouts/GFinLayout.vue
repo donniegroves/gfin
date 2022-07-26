@@ -14,9 +14,13 @@
 </template>
 
 <script>
+import { usePage } from '@inertiajs/inertia-vue3';
 import Topbar from '@/Components/Topbar.vue';
 import Sidebar from '@/Components/Sidebar.vue';
 export default{
+    provide() {
+        return {logged_in_user: usePage().props.value.auth.user}
+    },
     data: function(){
         return {
             author: 'Donnie Groves'

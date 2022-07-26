@@ -60,7 +60,7 @@ export default{
         },
         async refreshCategories(){
             console.log('refreshCategories');
-            const response = await axios.get('api/categories', {});
+            const response = await axios.get('reqs/categories', {});
             if (response.status == 200){
                 console.log('received ' + response.data.length + ' categories.');
                 this.all_categories = response.data;
@@ -68,7 +68,7 @@ export default{
         },
         async refreshCategoryPatterns(){
             console.log('refreshCategoryPatterns');
-            const response = await axios.get('api/categorypatterns', {});
+            const response = await axios.get('reqs/categorypatterns', {});
             if (response.status == 200){
                 console.log('received ' + response.data.length + ' category patterns.');
                 this.all_category_patterns = response.data;

@@ -53,7 +53,7 @@ export default{
     methods: {
         confirmPayeeChange(){
             console.log('PayeeRow - confirmPayeeChange');
-            axios.put('api/payee/' + this.payee.id,{
+            axios.put('reqs/payees/update/' + this.payee.id,{
                 payee: {
                     name: this.cur_payee_name
                 }
@@ -72,7 +72,7 @@ export default{
             this.cur_payee_name = this.orig_payee_name
         },
         deletePayee(){
-            axios.delete('api/payee/' + this.payee.id)
+            axios.delete('reqs/payees/destroy/' + this.payee.id)
             .then (response => {
                 if( response.status == 200 ){
                     this.$emit('payeeDeleted');

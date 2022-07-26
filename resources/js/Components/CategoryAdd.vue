@@ -22,7 +22,7 @@ export default{
     },
     methods: {
         addCategory(){
-            axios.post('api/category/store', {
+            axios.post('reqs/categories/store', {
                 category: {
                     name: this.category_name
                     }

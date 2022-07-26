@@ -42,7 +42,7 @@ export default{
     },
     methods: {
         deleteTransaction(){
-            axios.delete('api/transaction/' + this.transaction.id)
+            axios.delete('reqs/transactions/destroy/' + this.transaction.id)
             .then (response => {
                 if( response.status == 200 ){
                     this.$emit('transactionDeleted');
@@ -59,7 +59,7 @@ export default{
             this.edit_mode = !this.edit_mode;
         },
         editTransaction(){
-            axios.put('api/transaction/' + this.transaction.id,{
+            axios.put('reqs/transactions/update/' + this.transaction.id,{
                 transaction: {
                     trans_date: this.row_date,
                     payee_id: this.selected_payee.id,

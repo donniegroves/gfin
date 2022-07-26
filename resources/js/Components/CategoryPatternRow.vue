@@ -25,7 +25,7 @@ export default{
             this.cur_pattern = this.orig_pattern;
         },
         confirmPatternChange(){
-            axios.put('api/categorypattern/' + this.pattern.id,{
+            axios.put('reqs/categorypatterns/update/' + this.pattern.id,{
                 pattern: {
                     pattern: this.cur_pattern
                 }
@@ -41,7 +41,7 @@ export default{
             });
         },
         deletePattern(){
-            axios.delete('api/categorypattern/' + this.pattern.id)
+            axios.delete('reqs/categorypatterns/destroy/' + this.pattern.id)
             .then (response => {
                 if( response.status == 200 ){
                     this.$emit('patternDeleted');

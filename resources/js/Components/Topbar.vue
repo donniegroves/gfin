@@ -71,7 +71,7 @@
         <!-- Nav Item - User Information -->
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ logged_in_user }}</span>
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ logged_in_user.name }}</span>
                 <img class="img-profile rounded-circle"
                     src="img/undraw_profile.svg">
             </a>
@@ -104,10 +104,10 @@
 
 <script>
     export default {
+        inject: ['logged_in_user'],
         data: function(){
             return {
                 notifs_quant: 555,
-                logged_in_user: "Donnie Groves"
             }
         }
     }

@@ -23,7 +23,7 @@ export default{
     },
     methods: {
         addPattern(){
-            axios.post('api/categorypattern/store', {
+            axios.post('reqs/categorypatterns/store', {
                 pattern: {
                     pattern: this.cur_input,
                     category_id: this.category_id

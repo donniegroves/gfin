@@ -22,7 +22,7 @@ export default{
     },
     methods: {
         addPayee(){
-            axios.post('api/payee/store', {
+            axios.post('reqs/payees/store', {
                 payee: {
                     name: this.payee_name
                     }

@@ -61,7 +61,7 @@ export default{
         },
         async refreshPayees(){
             console.log('refreshPayees');
-            const response = await axios.get('api/payees', {});
+            const response = await axios.get('reqs/payees', {});
             if (response.status == 200){
                 console.log('received ' + response.data.length + ' payees.');
                 this.all_payees = response.data;
@@ -69,7 +69,7 @@ export default{
         },
         async refreshPayeePatterns(){
             console.log('refreshPayeePatterns');
-            const response = await axios.get('api/payeepatterns', {});
+            const response = await axios.get('reqs/payeepatterns', {});
             if (response.status == 200){
                 console.log('received ' + response.data.length + ' payee patterns.');
                 this.all_payee_patterns = response.data;

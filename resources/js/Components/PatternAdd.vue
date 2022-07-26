@@ -23,7 +23,7 @@ export default{
     },
     methods: {
         addPattern(){
-            axios.post('api/payeepattern/store', {
+            axios.post('reqs/payeepatterns/store', {
                 pattern: {
                     pattern: this.cur_input,
                     payee_id: this.payee_id

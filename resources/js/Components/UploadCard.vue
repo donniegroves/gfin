@@ -35,7 +35,7 @@ export default{
             console.log(event.target.files[0]);
             let data = new FormData();
             data.append('file', event.target.files[0]);
-            axios.post('api/transactions/import', data)
+            axios.post('reqs/transactions/import', data)
             .then ( response => {
                 console.log(response);
                 if( response.status == 200 ){

@@ -46,7 +46,7 @@ export default{
     methods: {
         addTransaction(){
             console.log('addTransaction');
-            axios.post('api/transaction/store', {
+            axios.post('reqs/transactions/store', {
                 transaction: {
                     payee_id: this.add_payee.id >= 1 ? this.add_payee.id : null,
                     category_id: this.add_cat.id >= 1 ? this.add_cat.id : null,

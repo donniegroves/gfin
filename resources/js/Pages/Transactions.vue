@@ -54,7 +54,7 @@ export default{
         },
         async refreshTransactions(){
             console.log('refreshTransactions');
-            const response = await axios.get('api/transactions', {});
+            const response = await axios.get('reqs/transactions', {});
             if (response.status == 200){
                 console.log('received ' + response.data.length + ' transactions.');
                 this.all_trans = response.data;
@@ -62,7 +62,7 @@ export default{
         },
         async refreshPayees(){
             console.log('refreshPayees');
-            const response = await axios.get('api/payees', {});
+            const response = await axios.get('reqs/payees', {});
             if (response.status == 200){
                 console.log('received ' + response.data.length + ' payees.');
                 this.all_payees = response.data;
@@ -70,7 +70,7 @@ export default{
         },
         async refreshCategories(){
             console.log('refreshCategories');
-            const response = await axios.get('api/categories', {});
+            const response = await axios.get('reqs/categories', {});
             if (response.status == 200){
                 console.log('received ' + response.data.length + ' categories.');
                 this.all_categories = response.data;

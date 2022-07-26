@@ -53,7 +53,7 @@ export default{
     methods: {
         confirmCategoryChange(){
             console.log('CategoryRow - confirmCategoryChange');
-            axios.put('api/category/' + this.category.id,{
+            axios.put('reqs/categories/update/' + this.category.id,{
                 category: {
                     name: this.cur_cat_name
                 }
@@ -72,7 +72,7 @@ export default{
             this.cur_cat_name = this.orig_cat_name
         },
         deleteCategory(){
-            axios.delete('api/category/' + this.category.id)
+            axios.delete('reqs/categories/destroy/' + this.category.id)
             .then (response => {
                 if( response.status == 200 ){
                     this.$emit('categoryDeleted');
