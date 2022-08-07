@@ -62,8 +62,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::get('/plaid/create_link_token',[PlaidController::class, 'create_link_token']);
         Route::post('/plaid/exchange_public_token',[PlaidController::class, 'exchange_public_token']);
         Route::get('/plaid/is_account_connected',[PlaidController::class, 'is_account_connected']);
-        Route::get('/plaid/get_trans',[PlaidController::class, 'get_trans']);
         Route::get('/plaid/unlink_account',[PlaidController::class, 'unlink_account']);
+        Route::get('/plaid/transactions/import',[PlaidController::class, 'import_transactions']);
     });
 });
 

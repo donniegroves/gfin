@@ -56,6 +56,29 @@ class PlaidController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function import_transactions()
+    {
+        $user_id = Auth::user()->id;
+        $token_res = PlaidTokens::where('user_id', $user_id)->get();
+        
+        if (count($token_res) !== 1){
+            return response('Problem determining which token to use.', 500);
+        }
+
+        $access_token = $token_res->first()->token;
+        $plaid = new Plaid(self::PLAID_CLIENT_ID, self::PLAID_SECRET_KEY, "sandbox");
+
+        $start_date = new \DateTime('1 month ago');
+        $end_date = new \DateTime('yesterday');
+
+        $transactions = $plaid->transactions->list($access_token, $start_date, $end_date);
+    }
+
+    /**
+     * 
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function is_account_connected()
     {
         $user_id = Auth::user()->id;
@@ -83,24 +106,6 @@ class PlaidController extends Controller
         }
 
         return response('Account unlinked successfully.', 200);
-    }
-
-    /**
-     * 
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function get_trans()
-    {
-        $plaid = new Plaid(self::PLAID_CLIENT_ID, self::PLAID_SECRET_KEY, "sandbox");
-
-        $access_token = 'xxxxxxxxxx'; // LOOK UP ACCESS_TOKEN IN DATABASE.
-        $start_date = new \DateTime('1 month ago');
-        $end_date = new \DateTime('yesterday');
-
-        $transactions = $plaid->transactions->list($access_token, $start_date, $end_date);
-        
-        return $transactions;
     }
 
     /**

@@ -64,6 +64,18 @@ export default{
             catch{
                 console.log('problem unlinking account');
             }
+        },
+        getNewTransactions: async function(){
+            try{
+                const response = await axios.get('/reqs/plaid/transactions/import', {});
+                if (response.status == 200){
+                    console.log('successfully retrieved transactions');
+                    this.is_account_connected = false;
+                }
+            }
+            catch{
+                console.log('problem retrieving transactions');
+            }
         }
     },
     mounted(){
@@ -125,6 +137,7 @@ export default{
             const getTransactionsButton = document.getElementById("get_trans_btn");
             getTransactionsButton.addEventListener("click", (event) => {
                 console.log('getting transactions!');
+                this.getNewTransactions();
             });
         })(jQuery);
     }
