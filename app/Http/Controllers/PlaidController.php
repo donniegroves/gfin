@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use TomorrowIdeas\Plaid\Plaid;
 use TomorrowIdeas\Plaid\Entities\User;
+use App\Models\PlaidTokens;
+use Illuminate\Support\Facades\Auth;
 
 class PlaidController extends Controller
 {
@@ -37,9 +39,16 @@ class PlaidController extends Controller
 
         $access_token = $plaid->items->exchangeToken($request->input('public_token'));
 
-        // STORE THIS ACCESS TOKEN IN DB FOR USER.
+        $plaid_token = new PlaidTokens();
+        $plaid_token->token = $access_token->access_token;
+        $plaid_token->user_id = Auth::user()->id;
+        $saved = $plaid_token->save();
 
-        return $access_token;
+        if (!$saved){
+            return response('Problem with saving token.', 500);
+        }
+
+        return response('Token saved successfully.', 200);
     }
 
     /**
@@ -49,7 +58,31 @@ class PlaidController extends Controller
      */
     public function is_account_connected()
     {
-        return '{"status":false}';
+        $user_id = Auth::user()->id;
+        $token_res = PlaidTokens::where('user_id', $user_id)->get();
+
+        if (count($token_res) !== 1){
+            return response('0', 200);
+        }
+
+        return response(1, 200);
+    }
+
+    /**
+     * 
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function unlink_account()
+    {
+        $user_id = Auth::user()->id;
+        $deleted = PlaidTokens::where('user_id', $user_id)->delete();
+
+        if (!$deleted){
+            return response('Problem unlinking account', 500);
+        }
+
+        return response('Account unlinked successfully.', 200);
     }
 
     /**
@@ -61,7 +94,7 @@ class PlaidController extends Controller
     {
         $plaid = new Plaid(self::PLAID_CLIENT_ID, self::PLAID_SECRET_KEY, "sandbox");
 
-        $access_token = 'xxx'; // LOOK UP ACCESS_TOKEN IN DATABASE.
+        $access_token = 'xxxxxxxxxx'; // LOOK UP ACCESS_TOKEN IN DATABASE.
         $start_date = new \DateTime('1 month ago');
         $end_date = new \DateTime('yesterday');
 

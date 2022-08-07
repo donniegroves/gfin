@@ -23,10 +23,3 @@ use App\Http\Controllers\PlaidController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::prefix('/plaid')->group(function(){
-    Route::get('/create_link_token',[PlaidController::class, 'create_link_token']);
-    Route::post('/exchange_public_token',[PlaidController::class, 'exchange_public_token']);
-    Route::get('/is_account_connected',[PlaidController::class, 'is_account_connected']);
-    Route::get('/get_trans',[PlaidController::class, 'get_trans']);
-});

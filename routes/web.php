@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CategoryPatternController;
 use App\Http\Controllers\PayeeController;
 use App\Http\Controllers\PayeePatternsController;
+use App\Http\Controllers\PlaidController;
 use App\Http\Controllers\TransactionController;
 
 /*
@@ -57,6 +58,12 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::post('/categorypatterns/store', [CategoryPatternController::class, 'store']);
         Route::put('/categorypatterns/update/{id}',[CategoryPatternController::class, 'update']);
         Route::delete('/categorypatterns/destroy/{id}', [CategoryPatternController::class, 'destroy']);
+
+        Route::get('/plaid/create_link_token',[PlaidController::class, 'create_link_token']);
+        Route::post('/plaid/exchange_public_token',[PlaidController::class, 'exchange_public_token']);
+        Route::get('/plaid/is_account_connected',[PlaidController::class, 'is_account_connected']);
+        Route::get('/plaid/get_trans',[PlaidController::class, 'get_trans']);
+        Route::get('/plaid/unlink_account',[PlaidController::class, 'unlink_account']);
     });
 });
 
