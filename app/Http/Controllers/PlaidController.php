@@ -6,11 +6,22 @@ use Illuminate\Http\Request;
 use TomorrowIdeas\Plaid\Plaid;
 use TomorrowIdeas\Plaid\Entities\User;
 use App\Models\PlaidTokens;
+use App\Models\PayeePattern;
+use App\Models\CategoryPattern;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 
 class PlaidController extends Controller
 {
 
+    private $pclient;
+    private $payee_patterns;
+    private $cat_patterns;
+
+    public function __construct()
+    {
+        $this->pclient = new Plaid(self::PLAID_CLIENT_ID, self::PLAID_SECRET_KEY, "sandbox");
+    }
 
     /**
      * 
@@ -19,11 +30,9 @@ class PlaidController extends Controller
      */
     public function create_link_token()
     {
-        $plaid = new Plaid(self::PLAID_CLIENT_ID, self::PLAID_SECRET_KEY, "sandbox");
-
         $token_user = new User(self::ARBITRARY_USER_ID);
         
-        $token = $plaid->tokens->create(self::APP_NAME,'en',['US','CA'], $token_user, ['transactions']);
+        $token = $this->pclient->tokens->create(self::APP_NAME,'en',['US','CA'], $token_user, ['transactions']);
         
         return $token;
     }
@@ -35,9 +44,7 @@ class PlaidController extends Controller
      */
     public function exchange_public_token(Request $request)
     {
-        $plaid = new Plaid(self::PLAID_CLIENT_ID, self::PLAID_SECRET_KEY, "sandbox");
-
-        $access_token = $plaid->items->exchangeToken($request->input('public_token'));
+        $access_token = $this->pclient->items->exchangeToken($request->input('public_token'));
 
         $plaid_token = new PlaidTokens();
         $plaid_token->token = $access_token->access_token;
@@ -60,18 +67,67 @@ class PlaidController extends Controller
     {
         $user_id = Auth::user()->id;
         $token_res = PlaidTokens::where('user_id', $user_id)->get();
-        
         if (count($token_res) !== 1){
             return response('Problem determining which token to use.', 500);
         }
-
         $access_token = $token_res->first()->token;
-        $plaid = new Plaid(self::PLAID_CLIENT_ID, self::PLAID_SECRET_KEY, "sandbox");
 
         $start_date = new \DateTime('1 month ago');
         $end_date = new \DateTime('yesterday');
 
-        $transactions = $plaid->transactions->list($access_token, $start_date, $end_date);
+        $transactions = $this->pclient->transactions->list($access_token, $start_date, $end_date);
+        self::preparePatterns();
+        
+        $proc_results = [];
+        foreach ($transactions->transactions as $tran){
+            $proc_results[] = [
+                "transaction" => $tran,
+                "match_results" => self::processTransaction($tran)
+            ];
+        }
+
+        return $proc_results;
+    }
+
+    private function processTransaction($tran){
+        $res_arr = [];
+        $t_desc = $tran->name;
+
+        // determine if payee is matchable
+        foreach($this->payee_patterns as $ppat){
+            if (str_contains($t_desc, $ppat['pattern'])){
+                $res_arr['payee_id'] = $ppat['payee_id'];
+                break;
+            }
+        }
+        
+        // determine if category is matchable
+        foreach($this->cat_patterns as $cpat){
+            if (str_contains($t_desc, $cpat['pattern'])){
+                $res_arr['category_id'] = $cpat['category_id'];
+                break;
+            }
+        }
+        
+        // add transactions into table
+        $transaction = new Transaction([
+            "trans_date" => $tran->date,
+            "payee_id" => $res_arr['payee_id'] ?? null,
+            "category_id" => $res_arr['category_id'] ?? null,
+            "orig_detail" => $tran->name,
+            "orig_amt" => $tran->amount,
+            "verified" => 1,
+        ]);
+        $transaction->save();
+
+        if (!empty($res_arr)){
+            return $res_arr;
+        }
+    }
+
+    private function preparePatterns(){
+        $this->payee_patterns = PayeePattern::get()->toArray();
+        $this->cat_patterns = CategoryPattern::get()->toArray();
     }
 
     /**

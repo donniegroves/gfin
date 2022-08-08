@@ -25,7 +25,21 @@
                 ">
                     <span v-text="this.is_account_connected ? 'Unlink Account' : 'Link Account'"></span>
                 </button>
-                <button id="get_trans_btn">Get Transactions</button>
+            </div>
+            <div v-if="is_account_connected" class="col-xl-3 col-md-6 mb-4">
+                <button type="button" id="get_trans_btn" class="btn btn-primary btn-dark btn-lg" style="
+                border: 1px solid black;
+                border-radius: 5px;
+                background: black;
+                height: 48px;
+                width: 200px;
+                margin-top: 5; 
+                margin-left: 10;
+                color: white;
+                font-size: 18px;
+                ">
+                    <span>Get Transactions</span>
+                </button>
             </div>
         </div>
     </GFinLayout>
@@ -70,7 +84,6 @@ export default{
                 const response = await axios.get('/reqs/plaid/transactions/import', {});
                 if (response.status == 200){
                     console.log('successfully retrieved transactions');
-                    this.is_account_connected = false;
                 }
             }
             catch{

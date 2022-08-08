@@ -7,5 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
+    protected $fillable = [
+        "trans_date",
+        "payee_id",
+        "category_id",
+        "orig_detail",
+        "orig_amt",
+        "verified",
+    ];
+
     use HasFactory;
 }
