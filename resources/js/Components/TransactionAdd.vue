@@ -1,9 +1,9 @@
 <template>
     <div class="row pt-1 pb-1 align-items-center">
-        <div class="col-2 pl-0">
+        <div class="col-2">
             <input class="form-control" type="date" v-model="add_date"/>
         </div>
-        <div class="col-3 pl-2">
+        <div class="col-2 pl-2">
             <v-select label="name" v-model="add_payee" :options="all_payees"></v-select>
         </div>
         
@@ -11,10 +11,10 @@
             <v-select label="name" v-model="add_cat" :options="all_categories"></v-select>
         </div>
         
-        <div class="col-3 pl-2">
+        <div class="col-4 pl-2">
             <input class="form-control" type="text" v-model="add_desc"/>
         </div>
-        <div class="col-1 p-0">
+        <div class="col-1">
             <input class="form-control" type="number" min="1" step="any" v-model="add_amt"/>
         </div>
         <div class="col-1 pl-2 pr-0 text-right">
@@ -73,7 +73,11 @@ export default{
 <style scoped>
 input{
     width: 100%;
-} 
+}
+.form-control {
+    padding: 0 0.50rem;
+    height: calc(1em + 0.75rem + 2px);
+}
 .active {
     color: #00ce25;
 }

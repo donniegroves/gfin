@@ -14,8 +14,6 @@
             :all_categories="all_categories"
             :selected_payee="filteredPayee(tran.payee_id)"
             :selected_category="filteredCategory(tran.category_id)"
-            :selected_payee_name="filteredPayee(tran.payee_id)?.name"
-            :selected_category_name="filteredCategory(tran.category_id)?.name"
             :key="tran.id"
             @editTransaction="refreshView"
             @transactionDeleted="refreshView"
