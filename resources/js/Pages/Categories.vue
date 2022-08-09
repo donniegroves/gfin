@@ -40,7 +40,6 @@ export default{
 },
     methods: {
         filtered(search_category_id){
-            console.log('filtered');
             let final_arr = [];
             if (this.all_category_patterns == null){
                 return final_arr;

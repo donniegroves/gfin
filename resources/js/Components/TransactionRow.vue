@@ -3,19 +3,19 @@
         <div class="col-2">
             <!-- <button @click="verifyTransaction()" class="btn btn-outline-danger btn-sm ml-1"><i class="fa-solid fa-square-check"></i></button>
             <span>{{ transaction.verified }}</span> -->
-            <input class="form-control" type="date" v-model="row_date"/>
+            <input class="form-control" type="date" v-model="row_date" @change="editTransaction"/>
         </div>
         <div class="col-2 transactionRow-payee">
-            <v-select appendToBody label="name" v-model="selected_payee" :options="all_payees"></v-select>
+            <v-select appendToBody label="name" v-model="selected_payee" :options="all_payees" @option:selected="editTransaction"></v-select>
         </div>
         <div class="col-2 transactionRow-category">
-            <v-select appendToBody label="name" v-model="selected_category" :options="all_categories"></v-select>
+            <v-select appendToBody label="name" v-model="selected_category" :options="all_categories" @option:selected="editTransaction"></v-select>
         </div>
         <div class="col-4 transactionRow-desc">
-            <input class="form-control" type="text" v-model="row_desc"/>
+            <input class="form-control" type="text" v-model="row_desc" @change="editTransaction"/>
         </div>
         <div class="col-1">
-            <input class="form-control" type="number" min="1" step="any" v-model="row_amt"/>
+            <input class="form-control" type="number" min="1" step="any" v-model="row_amt" @change="editTransaction"/>
         </div>
         <div class="col-1 d-flex justify-content-around p-0">
             <button @click="toggleVerified()" class="btn btn-outline-info btn-sm"><i :class="['fas', row_verified ? 'fa-check' : 'fa-square-o']"></i></button>
@@ -50,16 +50,18 @@ export default{
             });
         },
         toggleVerified(){
-            console.log('toggleVerified');
+            this.row_verified = !this.row_verified;
+            this.editTransaction();
         },
         editTransaction(){
             axios.put('reqs/transactions/update/' + this.transaction.id,{
                 transaction: {
                     trans_date: this.row_date,
-                    payee_id: this.selected_payee.id,
-                    category_id: this.selected_category.id,
+                    payee_id: this.selected_payee?.id,
+                    category_id: this.selected_category?.id,
                     new_detail: this.row_desc,
-                    new_amt: this.row_amt
+                    new_amt: this.row_amt,
+                    verified: this.row_verified
                 }
             })
             .then (response => {

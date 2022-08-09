@@ -39,10 +39,10 @@ export default{
         this.refreshView();
     },
     components: {
-    TransactionRow,
-    TransactionAdd,
-    GFinLayout
-},
+        TransactionRow,
+        TransactionAdd,
+        GFinLayout
+    },
     methods: {
         refreshView(){
             console.log('refreshView');
@@ -75,7 +75,6 @@ export default{
             }
         },
         filteredPayee(search_payee_id){
-            console.log('filtered');
             let final_arr = [];
             if (this.all_payees == null){
                 return final_arr;
@@ -89,7 +88,6 @@ export default{
             return final_arr[0];
         },
         filteredCategory(search_category_id){
-            console.log('filtered');
             let final_arr = [];
             if (this.all_categories == null){
                 return final_arr;

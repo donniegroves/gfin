@@ -41,7 +41,6 @@ export default{
 },
     methods: {
         filtered(search_payee_id){
-            console.log('filtered');
             let final_arr = [];
             if (this.all_payee_patterns == null){
                 return final_arr;
