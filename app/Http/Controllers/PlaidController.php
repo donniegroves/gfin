@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Auth;
 
 class PlaidController extends Controller
 {
-
     private $pclient;
     private $payee_patterns;
     private $cat_patterns;
@@ -21,7 +20,7 @@ class PlaidController extends Controller
 
     public function __construct()
     {
-        $this->pclient = new Plaid(self::PLAID_CLIENT_ID, self::PLAID_SECRET_KEY, "sandbox");
+        $this->pclient = new Plaid(env('PLAID_CLIENT_ID'), env('PLAID_SECRET_KEY'), "sandbox");
     }
 
     /**
@@ -31,11 +30,9 @@ class PlaidController extends Controller
      */
     public function create_link_token()
     {
-        $token_user = new User(self::ARBITRARY_USER_ID);
+        $token_user = new User(Auth::user()->id);
         
-        $token = $this->pclient->tokens->create(self::APP_NAME,'en',['US','CA'], $token_user, ['transactions']);
-        
-        return $token;
+        return $this->pclient->tokens->create(env('APP_NAME'),'en',['US','CA'], $token_user, ['transactions']);
     }
 
     /**
