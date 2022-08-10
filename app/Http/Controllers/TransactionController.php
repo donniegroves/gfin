@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Transaction;
+use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
@@ -104,6 +105,48 @@ class TransactionController extends Controller
     public function edit($id)
     {
         //
+    }
+
+
+    /**
+     * Gets and returns an array of category totals, ordered desc by their total amount.
+     * Takes Quantity and Interval as arguments. Passing 2 and 'month' will account for all transactions 
+     * within the past 2 months.
+     *
+     * @param integer $quant
+     * @param string $interval
+     * @return void
+     */
+    public function getCategoryTotals(int $quant, string $interval){
+        $interval = strtoupper($interval);
+        if (!in_array($interval,['DAY','YEAR','MONTH','YEAR'])){
+            return false;
+        }
+
+        $query = '
+            SELECT
+                categories.`name`, 
+                SUM(COALESCE(transactions.new_amt, transactions.orig_amt)) AS total
+            FROM
+                transactions
+                LEFT JOIN
+                categories
+                ON 
+                    transactions.category_id = categories.id
+            WHERE
+                transactions.trans_date >= DATE_SUB(CURDATE(), INTERVAL ' . $quant . ' ' . $interval .')
+            GROUP BY
+                categories.`name`
+            ORDER BY `total` DESC';
+        
+        $cat_totals = DB::select($query);
+        $result_arr = [];
+        foreach ($cat_totals as $cat_row){
+            $cat_row->name = $cat_row->name ?? 'Uncategorized';
+            $result_arr[$cat_row->name] = $cat_row->total;
+        }
+        
+        return $result_arr;
     }
 
     /**
