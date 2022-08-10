@@ -40,6 +40,13 @@
                 ">
                     <span>Get Transactions</span>
                 </button>
+                <div v-if="importResult" class="import_result">
+                    <span>Received transactions successfully.</span><br />
+                    <span>{{ importResult.total_incoming }} total transactions received.</span><br />
+                    <span>{{ importResult.existing_skipped }} skipped.</span><br />
+                    <span>{{ importResult.new_processed }} transactions imported.</span><br />
+                    <span>{{ importResult.matched_trans + '/' + importResult.new_processed }} transactions matched a pattern.</span><br />
+                </div>
             </div>
         </div>
     </GFinLayout>
@@ -53,7 +60,8 @@ export default{
     data(){
         return {
             isFetching: true,
-            is_account_connected: false
+            is_account_connected: false,
+            importResult: false
         }
     },
     components: {
@@ -84,6 +92,7 @@ export default{
                 const response = await axios.get('/reqs/plaid/transactions/import', {});
                 if (response.status == 200){
                     console.log('successfully retrieved transactions');
+                    this.importResult = response.data;
                 }
             }
             catch{
