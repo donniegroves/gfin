@@ -34,6 +34,7 @@ Route::get('/', function () {
 Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::prefix('/reqs')->group(function(){
         Route::get('/transactions',[TransactionController::class, 'index']);
+        Route::get('/transactions/stats',[TransactionController::class, 'get_stats']);
         Route::post('/transactions/store', [TransactionController::class, 'store']);
         Route::post('/transactions/import',[TransactionController::class, 'import']);
         Route::put('/transactions/update/{id}', [TransactionController::class, 'update']);

@@ -117,7 +117,7 @@ class TransactionController extends Controller
      * @param string $interval
      * @return void
      */
-    public function getCategoryTotals(int $quant, string $interval){
+    private function getCategoryTotals(int $quant, string $interval){
         $interval = strtoupper($interval);
         if (!in_array($interval,['DAY','YEAR','MONTH','YEAR'])){
             return false;
@@ -147,6 +147,10 @@ class TransactionController extends Controller
         }
         
         return $result_arr;
+    }
+
+    public function get_stats(){
+        return self::getCategoryTotals(2, 'year');
     }
 
     /**

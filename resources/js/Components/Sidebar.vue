@@ -37,8 +37,8 @@
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#">
-                <i class="fa-regular fa-fw fa-file-lines"></i>
-                <span>Reports</span>
+                <i class="fa-regular fa-fw fa-calendar-days"></i>
+                <span>Calendar</span>
             </a>
         </li>
         <!-- End of Main -->
