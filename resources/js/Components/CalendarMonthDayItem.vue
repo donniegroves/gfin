@@ -69,7 +69,7 @@ export default {
             this.filtered_trans.forEach((tran)=>{
                 let amt = parseInt(tran.new_amt ?? tran.orig_amt);
                 let cat_id = tran.category_id;
-                let cat_name = this.cats[cat_id]?.name ?? 'Uncategorized';
+                let cat_name = this.getCatNameById(cat_id);
                 if (final_obj[cat_name] == undefined){
                     final_obj[cat_name] = amt;
                 }
@@ -78,6 +78,15 @@ export default {
                 }
                 this.cat_totals = final_obj;
             });
+        },
+        getCatNameById(cat_id){
+            let found_name = false;
+            this.cats.forEach((cat) => {
+                if (cat_id == cat.id){
+                    found_name = cat.name;
+                }
+            });
+            return found_name ? found_name : 'Uncategorized';
         }
     },
     computed: {
