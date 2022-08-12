@@ -8,6 +8,7 @@ use App\Http\Controllers\CategoryPatternController;
 use App\Http\Controllers\PayeeController;
 use App\Http\Controllers\PayeePatternsController;
 use App\Http\Controllers\PlaidController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TransactionController;
 
 /*
@@ -39,6 +40,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::post('/transactions/import',[TransactionController::class, 'import']);
         Route::put('/transactions/update/{id}', [TransactionController::class, 'update']);
         Route::delete('/transactions/destroy/{id}', [TransactionController::class, 'destroy']);
+
+        Route::get('/settings',[SettingsController::class, 'index']);
 
         Route::get('/payees',[PayeeController::class, 'index']);
         Route::post('/payees/store', [PayeeController::class, 'store']);
