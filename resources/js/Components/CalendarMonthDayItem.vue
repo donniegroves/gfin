@@ -1,44 +1,90 @@
 <template>
-<ol>
-  <li
-    class="calendar-day"
-    :class="{
-      'calendar-day--not-current': !day.isCurrentMonth,
-      'calendar-day--today': isToday
-    }"
-  >
-    <span>{{ label }}</span>
-  </li></ol>
+    <ol>
+        <li
+            class="calendar-day"
+            :class="{
+            'calendar-day--not-current': !day.isCurrentMonth,
+            'calendar-day--today': isToday
+            }"
+        >
+            <span>{{ label }}</span> <br />
+            <div v-if="cat_totals" v-for="(amt, cat_label) in cat_totals" class="text-right">
+                <div class="cat_line text-xs">
+                    <span class="cat_name"><strong>{{ cat_label }}: </strong></span>
+                    <span class="amt">{{ amt }}</span>
+                </div>
+            </div>
+        </li>
+    </ol>
 </template>
 
 <script>
 import dayjs from "dayjs";
 
 export default {
-  name: "CalendarMonthDayItem",
+    name: "CalendarMonthDayItem",
 
-  props: {
-    day: {
-      type: Object,
-      required: true
+    props: {
+        day: {
+            type: Object,
+            required: true
+        },
+
+        isCurrentMonth: {
+            type: Boolean,
+            default: false
+        },
+
+        isToday: {
+            type: Boolean,
+            default: false
+        },
+
+        trans: {
+            type: Object,
+            required: true
+        },
+        cats: {
+            type: Object,
+            required: true
+        }
     },
-
-    isCurrentMonth: {
-      type: Boolean,
-      default: false
+    data() {
+        return {
+            filtered_trans: [],
+            cat_totals: null
+        }
     },
-
-    isToday: {
-      type: Boolean,
-      default: false
+    mounted(){
+        this.setFilteredTrans();
+        this.setCategoryTotals();
+    },
+    methods: {
+        setFilteredTrans(){
+            let filter_result = this.trans.filter(tran => tran.trans_date == this.day.date);
+            this.filtered_trans = filter_result;
+        },
+        setCategoryTotals(){
+            let final_obj = {};
+            this.filtered_trans.forEach((tran)=>{
+                let amt = parseInt(tran.new_amt ?? tran.orig_amt);
+                let cat_id = tran.category_id;
+                let cat_name = this.cats[cat_id]?.name ?? 'Uncategorized';
+                if (final_obj[cat_name] == undefined){
+                    final_obj[cat_name] = amt;
+                }
+                else {
+                    final_obj[cat_name] += amt;
+                }
+                this.cat_totals = final_obj;
+            });
+        }
+    },
+    computed: {
+        label() {
+            return dayjs(this.day.date).format("D");
+        }
     }
-  },
-
-  computed: {
-    label() {
-      return dayjs(this.day.date).format("D");
-    }
-  }
 };
 </script>
 
@@ -50,6 +96,7 @@ export default {
   background-color: #fff;
   color: #3e4e63;
   padding: 5px;
+  border:#4e72df3a solid 1px;
 }
 
 .calendar-day > span {

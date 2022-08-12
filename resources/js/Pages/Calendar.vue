@@ -6,11 +6,10 @@
 
                 <CalendarDateSelector :current-date="today" :selected-date="selectedDate" @dateSelected="selectDate" />
             </div>
-
             <CalendarWeekdays />
 
             <ol class="days-grid">
-                <CalendarMonthDayItem v-for="day in days" :key="day.date" :day="day" :is-today="day.date === today" />
+                <CalendarMonthDayItem v-if="all_trans && all_categories" v-for="day in days" :key="day.date" :day="day" :is-today="day.date === today" :trans="all_trans" :cats="all_categories"/>
             </ol>
         </div>
     </GFinLayout>
@@ -18,6 +17,7 @@
 
 <script>
     import GFinLayout from "@/Layouts/GFinLayout.vue";
+    import axios from "axios";
     import dayjs from "dayjs";
     import weekday from "dayjs/plugin/weekday";
     import weekOfYear from "dayjs/plugin/weekOfYear";
@@ -42,7 +42,9 @@
 
         data() {
             return {
-                selectedDate: dayjs()
+                selectedDate: dayjs(),
+                all_trans: null,
+                all_categories: null
             };
         },
 
@@ -136,6 +138,10 @@
                 });
             }
         },
+        created(){
+            this.getTransactions();
+            this.getCategories();
+        },
 
         methods: {
             getWeekday(date) {
@@ -144,6 +150,20 @@
 
             selectDate(newSelectedDate) {
                 this.selectedDate = newSelectedDate;
+            },
+            async getTransactions(){
+                const response = await axios.get('reqs/transactions', {});
+                if (response.status == 200){
+                    console.log('received ' + response.data.length + ' transactions.');
+                    this.all_trans = response.data;
+                }
+            },
+            async getCategories(){
+                const response = await axios.get('reqs/categories', {});
+                if (response.status == 200){
+                    console.log('received ' + Object.keys(response.data).length + ' categories.');
+                    this.all_categories = response.data;
+                }
             }
         }
     };
