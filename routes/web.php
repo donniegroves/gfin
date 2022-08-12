@@ -74,6 +74,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
     Route::get('/overview', function () {return Inertia::render('Overview');})->name('overview');
     Route::get('/transactions', function () {return Inertia::render('Transactions');})->name('transactions');
     Route::get('/import', function () {return Inertia::render('Import');})->name('import');
+    Route::get('/calendar', function () {return Inertia::render('Calendar');})->name('calendar');
     Route::get('/settings', function () {return Inertia::render('Settings');})->name('settings');
     Route::get('/payees', function () {return Inertia::render('Payees');})->name('payees');
     Route::get('/categories', function () {return Inertia::render('Categories');})->name('categories');

@@ -23,6 +23,7 @@
         "rollup": "2.74.1"
     },
     "dependencies": {
+        "dayjs": "^1.11.4",
         "vue-select": "^4.0.0-beta.3"
     }
 }

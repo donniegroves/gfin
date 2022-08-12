@@ -36,12 +36,11 @@
             </Link>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">
+            <Link href="calendar" class="nav-link">
                 <i class="fa-regular fa-fw fa-calendar-days"></i>
                 <span>Calendar</span>
-            </a>
+            </Link>
         </li>
-        <!-- End of Main -->
 
         <hr class="sidebar-divider">
 
