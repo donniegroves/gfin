@@ -9,10 +9,10 @@
 
 <!-- Content Row -->
 <div class="row">
-    <StatCard title="This Week" :date_start="cDates.week.start" :date_end="cDates.week.end"/>
-    <StatCard title="This Month" :date_start="cDates.month.start" :date_end="cDates.month.end"/>
-    <StatCard title="This Quarter" :date_start="cDates.quarter.start" :date_end="cDates.quarter.end"/>
-    <StatCard title="Year to Date" :date_start="cDates.ytd.start" :date_end="cDates.ytd.end"/>
+    <StatCard title="This Week" :date_start="cDates.week.start" :date_end="cDates.week.end" :stats="stats.week"/>
+    <StatCard title="This Month" :date_start="cDates.month.start" :date_end="cDates.month.end" :stats="stats.month"/>
+    <StatCard title="This Quarter" :date_start="cDates.quarter.start" :date_end="cDates.quarter.end" :stats="stats.quarter"/>
+    <StatCard title="YTD" :date_start="cDates.ytd.start" :date_end="cDates.ytd.end" :stats="stats.year"/>
 </div>
 
 <div class="row">

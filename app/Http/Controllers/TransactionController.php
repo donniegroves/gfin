@@ -109,21 +109,14 @@ class TransactionController extends Controller
 
 
     /**
-     * Gets and returns an array of category totals, ordered desc by their total amount.
-     * Takes Quantity and Interval as arguments. Passing 2 and 'month' will account for all transactions 
-     * within the past 2 months.
+     * Gets and returns an array of category totals, ordered desc by their total amount, within the selected date ranges
      *
-     * @param integer $quant
-     * @param string $interval
+     * @param string $start_date
+     * @param string $end_date
      * @return void
      */
-    private function getCategoryTotals(int $quant, string $interval){
-        $interval = strtoupper($interval);
-        if (!in_array($interval,['DAY','YEAR','MONTH','YEAR'])){
-            return false;
-        }
-
-        $query = '
+    private function getCategoryTotals(string $start_date, string $end_date){
+        $query = "
             SELECT
                 categories.`name`, 
                 SUM(COALESCE(transactions.new_amt, transactions.orig_amt)) AS total
@@ -134,10 +127,11 @@ class TransactionController extends Controller
                 ON 
                     transactions.category_id = categories.id
             WHERE
-                transactions.trans_date >= DATE_SUB(CURDATE(), INTERVAL ' . $quant . ' ' . $interval .')
+                transactions.trans_date >= '" . addslashes($start_date) . "'
+                AND transactions.trans_date <= '" . addslashes($end_date) . "'
             GROUP BY
                 categories.`name`
-            ORDER BY `total` DESC';
+            ORDER BY `total` DESC";
         
         $cat_totals = DB::select($query);
         $result_arr = [];
@@ -150,7 +144,22 @@ class TransactionController extends Controller
     }
 
     public function get_stats(){
-        return self::getCategoryTotals(2, 'year');
+        // getting dates
+        $week_start = date('Y-m-d',strtotime('last sunday'));
+        $week_end = date('Y-m-d', strtotime('this saturday'));
+        $month_start = date('Y-m-d', strtotime(date('Y-m-1')));
+        $month_end = date('Y-m-t', time());
+        $quarter_start = date('Y-m-d', strtotime(date('Y') . '-' . ((ceil(date('n') / 3) * 3) - 2) . '-1'));
+        $quarter_end = date('Y-m-t', strtotime(date('Y') . '-' . ((ceil(date('n') / 3) * 3)) . '-1'));
+        $year_start = date('Y-m-d', strtotime('first day of january this year'));
+        $year_end = date('Y-m-d', strtotime('last day of december this year'));
+
+        return [
+            "week" => self::getCategoryTotals($week_start, $week_end),
+            "month" => self::getCategoryTotals($month_start, $month_end),
+            "quarter" => self::getCategoryTotals($quarter_start, $quarter_end),
+            "year" => self::getCategoryTotals($year_start, $year_end)
+        ];
     }
 
     /**
