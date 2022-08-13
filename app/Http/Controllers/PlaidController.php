@@ -134,7 +134,7 @@ class PlaidController extends Controller
                 "category_id" => null,
                 "orig_detail" => $one_tran->name,
                 "orig_amt" => $one_tran->amount,
-                "verified" => 0,
+                "approved" => 0,
             ]);
 
             // determine if payee is matchable
@@ -178,7 +178,7 @@ class PlaidController extends Controller
                 "category_id" => $tran->category_id,
                 "orig_detail" => $tran->orig_detail,
                 "orig_amt" => $tran->orig_amt,
-                "verified" => 1,
+                "approved" => 0,
             ]);
             $transaction->save();
         }

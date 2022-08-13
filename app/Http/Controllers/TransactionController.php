@@ -45,7 +45,7 @@ class TransactionController extends Controller
         // optional input
         $new_trans->payee_id = $request->transaction["payee_id"] ?? null;
         $new_trans->category_id = $request->transaction["category_id"] ?? null;
-        $new_trans->verified = $request->transaction["verified"] ?? 0;
+        $new_trans->approved = $request->transaction["approved"] ?? 0;
         
         $new_trans->save();
 
@@ -129,6 +129,7 @@ class TransactionController extends Controller
             WHERE
                 transactions.trans_date >= '" . addslashes($start_date) . "'
                 AND transactions.trans_date <= '" . addslashes($end_date) . "'
+                AND transactions.approved = 1
             GROUP BY
                 categories.`name`
             ORDER BY `total` DESC";
@@ -179,7 +180,7 @@ class TransactionController extends Controller
             $existing_trans->category_id = !empty($request->transaction['category_id']) ? $request->transaction['category_id'] : $existing_trans->category_id;
             $existing_trans->new_detail = !empty($request->transaction['new_detail']) ? $request->transaction['new_detail'] : $existing_trans->new_detail;
             $existing_trans->new_amt = !empty($request->transaction['new_amt']) ? $request->transaction['new_amt'] : $existing_trans->new_amt;
-            $existing_trans->verified = isset($request->transaction['verified']) ? (bool) $request->transaction['verified'] : $existing_trans->verified;
+            $existing_trans->approved = isset($request->transaction['approved']) ? (bool) $request->transaction['approved'] : $existing_trans->approved;
             $existing_trans->save();
 
             return $existing_trans;

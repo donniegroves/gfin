@@ -30,7 +30,7 @@ return new class extends Migration
             $table->string('new_detail')->nullable()->default(null);
             $table->decimal('orig_amt');
             $table->decimal('new_amt')->nullable()->default(null);
-            $table->boolean('verified')->default(false);
+            $table->boolean('approved')->default(false);
             $table->timestamps();
         });
     }

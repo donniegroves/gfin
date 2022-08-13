@@ -27,7 +27,7 @@ class TransactionFactory extends Factory
             'category_id' => Category::all()->random()->id,
             'orig_detail' => rtrim(strtoupper($this->faker->text(32)),'.'),
             'orig_amt' => $this->faker->numberBetween(0,1000) . '.' . $this->faker->numerify('##'),
-            'verified' => rand(0,1),
+            'approved' => 1,
         ];
     }
 }

@@ -1,8 +1,6 @@
 <template>
     <div class="transactionRow row pt-1 pb-1 align-items-center">
         <div class="col-2">
-            <!-- <button @click="verifyTransaction()" class="btn btn-outline-danger btn-sm ml-1"><i class="fa-solid fa-square-check"></i></button>
-            <span>{{ transaction.verified }}</span> -->
             <input class="form-control" type="date" v-model="row_date" @change="editTransaction"/>
         </div>
         <div class="col-2 transactionRow-payee">
@@ -18,8 +16,12 @@
             <input class="form-control" type="number" min="1" step="any" v-model="row_amt" @change="editTransaction"/>
         </div>
         <div class="col-1 d-flex justify-content-around p-0">
-            <button @click="toggleVerified()" class="btn btn-outline-info btn-sm"><i :class="['fas', row_verified ? 'fa-check' : 'fa-square-o']"></i></button>
-            <button @click="deleteTransaction()" class="btn btn-outline-danger btn-sm ml-1"><i class="fa-solid fa-trash"></i></button>
+            <button @click="toggleApproved()" :class="['btn', 'btn-sm', row_approved ? 'btn-info' : 'btn-outline-info']">
+                <i class="fas fa-check"></i>
+            </button>
+            <button @click="deleteTransaction()" class="btn btn-outline-danger btn-sm ml-1">
+                <i class="fa-solid fa-trash"></i>
+            </button>
         </div>
     </div>
 </template>
@@ -34,7 +36,7 @@ export default{
             row_date: this.transaction.trans_date,
             row_desc: this.transaction.new_detail?.length > 0 ? this.transaction.new_detail : this.transaction.orig_detail,
             row_amt: this.transaction.new_amt?.length > 0 ? this.transaction.new_amt : this.transaction.orig_amt,
-            row_verified: this.transaction.verified
+            row_approved: this.transaction.approved
         }
     },
     methods: {
@@ -49,8 +51,8 @@ export default{
                 console.log(error);
             });
         },
-        toggleVerified(){
-            this.row_verified = !this.row_verified;
+        toggleApproved(){
+            this.row_approved = !this.row_approved;
             this.editTransaction();
         },
         editTransaction(){
@@ -61,7 +63,7 @@ export default{
                     category_id: this.selected_category?.id,
                     new_detail: this.row_desc,
                     new_amt: this.row_amt,
-                    verified: this.row_verified
+                    approved: this.row_approved
                 }
             })
             .then (response => {

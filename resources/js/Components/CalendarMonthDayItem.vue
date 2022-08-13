@@ -61,7 +61,7 @@ export default {
     },
     methods: {
         setFilteredTrans(){
-            let filter_result = this.trans.filter(tran => tran.trans_date == this.day.date);
+            let filter_result = this.trans.filter(tran => tran.trans_date == this.day.date && tran.approved);
             this.filtered_trans = filter_result;
         },
         setCategoryTotals(){

@@ -13,7 +13,7 @@ class Transaction extends Model
         "category_id",
         "orig_detail",
         "orig_amt",
-        "verified",
+        "approved",
     ];
 
     use HasFactory;
