@@ -110,7 +110,11 @@ export default{
             const response = await axios.get('reqs/settings', {});
             if (response.status == 200){
                 console.log('received original settings.');
-                this.settings = response.data;
+                this.settings = {
+                    enable_sms_notifs:  response.data.enable_sms_notifs === "1",
+                    primary_sms:        response.data.primary_sms,
+                    secondary_sms:      response.data.secondary_sms
+                };
             }
         },
         async saveNotifSettings(){

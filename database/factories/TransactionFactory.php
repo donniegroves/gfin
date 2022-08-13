@@ -18,9 +18,9 @@ class TransactionFactory extends Factory
      */
     public function definition()
     {
-        $rand_year = rand(0,1) ? '2021' : '2022';
+        $year = date("Y");
         $rand_date = $this->faker->date();
-        $rand_date = $rand_year . substr($rand_date, 4);
+        $rand_date = $year . substr($rand_date, 4);
         return [
             'trans_date' => $rand_date,
             'payee_id' => Payee::all()->random()->id,

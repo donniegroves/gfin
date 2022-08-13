@@ -15,11 +15,13 @@ class SettingsController extends Controller
      */
     public function index()
     {
-        return [
-            "enable_sms_notifs" => false,
-            "primary_sms" => '4075551234',
-            "secondary_sms" => '9415554321'
-        ];
+        $stg_rows = Settings::where('user_id', Auth::user()->id)->get()->toArray();
+
+        $return_arr = [];
+        foreach($stg_rows as $row){
+            $return_arr[$row['stg_name']] = $row['stg_val'];
+        }
+        return $return_arr;
     }
 
     /**
