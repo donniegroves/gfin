@@ -14,7 +14,7 @@ class SettingsController extends Controller
     public function index()
     {
         return [
-            "enable_sms_notifs" => true,
+            "enable_sms_notifs" => false,
             "primary_sms" => '4075551234',
             "secondary_sms" => '9415554321'
         ];

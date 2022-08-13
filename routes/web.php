@@ -42,6 +42,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::delete('/transactions/destroy/{id}', [TransactionController::class, 'destroy']);
 
         Route::get('/settings',[SettingsController::class, 'index']);
+        Route::post('/settings', [SettingsController::class, 'store']);
 
         Route::get('/payees',[PayeeController::class, 'index']);
         Route::post('/payees/store', [PayeeController::class, 'store']);

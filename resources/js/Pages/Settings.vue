@@ -1,5 +1,5 @@
 <template>
-<GFinLayout v-if="orig_settings">
+<GFinLayout v-if="settings">
 <div class="row">
     <div class="col-md-6">
         <div class="card shadow mb-4">
@@ -13,7 +13,7 @@
                         Enable Text Messages: 
                     </div>
                     <div class="col-6">
-                        <ToggleSwitch p_name="enable_sms_notifs" p_id="enable_sms_notifs" :prop_checked="orig_settings.enable_sms_notifs"/>
+                        <ToggleSwitch @checkboxChange="(key, value) => changeSettingData(key, value)" identifier="enable_sms_notifs" :checked="settings.enable_sms_notifs"/>
                     </div>
                 </div>
                 <div class="row mb-1">
@@ -21,7 +21,7 @@
                         Primary SMS #:
                     </div>
                     <div class="col-6">
-                        <input type="tel" class="form-control" name="primary_sms" id="primary_sms" :value="orig_settings.primary_sms">
+                        <input type="tel" class="form-control" v-model="settings.primary_sms">
                     </div>
                 </div>
                 <div class="row">
@@ -29,12 +29,12 @@
                         Secondary SMS #:
                     </div>
                     <div class="col-6">
-                        <input type="tel" class="form-control" name="secondary_sms" id="secondary_sms" :value="orig_settings.secondary_sms">
+                        <input type="tel" class="form-control" v-model="settings.secondary_sms">
                     </div>
                 </div>
                 <div class="row mt-3 mb-0 text-right">
                     <div class="col-12">
-                        <a href="#" class="btn btn-primary btn-icon-split btn-sm">
+                        <a @click="saveNotifSettings()" id="save_notifs_btn" class="btn btn-primary btn-icon-split btn-sm">
                             <span class="icon text-white-50">
                                 <i class="fas fa-check"></i>
                             </span>
@@ -101,7 +101,7 @@ export default{
     },
     data: function(){
         return {
-            orig_settings: null
+            settings: null
         }
     },
     methods:{
@@ -110,8 +110,21 @@ export default{
             const response = await axios.get('reqs/settings', {});
             if (response.status == 200){
                 console.log('received original settings.');
-                this.orig_settings = response.data;
+                this.settings = response.data;
             }
+        },
+        async saveNotifSettings(){
+            console.log('saveNotifSettings');
+            const response = await axios.post('reqs/settings', {
+                primary_sms: this.$refs.primary_sms.value,
+                secondary_sms: this.$refs.secondary_sms.value
+            });
+            if (response.status == 200){
+                console.log('saved notif settings.');
+            }
+        },
+        changeSettingData(key,value){
+            this.settings[key] = value;
         }
     },
     created(){

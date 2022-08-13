@@ -1,6 +1,6 @@
 <template>
     <div class="toggle_button button r">
-        <input :name="p_name" :id="p_id" type="checkbox" class="checkbox" v-model="is_checked"/>
+        <input type="checkbox" class="checkbox" v-model="is_checked" @click="$emit('checkboxChange', identifier, !is_checked)"/>
         <div class="knobs"></div>
         <div class="layer"></div>
     </div>
@@ -8,14 +8,14 @@
 
 <script>
 export default{
-    props: ['prop_checked', 'p_name', 'p_id'],
+    props: ['checked', 'identifier'],
+    emits: ['checkboxChange'],
     data: function(){
         return{
-            is_checked: this.prop_checked ?? false
+            is_checked: this.checked ?? false
         }
     },
     methods: {
-        
     }
 }
 </script>
