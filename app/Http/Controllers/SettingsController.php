@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Settings;
+use Illuminate\Support\Facades\Auth;
 
 class SettingsController extends Controller
 {
@@ -38,7 +40,37 @@ class SettingsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Settings::updateOrCreate(
+            [
+                'user_id'   => Auth::user()->id,
+                'stg_name'  => 'enable_sms_notifs'
+            ],
+            [
+                'stg_val'   => $request->enable_sms_notifs
+            ]
+        );
+
+        Settings::updateOrCreate(
+            [
+                'user_id'   => Auth::user()->id,
+                'stg_name'  => 'primary_sms'
+            ],
+            [
+                'stg_val'   => $request->primary_sms
+            ]
+        );
+
+        Settings::updateOrCreate(
+            [
+                'user_id'   => Auth::user()->id,
+                'stg_name'  => 'secondary_sms'
+            ],
+            [
+                'stg_val'   => $request->secondary_sms
+            ]
+        );
+
+        return 'Saved settings.';
     }
 
     /**

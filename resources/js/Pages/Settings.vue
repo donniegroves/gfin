@@ -116,8 +116,9 @@ export default{
         async saveNotifSettings(){
             console.log('saveNotifSettings');
             const response = await axios.post('reqs/settings', {
-                primary_sms: this.$refs.primary_sms.value,
-                secondary_sms: this.$refs.secondary_sms.value
+                enable_sms_notifs: this.settings.enable_sms_notifs,
+                primary_sms: this.settings.primary_sms,
+                secondary_sms: this.settings.secondary_sms
             });
             if (response.status == 200){
                 console.log('saved notif settings.');
