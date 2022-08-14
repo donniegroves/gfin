@@ -1,5 +1,5 @@
 <template>
-    <GFinLayout>
+    <GFinLayout v-if="budget_stgs && all_trans && all_categories">
         <div class="calendar-month">
             <div class="calendar-month-header">
                 <CalendarDateIndicator :selected-date="selectedDate" class="calendar-month-header-selected-month" />
@@ -9,7 +9,14 @@
             <CalendarWeekdays />
 
             <ol class="days-grid">
-                <CalendarMonthDayItem v-if="all_trans && all_categories" v-for="day in days" :key="day.date" :day="day" :is-today="day.date === today" :trans="all_trans" :cats="all_categories"/>
+                <CalendarMonthDayItem 
+                    v-for="day in days" 
+                    :key="day.date" :day="day" 
+                    :is-today="day.date === today"
+                    :budget_stgs="budget_stgs"
+                    :trans="all_trans" 
+                    :cats="all_categories"
+                />
             </ol>
         </div>
     </GFinLayout>
@@ -43,6 +50,7 @@
         data() {
             return {
                 selectedDate: dayjs(),
+                budget_stgs: null,
                 all_trans: null,
                 all_categories: null
             };
@@ -139,6 +147,7 @@
             }
         },
         created(){
+            this.getBudgets();
             this.getTransactions();
             this.getCategories();
         },
@@ -150,6 +159,16 @@
 
             selectDate(newSelectedDate) {
                 this.selectedDate = newSelectedDate;
+            },
+            async getBudgets(){
+                const response = await axios.get('reqs/settings', {});
+                if (response.status == 200){
+                    console.log('received budget settings.');
+                    this.budget_stgs = {
+                        daily_exp_budget:   response.data.daily_exp_budget,
+                        weekly_exp_budget:  response.data.weekly_exp_budget
+                    };
+                }
             },
             async getTransactions(){
                 const response = await axios.get('reqs/transactions', {});

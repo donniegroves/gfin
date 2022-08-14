@@ -3,9 +3,11 @@
         <li
             class="calendar-day"
             :class="{
-            'calendar-day--not-current': !day.isCurrentMonth,
-            'calendar-day--today': isToday
+                'calendar-day--not-current': !day.isCurrentMonth,
+                'calendar-day--today': isToday
             }"
+            :style="li_bg"
+            
         >
             <span>{{ label }}</span> <br />
             <div v-if="cat_totals" v-for="(amt, cat_label) in cat_totals" class="text-right">
@@ -40,6 +42,10 @@ export default {
             default: false
         },
 
+        budget_stgs: {
+            type: Object,
+            required: true
+        },
         trans: {
             type: Object,
             required: true
@@ -52,12 +58,15 @@ export default {
     data() {
         return {
             filtered_trans: [],
-            cat_totals: null
+            cat_totals: null,
+            exp_total: 0,
+            li_bg: null
         }
     },
     mounted(){
         this.setFilteredTrans();
         this.setCategoryTotals();
+        this.setBG();
     },
     methods: {
         setFilteredTrans(){
@@ -68,6 +77,9 @@ export default {
             let final_obj = {};
             this.filtered_trans.forEach((tran)=>{
                 let amt = parseInt(tran.new_amt ?? tran.orig_amt);
+                if (amt < 0){
+                    this.exp_total += amt;
+                }
                 let cat_id = tran.category_id;
                 let cat_name = this.getCatNameById(cat_id);
                 if (final_obj[cat_name] == undefined){
@@ -87,6 +99,32 @@ export default {
                 }
             });
             return found_name ? found_name : 'Uncategorized';
+        },
+        setBG(){
+            if (this.exp_total === 0){
+                return '';
+            }
+            let spent = Math.abs(this.exp_total);
+            let budg_percentage = spent/this.budget_stgs.daily_exp_budget;
+            let over_budget = budg_percentage > 1;
+            let multiplier;
+
+            if (over_budget){
+                multiplier = budg_percentage - 1;
+            }
+
+            if (multiplier > 1){
+                multiplier = 1;
+            }
+
+            this.li_bg = "background-color: rgb(";
+            if (!over_budget){
+                this.li_bg += budg_percentage*255 + ",255," + budg_percentage*255;
+            }
+            else {
+                this.li_bg += "255," + (1-multiplier)*255 + "," + (1-multiplier)*255;
+            }
+            this.li_bg += ")";
         }
     },
     computed: {
