@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Payee;
 use App\Models\Category;
+use App\Models\User;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Transaction>
@@ -22,12 +23,13 @@ class TransactionFactory extends Factory
         $rand_date = $this->faker->date();
         $rand_date = $year . substr($rand_date, 4);
         return [
-            'trans_date' => $rand_date,
-            'payee_id' => Payee::all()->random()->id,
-            'category_id' => Category::all()->random()->id,
-            'orig_detail' => rtrim(strtoupper($this->faker->text(32)),'.'),
-            'orig_amt' => $this->faker->numberBetween(0,1000) . '.' . $this->faker->numerify('##'),
-            'approved' => 1,
+            'user_id'       => User::all()->random()->id,
+            'trans_date'    => $rand_date,
+            'payee_id'      => Payee::all()->random()->id,
+            'category_id'   => Category::all()->random()->id,
+            'orig_detail'   => rtrim(strtoupper($this->faker->text(32)),'.'),
+            'orig_amt'      => $this->faker->numberBetween(0,1000) . '.' . $this->faker->numerify('##'),
+            'approved'      => 1,
         ];
     }
 }

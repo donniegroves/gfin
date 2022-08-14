@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
@@ -15,7 +16,9 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        return Transaction::orderBy('trans_date', 'DESC')->get();
+        return Transaction::where('user_id', Auth::user()->id)
+            ->orderBy('trans_date', 'DESC')
+            ->get();
     }
 
     /**
@@ -37,6 +40,8 @@ class TransactionController extends Controller
     public function store(Request $request)
     {
         $new_trans = new Transaction;
+        $new_trans->user_id = Auth::user()->id;
+
         // required input
         $new_trans->trans_date = $request->transaction["trans_date"];
         $new_trans->orig_detail = $request->transaction["orig_detail"];
@@ -173,13 +178,17 @@ class TransactionController extends Controller
     public function update(Request $request, $id)
     {
         $existing_trans = Transaction::find($id);
+        if ($existing_trans->user_id !== Auth::user()->id){
+            return 'Permissions problem.';
+        }
 
         if ($existing_trans){
-            $existing_trans->trans_date = !empty($request->transaction['trans_date']) ? $request->transaction['trans_date'] : $existing_trans->trans_date;
-            $existing_trans->payee_id = !empty($request->transaction['payee_id']) ? $request->transaction['payee_id'] : $existing_trans->payee_id;
-            $existing_trans->category_id = !empty($request->transaction['category_id']) ? $request->transaction['category_id'] : $existing_trans->category_id;
-            $existing_trans->new_detail = !empty($request->transaction['new_detail']) ? $request->transaction['new_detail'] : $existing_trans->new_detail;
-            $existing_trans->new_amt = !empty($request->transaction['new_amt']) ? $request->transaction['new_amt'] : $existing_trans->new_amt;
+            $existing_trans->user_id =      $request->transactions['user_id']       ?? $existing_trans->user_id;
+            $existing_trans->trans_date =   $request->transactions['trans_date']    ?? $existing_trans->trans_date;
+            $existing_trans->payee_id =     $request->transactions['payee_id']      ?? $existing_trans->payee_id;
+            $existing_trans->category_id =  $request->transactions['category_id']   ?? $existing_trans->category_id;
+            $existing_trans->new_detail =   $request->transaction['new_detail']     ?? $existing_trans->new_detail;
+            $existing_trans->new_amt =      $request->transactions['new_amt']       ?? $existing_trans->new_amt;
             $existing_trans->approved = isset($request->transaction['approved']) ? (bool) $request->transaction['approved'] : $existing_trans->approved;
             $existing_trans->save();
 
@@ -198,6 +207,9 @@ class TransactionController extends Controller
     public function destroy($id)
     {
         $existing_trans = Transaction::find($id);
+        if ($existing_trans->user_id !== Auth::user()->id){
+            return 'Permissions problem.';
+        }
 
         if ($existing_trans){
             $existing_trans->delete();

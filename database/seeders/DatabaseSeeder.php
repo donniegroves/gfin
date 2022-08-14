@@ -27,6 +27,6 @@ class DatabaseSeeder extends Seeder
         // Category::factory(12)->create();
         $this->call(CategorySeeder::class);
         CategoryPattern::factory(4)->create();
-        Transaction::factory(25)->create();
+        Transaction::factory(100)->create();
     }
 }
