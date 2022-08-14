@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\PayeePattern;
+use Illuminate\Support\Facades\Auth;
 
 class PayeePatternsController extends Controller
 {
@@ -14,7 +15,9 @@ class PayeePatternsController extends Controller
      */
     public function index()
     {
-        return PayeePattern::orderBy('updated_at', 'ASC')->get();
+        return PayeePattern::where('user_id', Auth::user()->id)
+            ->orderBy('updated_at', 'ASC')
+            ->get();
     }
 
     /**
@@ -36,6 +39,7 @@ class PayeePatternsController extends Controller
     public function store(Request $request)
     {
         $pattern = new PayeePattern;
+        $pattern->user_id = Auth::user()->id;
         $pattern->pattern = $request->pattern["pattern"];
         $pattern->payee_id = $request->pattern["payee_id"];
         $pattern->save();
@@ -75,6 +79,9 @@ class PayeePatternsController extends Controller
     public function update(Request $request, $id)
     {
         $existing_pattern = PayeePattern::find($id);
+        if ($existing_pattern->user_id !== Auth::user()->id){
+            return 'Permissions problem.';
+        }
 
         if ($existing_pattern){
             $existing_pattern->pattern = !empty($request->pattern['pattern']) ? $request->pattern['pattern'] : $existing_pattern->pattern;
@@ -95,6 +102,9 @@ class PayeePatternsController extends Controller
     public function destroy($id)
     {
         $existing_pattern = PayeePattern::find($id);
+        if ($existing_pattern->user_id !== Auth::user()->id){
+            return 'Permissions problem.';
+        }
 
         if ($existing_pattern){
             $existing_pattern->delete();
