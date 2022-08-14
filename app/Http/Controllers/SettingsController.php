@@ -8,6 +8,14 @@ use Illuminate\Support\Facades\Auth;
 
 class SettingsController extends Controller
 {
+    const PERMITTED_SETTINGS_ARR = [
+        'enable_sms_notifs',
+        'primary_sms',
+        'secondary_sms',
+        'send_daily_sms',
+        'send_weekly_sms'        
+    ];
+
     /**
      * Display a listing of the resource.
      *
@@ -42,35 +50,17 @@ class SettingsController extends Controller
      */
     public function store(Request $request)
     {
-        Settings::updateOrCreate(
-            [
-                'user_id'   => Auth::user()->id,
-                'stg_name'  => 'enable_sms_notifs'
-            ],
-            [
-                'stg_val'   => $request->enable_sms_notifs
-            ]
-        );
-
-        Settings::updateOrCreate(
-            [
-                'user_id'   => Auth::user()->id,
-                'stg_name'  => 'primary_sms'
-            ],
-            [
-                'stg_val'   => $request->primary_sms
-            ]
-        );
-
-        Settings::updateOrCreate(
-            [
-                'user_id'   => Auth::user()->id,
-                'stg_name'  => 'secondary_sms'
-            ],
-            [
-                'stg_val'   => $request->secondary_sms
-            ]
-        );
+        foreach (self::PERMITTED_SETTINGS_ARR AS $one_stg){
+            Settings::updateOrCreate(
+                [
+                    'user_id'   => Auth::user()->id,
+                    'stg_name'  => $one_stg
+                ],
+                [
+                    'stg_val'   => $request->$one_stg
+                ]
+            );
+        }
 
         return 'Saved settings.';
     }

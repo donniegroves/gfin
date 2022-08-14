@@ -4,18 +4,11 @@
     <div class="col-md-6">
         <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Notification Settings</h6>
+                <h6 class="m-0 font-weight-bold text-primary">SMS Notifications</h6>
+                <ToggleSwitch @checkboxChange="(key, value) => changeSettingData(key, value)" identifier="enable_sms_notifs" :checked="settings.enable_sms_notifs"/>
             </div>
             <!-- Card Body -->
             <div class="card-body pb-3">
-                <div class="row mb-3">
-                    <div class="col-6">
-                        Enable Text Messages: 
-                    </div>
-                    <div class="col-6">
-                        <ToggleSwitch @checkboxChange="(key, value) => changeSettingData(key, value)" identifier="enable_sms_notifs" :checked="settings.enable_sms_notifs"/>
-                    </div>
-                </div>
                 <div class="row mb-1">
                     <div class="col-6">
                         Primary SMS #:
@@ -24,12 +17,28 @@
                         <input type="tel" class="form-control" v-model="settings.primary_sms">
                     </div>
                 </div>
-                <div class="row">
+                <div class="row pb-2">
                     <div class="col-6">
                         Secondary SMS #:
                     </div>
                     <div class="col-6">
                         <input type="tel" class="form-control" v-model="settings.secondary_sms">
+                    </div>
+                </div>
+                <div class="row pb-2">
+                    <div class="col-6">
+                        Daily Notifications:
+                    </div>
+                    <div class="col-6">
+                        <ToggleSwitch @checkboxChange="(key, value) => changeSettingData(key, value)" identifier="send_daily_sms" :checked="settings.send_daily_sms"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        Weekly Notifications:
+                    </div>
+                    <div class="col-6">
+                        <ToggleSwitch @checkboxChange="(key, value) => changeSettingData(key, value)" identifier="send_weekly_sms" :checked="settings.send_weekly_sms"/>
                     </div>
                 </div>
                 <div class="row mt-3 mb-0 text-right">
@@ -113,7 +122,9 @@ export default{
                 this.settings = {
                     enable_sms_notifs:  response.data.enable_sms_notifs === "1",
                     primary_sms:        response.data.primary_sms,
-                    secondary_sms:      response.data.secondary_sms
+                    secondary_sms:      response.data.secondary_sms,
+                    send_daily_sms:      response.data.send_daily_sms === "1",
+                    send_weekly_sms:      response.data.send_weekly_sms === "1",
                 };
             }
         },
@@ -122,13 +133,16 @@ export default{
             const response = await axios.post('reqs/settings', {
                 enable_sms_notifs: this.settings.enable_sms_notifs,
                 primary_sms: this.settings.primary_sms,
-                secondary_sms: this.settings.secondary_sms
+                secondary_sms: this.settings.secondary_sms,
+                send_daily_sms: this.settings.send_daily_sms,
+                send_weekly_sms: this.settings.send_weekly_sms
             });
             if (response.status == 200){
                 console.log('saved notif settings.');
             }
         },
         changeSettingData(key,value){
+            console.log ('changing ' + key + ' to ' + value);
             this.settings[key] = value;
         }
     },

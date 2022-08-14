@@ -15,7 +15,7 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        return Transaction::orderBy('trans_date', 'ASC')->get();
+        return Transaction::orderBy('trans_date', 'DESC')->get();
     }
 
     /**
