@@ -15,6 +15,10 @@ return new class extends Migration
     {
         Schema::create('category_patterns', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->foreignId('category_id')
                 ->constrained()
                 ->onUpdate('cascade')

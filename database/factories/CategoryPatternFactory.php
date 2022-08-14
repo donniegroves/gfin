@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Category;
+use App\Models\User;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CategoryPattern>
@@ -18,6 +19,7 @@ class CategoryPatternFactory extends Factory
     public function definition()
     {
         return [
+            'user_id'   => User::all()->random()->id,
             'category_id' => Category::all()->random()->id,
             'pattern' => $this->faker->word()
         ];

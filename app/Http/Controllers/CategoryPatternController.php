@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\CategoryPattern;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryPatternController extends Controller
 {
@@ -14,7 +15,9 @@ class CategoryPatternController extends Controller
      */
     public function index()
     {
-        return CategoryPattern::orderBy('updated_at', 'ASC')->get();
+        return CategoryPattern::where('user_id', Auth::user()->id)
+            ->orderBy('updated_at', 'ASC')
+            ->get();
     }
 
     /**
@@ -36,6 +39,7 @@ class CategoryPatternController extends Controller
     public function store(Request $request)
     {
         $pattern = new CategoryPattern;
+        $pattern->user_id = Auth::user()->id;
         $pattern->pattern = $request->pattern["pattern"];
         $pattern->category_id = $request->pattern["category_id"];
         $pattern->save();
@@ -75,6 +79,9 @@ class CategoryPatternController extends Controller
     public function update(Request $request, $id)
     {
         $existing_pattern = CategoryPattern::find($id);
+        if ($existing_pattern->user_id !== Auth::user()->id){
+            return 'Permissions problem.';
+        }
 
         if ($existing_pattern){
             $existing_pattern->pattern = !empty($request->pattern['pattern']) ? $request->pattern['pattern'] : $existing_pattern->pattern;
@@ -95,6 +102,9 @@ class CategoryPatternController extends Controller
     public function destroy($id)
     {
         $existing_pattern = CategoryPattern::find($id);
+        if ($existing_pattern->user_id !== Auth::user()->id){
+            return 'Permissions problem.';
+        }
 
         if ($existing_pattern){
             $existing_pattern->delete();
