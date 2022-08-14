@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -14,7 +15,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return Category::orderBy('name', 'ASC')->get();
+        return Category::where('user_id', Auth::user()->id)
+            ->orderBy('name', 'ASC')
+            ->get();
     }
 
     /**
@@ -36,6 +39,7 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $new_cat = new Category;
+        $new_cat->user_id = Auth::user()->id;
         $new_cat->name = $request->category["name"];
         $new_cat->save();
 
@@ -74,6 +78,9 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         $existing_cat = Category::find($id);
+        if ($existing_cat->user_id !== Auth::user()->id){
+            return 'Permissions problem.';
+        }
 
         if ($existing_cat){
             $existing_cat->name = !empty($request->category['name']) ? $request->category['name'] : $existing_cat->name;
@@ -94,6 +101,9 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $existing_cat = Category::find($id);
+        if ($existing_cat->user_id !== Auth::user()->id){
+            return 'Permissions problem.';
+        }
 
         if ($existing_cat){
             $existing_cat->delete();
