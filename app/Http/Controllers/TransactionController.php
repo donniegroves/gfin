@@ -184,12 +184,12 @@ class TransactionController extends Controller
         }
 
         if ($existing_trans){
-            $existing_trans->user_id =      $request->transactions['user_id']       ?? $existing_trans->user_id;
-            $existing_trans->trans_date =   $request->transactions['trans_date']    ?? $existing_trans->trans_date;
-            $existing_trans->payee_id =     $request->transactions['payee_id']      ?? $existing_trans->payee_id;
-            $existing_trans->category_id =  $request->transactions['category_id']   ?? $existing_trans->category_id;
-            $existing_trans->new_detail =   $request->transaction['new_detail']     ?? $existing_trans->new_detail;
-            $existing_trans->new_amt =      $request->transactions['new_amt']       ?? $existing_trans->new_amt;
+            $existing_trans->user_id =      $request->transaction['user_id']       ?? $existing_trans->user_id;
+            $existing_trans->trans_date =   $request->transaction['trans_date']    ?? $existing_trans->trans_date;
+            $existing_trans->payee_id =     $request->transaction['payee_id']      ?? $existing_trans->payee_id;
+            $existing_trans->category_id =  $request->transaction['category_id']   ?? $existing_trans->category_id;
+            $existing_trans->new_detail =   $request->transaction['new_detail']    ?? $existing_trans->new_detail;
+            $existing_trans->new_amt =      $request->transaction['new_amt']       ?? $existing_trans->new_amt;
             $existing_trans->approved = isset($request->transaction['approved']) ? (bool) $request->transaction['approved'] : $existing_trans->approved;
             $existing_trans->save();
 

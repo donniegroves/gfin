@@ -19,7 +19,8 @@ return new class extends Migration
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->string('name')->unique();
+            $table->string('name');
+            $table->unique(['user_id','name']);
             $table->timestamps();
         });
     }

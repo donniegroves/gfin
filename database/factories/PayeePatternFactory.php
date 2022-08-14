@@ -19,7 +19,7 @@ class PayeePatternFactory extends Factory
     public function definition()
     {
         return [
-            'user_id'   => User::all()->random()->id,
+            'user_id'   => 10,
             'payee_id' => Payee::all()->random()->id,
             'pattern' => $this->faker->word()
         ];

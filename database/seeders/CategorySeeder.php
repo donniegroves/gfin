@@ -15,20 +15,25 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        $cats = [
-            ['name' => 'Lawn care'],
-            ['name' => 'Fuel'],
-            ['name' => 'Food'],
-            ['name' => 'Entertainment'],
-            ['name' => 'Clothing'],
-            ['name' => 'Travel'],
-            ['name' => 'Furniture'],
-            ['name' => 'eMail'],
-            ['name' => 'Office Supplies']    
+        $cat_names = [
+            'Lawn care',
+            'Fuel',
+            'Food',
+            'Entertainment',
+            'Clothing',
+            'Travel',
+            'Furniture',
+            'eMail',
+            'Office Supplies' 
        ];
 
-       foreach ($cats as $cat) {
-           Category::create($cat);
+       foreach ($cat_names as $name) {
+           Category::create(
+            [
+                'user_id'   => 10,
+                'name'      => $name
+            ]
+           );
        }
     }
 }

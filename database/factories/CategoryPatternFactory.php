@@ -19,7 +19,7 @@ class CategoryPatternFactory extends Factory
     public function definition()
     {
         return [
-            'user_id'   => User::all()->random()->id,
+            'user_id'   => 10,
             'category_id' => Category::all()->random()->id,
             'pattern' => $this->faker->word()
         ];

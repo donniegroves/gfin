@@ -15,20 +15,23 @@ class PayeeSeeder extends Seeder
      */
     public function run()
     {
-        $payees = [
-            ['name' => 'Allegiant'],
-            ['name' => 'BearStore'],
-            ['name' => 'Google'],
-            ['name' => 'Ikea'],
-            ['name' => 'InstaCart'],
-            ['name' => 'Netflix'],
-            ['name' => 'Publix'],
-            ['name' => 'RaceTrac'],
-            ['name' => 'TruGreen']    
+        $payee_names = [
+            'Allegiant',
+            'BearStore',
+            'Google',
+            'Ikea',
+            'InstaCart',
+            'Netflix',
+            'Publix',
+            'RaceTrac',
+            'TruGreen'
        ];
 
-       foreach ($payees as $payee) {
-           Payee::create($payee);
+       foreach ($payee_names as $name) {
+            Payee::create([
+                'user_id'   => 10,
+                'name'      => $name
+            ]);
        }
     }
 }
