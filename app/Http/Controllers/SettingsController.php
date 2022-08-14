@@ -13,7 +13,9 @@ class SettingsController extends Controller
         'primary_sms',
         'secondary_sms',
         'send_daily_sms',
-        'send_weekly_sms'        
+        'send_weekly_sms',
+        'daily_exp_budget',
+        'weekly_exp_budget'
     ];
 
     /**
@@ -51,15 +53,17 @@ class SettingsController extends Controller
     public function store(Request $request)
     {
         foreach (self::PERMITTED_SETTINGS_ARR AS $one_stg){
-            Settings::updateOrCreate(
-                [
-                    'user_id'   => Auth::user()->id,
-                    'stg_name'  => $one_stg
-                ],
-                [
-                    'stg_val'   => $request->$one_stg
-                ]
-            );
+            if (!is_null($request->$one_stg)){
+                Settings::updateOrCreate(
+                    [
+                        'user_id'   => Auth::user()->id,
+                        'stg_name'  => $one_stg
+                    ],
+                    [
+                        'stg_val'   => $request->$one_stg
+                    ]
+                );
+            }
         }
 
         return 'Saved settings.';
