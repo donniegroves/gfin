@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Payee;
+use Illuminate\Support\Facades\Auth;
 
 class PayeeController extends Controller
 {
@@ -14,7 +15,9 @@ class PayeeController extends Controller
      */
     public function index()
     {
-        return Payee::orderBy('name', 'ASC')->get();
+        return Payee::where('user_id', Auth::user()->id)
+            ->orderBy('name', 'ASC')
+            ->get();
     }
 
     /**
@@ -36,6 +39,7 @@ class PayeeController extends Controller
     public function store(Request $request)
     {
         $new_payee = new Payee;
+        $new_payee->user_id = Auth::user()->id;
         $new_payee->name = $request->payee["name"];
         $new_payee->save();
 
@@ -74,6 +78,9 @@ class PayeeController extends Controller
     public function update(Request $request, $id)
     {
         $existing_payee = Payee::find($id);
+        if ($existing_payee->user_id !== Auth::user()->id){
+            return 'Permissions problem.';
+        }
 
         if ($existing_payee){
             $existing_payee->name = !empty($request->payee['name']) ? $request->payee['name'] : $existing_payee->name;
@@ -94,6 +101,9 @@ class PayeeController extends Controller
     public function destroy($id)
     {
         $existing_payee = Payee::find($id);
+        if ($existing_payee->user_id !== Auth::user()->id){
+            return 'Permissions problem.';
+        }
 
         if ($existing_payee){
             $existing_payee->delete();

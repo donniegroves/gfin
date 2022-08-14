@@ -121,6 +121,7 @@ class TransactionController extends Controller
      * @return void
      */
     private function getCategoryTotals(string $start_date, string $end_date){
+        // TODO: need to specify user_id in this query.
         $query = "
             SELECT
                 categories.`name`, 

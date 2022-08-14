@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\User;
+
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Payee>
@@ -17,7 +19,8 @@ class PayeeFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->company()
+            'user_id'   => User::all()->random()->id,
+            'name'      => $this->faker->company()
         ];
     }
 }
