@@ -28,7 +28,7 @@ class TransactionFactory extends Factory
             'payee_id'      => Payee::all()->random()->id,
             'category_id'   => Category::all()->random()->id,
             'orig_detail'   => rtrim(strtoupper($this->faker->text(32)),'.'),
-            'orig_amt'      => $this->faker->numberBetween(0,1000) . '.' . $this->faker->numerify('##'),
+            'orig_amt'      => $this->faker->numberBetween(0,-1000) . '.' . $this->faker->numerify('##'),
             'approved'      => 1,
         ];
     }
