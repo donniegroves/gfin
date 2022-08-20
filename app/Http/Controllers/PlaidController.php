@@ -129,12 +129,13 @@ class PlaidController extends Controller
             $is_match = false;
 
             $result_tran = new Transaction([
-                "trans_date" => $one_tran->date,
-                "payee_id" => null,
-                "category_id" => null,
-                "orig_detail" => $one_tran->name,
-                "orig_amt" => $one_tran->amount,
-                "approved" => 0,
+				"user_id"		=> Auth::user()->id,
+                "trans_date" 	=> $one_tran->date,
+                "payee_id" 		=> null,
+                "category_id" 	=> null,
+                "orig_detail" 	=> $one_tran->name,
+                "orig_amt" 		=> $one_tran->amount,
+                "approved" 		=> 0,
             ]);
 
             // determine if payee is matchable
@@ -173,12 +174,13 @@ class PlaidController extends Controller
     private function importTransactions(array $trans_arr){
         foreach ($trans_arr as $tran){
             $transaction = new Transaction([
-                "trans_date" => $tran->trans_date,
-                "payee_id" => $tran->payee_id,
-                "category_id" => $tran->category_id,
-                "orig_detail" => preg_replace('/\s+/',' ',$tran->orig_detail),
-                "orig_amt" => $tran->orig_amt,
-                "approved" => ($tran->payee_id && $tran->category_id) ? 1 : 0,
+				"user_id"		=> $tran->user_id,
+                "trans_date" 	=> $tran->trans_date,
+                "payee_id" 		=> $tran->payee_id,
+                "category_id" 	=> $tran->category_id,
+                "orig_detail" 	=> preg_replace('/\s+/',' ',$tran->orig_detail),
+                "orig_amt" 		=> $tran->orig_amt,
+                "approved" 		=> ($tran->payee_id && $tran->category_id) ? 1 : 0,
             ]);
             $transaction->save();
         }
