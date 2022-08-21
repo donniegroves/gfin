@@ -179,7 +179,7 @@ class PlaidController extends Controller
                 "payee_id" 		=> $tran->payee_id,
                 "category_id" 	=> $tran->category_id,
                 "orig_detail" 	=> preg_replace('/\s+/',' ',$tran->orig_detail),
-                "orig_amt" 		=> $tran->orig_amt,
+                "orig_amt" 		=> $tran->orig_amt * -1,
                 "approved" 		=> ($tran->payee_id && $tran->category_id) ? 1 : 0,
             ]);
             $transaction->save();

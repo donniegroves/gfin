@@ -15,7 +15,7 @@
                 <th scope="col">Payee</th>
                 <th scope="col">Category</th>
                 <th scope="col">Description</th>
-                <th scope="col">Amount</th>
+                <th scope="col">Withdrawl / Deposit</th>
             </thead>
             <tbody>
                 <TransactionRow v-for="(tran, index) in all_trans" 

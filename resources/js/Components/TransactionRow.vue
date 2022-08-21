@@ -20,8 +20,9 @@
         <td class="desc-field">
             <input class="form-control" type="text" v-model="row_desc" @change="editTransaction"/>
         </td>
-        <td class="text-right">
-            <input type="number" min="1" step="any" v-model="row_amt" @change="editTransaction"/>
+        <td class="amt-td text-right">
+            <input class="text-right form-control minus" type="text" v-model="row_amt_minus" @change="updateRowAmts"/>
+            <input class="text-right form-control plus" type="text" v-model="row_amt_plus" @change="updateRowAmts"/>
         </td>
     </tr>
 </template>
@@ -35,7 +36,9 @@ export default{
         return {
             row_date: this.transaction.trans_date,
             row_desc: this.transaction.new_detail?.length > 0 ? this.transaction.new_detail : this.transaction.orig_detail,
-            row_amt: this.transaction.new_amt?.length > 0 ? this.transaction.new_amt : this.transaction.orig_amt,
+            row_amt_minus: this.transaction.new_amt?.length > 0 ? (this.transaction.new_amt < 0 ? (this.transaction.new_amt*-1).toFixed(2) : null) : (this.transaction.orig_amt < 0 ? (this.transaction.orig_amt*-1).toFixed(2) : null),
+            row_amt_plus:  this.transaction.new_amt?.length > 0 ? (this.transaction.new_amt > 0 ? this.transaction.new_amt : null) : (this.transaction.orig_amt > 0 ? this.transaction.orig_amt : null),
+            row_amt_calc: this.transaction.new_amt?.length > 0 ? this.transaction.new_amt : this.transaction.orig_amt,
             row_approved: this.transaction.approved
         }
     },
@@ -62,7 +65,7 @@ export default{
                     payee_id: this.selected_payee?.id,
                     category_id: this.selected_category?.id,
                     new_detail: this.row_desc,
-                    new_amt: this.row_amt,
+                    new_amt: this.row_amt_calc,
                     approved: this.row_approved
                 }
             })
@@ -74,6 +77,17 @@ export default{
             .catch( error => {
                 console.log(error);
             });
+        },
+        updateRowAmts(e){
+            if (e.target.classList.contains('minus')){
+                this.row_amt_plus = null;
+                this.row_amt_calc = this.row_amt_minus*-1;
+            }
+            else {
+                this.row_amt_minus = null;
+                this.row_amt_calc = this.row_amt_plus;
+            }
+            this.editTransaction();
         }
     }
 }
@@ -89,7 +103,17 @@ export default{
 .payee-field, .category-field{
     width: 225px;
 }
-.desc-field{
-    width: 600px;
+.amt-td{
+    width: 190px;
+}
+.amt-td input{
+    display: inline-block;
+    width: 50%;
+}
+.amt-td .plus{
+    border-color: #36b9cc;
+}
+.amt-td .minus{
+    border-color: #e74a3b;
 }
 </style>
