@@ -8,16 +8,28 @@
         />
         <hr />
         <h2>Transactions:</h2>
-        <TransactionRow v-for="(tran, index) in all_trans" 
-            :transaction="tran"
-            :all_payees="all_payees"
-            :all_categories="all_categories"
-            :selected_payee="filteredPayee(tran.payee_id)"
-            :selected_category="filteredCategory(tran.category_id)"
-            :key="tran.id"
-            @editTransaction="refreshView"
-            @transactionDeleted="refreshView"
-        />
+        <table class="table table-striped align-middle">
+            <thead>
+                <th scope="col">Options</th>
+                <th scope="col">Date</th>
+                <th scope="col">Payee</th>
+                <th scope="col">Category</th>
+                <th scope="col">Description</th>
+                <th scope="col">Amount</th>
+            </thead>
+            <tbody>
+                <TransactionRow v-for="(tran, index) in all_trans" 
+                    :transaction="tran"
+                    :all_payees="all_payees"
+                    :all_categories="all_categories"
+                    :selected_payee="filteredPayee(tran.payee_id)"
+                    :selected_category="filteredCategory(tran.category_id)"
+                    :key="tran.id"
+                    @editTransaction="refreshView"
+                    @transactionDeleted="refreshView"
+                />
+            </tbody>
+        </table>
     </GFinLayout>
 </template>
 

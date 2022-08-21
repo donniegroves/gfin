@@ -1,29 +1,29 @@
 <template>
-    <div class="transactionRow row pt-1 pb-1 align-items-center">
-        <div class="col-2">
-            <input class="form-control" type="date" v-model="row_date" @change="editTransaction"/>
-        </div>
-        <div class="col-2 transactionRow-payee">
-            <v-select appendToBody label="name" v-model="selected_payee" :options="all_payees" @option:selected="editTransaction"></v-select>
-        </div>
-        <div class="col-2 transactionRow-category">
-            <v-select appendToBody label="name" v-model="selected_category" :options="all_categories" @option:selected="editTransaction"></v-select>
-        </div>
-        <div class="col-4 transactionRow-desc">
-            <input class="form-control" type="text" v-model="row_desc" @change="editTransaction"/>
-        </div>
-        <div class="col-1">
-            <input class="form-control" type="number" min="1" step="any" v-model="row_amt" @change="editTransaction"/>
-        </div>
-        <div class="col-1 d-flex justify-content-around p-0">
+    <tr class="text-center">
+        <td class="options">
             <button @click="toggleApproved()" :class="['btn', 'btn-sm', row_approved ? 'btn-info' : 'btn-outline-info']">
                 <i class="fas fa-check"></i>
             </button>
             <button @click="deleteTransaction()" class="btn btn-outline-danger btn-sm ml-1">
                 <i class="fa-solid fa-trash"></i>
             </button>
-        </div>
-    </div>
+        </td>
+        <td class="text-center date-field">
+            <input class="form-control" type="date" v-model="row_date" @change="editTransaction"/>
+        </td>
+        <td class="payee-field">
+            <v-select appendToBody label="name" v-model="selected_payee" :options="all_payees" @option:selected="editTransaction"></v-select>
+        </td>
+        <td class="category-field">
+            <v-select appendToBody label="name" v-model="selected_category" :options="all_categories" @option:selected="editTransaction"></v-select>
+        </td>
+        <td class="desc-field">
+            <input class="form-control" type="text" v-model="row_desc" @change="editTransaction"/>
+        </td>
+        <td class="text-right">
+            <input type="number" min="1" step="any" v-model="row_amt" @change="editTransaction"/>
+        </td>
+    </tr>
 </template>
 
 <script>
@@ -80,17 +80,16 @@ export default{
 </script>
 
 <style scoped>
-.form-control {
-    padding: 0 0.50rem;
-    height: calc(1em + 0.75rem + 2px);
+.options {
+    width: 70px;
 }
-.transactionRow{
-    border-bottom: rgb(235, 235, 235);
-    border-bottom-width: thin;
-    border-bottom-style: solid;
+.date-field input, .date-field{
+    width: 135px;
 }
-.transactionRow-desc, .transactionRow-payee{
-    overflow: hidden;
-    white-space: nowrap;
+.payee-field, .category-field{
+    width: 225px;
+}
+.desc-field{
+    width: 600px;
 }
 </style>
