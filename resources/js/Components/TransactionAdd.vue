@@ -36,7 +36,7 @@ export default{
     props: ['all_payees','all_categories'],
     data(){
         return{
-            add_date: '1983-05-27',
+            add_date: null,
             add_payee: [],
             add_cat: [],
             add_desc: null,

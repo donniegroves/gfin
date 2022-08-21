@@ -209,7 +209,7 @@ class PlaidController extends Controller
         $this->trans = Transaction::get()->toArray();
         $temp_arr = [];
         foreach ($this->trans as $tran){
-            $temp_arr[] = 'gf' . $tran['trans_date'] . $tran['orig_detail'] . $tran['orig_amt'];
+            $temp_arr[] = 'gf' . $tran['trans_date'] . $tran['orig_detail'] . number_format(($tran['orig_amt']*-1),2,'.','');
         }
         $this->trans = $temp_arr;
     }
