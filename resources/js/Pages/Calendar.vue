@@ -171,7 +171,7 @@
                 }
             },
             async getTransactions(){
-                const response = await axios.get('reqs/transactions', {});
+                const response = await axios.get('reqs/transactions?range=all', {});
                 if (response.status == 200){
                     console.log('received ' + response.data.length + ' transactions.');
                     this.all_trans = response.data;

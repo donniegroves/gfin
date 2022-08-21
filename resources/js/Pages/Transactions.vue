@@ -30,6 +30,12 @@
                 />
             </tbody>
         </table>
+        <div class="page-turner">
+            <a href="#" @click="changePage" class="paginate first-page">First Page</a> ... 
+            <a href="#" @click="changePage" class="paginate prev-page">Previous Page</a> ... 
+            <a href="#" @click="changePage" class="paginate next-page">Next Page</a> ... 
+            <a href="#" @click="changePage" class="paginate last-page">Last Page</a>
+        </div>
     </GFinLayout>
 </template>
 
@@ -41,9 +47,11 @@ import GFinLayout from "../Layouts/GFinLayout.vue";
 export default{
     data(){
         return {
-            all_trans: [],
-            all_payees: [],
-            all_categories: []
+            all_trans:      [],
+            all_payees:     [],
+            all_categories: [],
+            last_page:   null,
+            current_page:null
         }
     },
     created(){
@@ -56,18 +64,40 @@ export default{
         GFinLayout
     },
     methods: {
+        changePage(e){
+            console.log('changePage');
+            console.log(e.target.classList[1]);
+            let switch_to = e.target.classList[1];
+            console.log('switching to ' + switch_to);
+            switch(switch_to){
+                case 'first-page':
+                    this.refreshTransactions(1);
+                    break;
+                case 'prev-page':
+                    this.refreshTransactions(this.current_page-1);
+                    break;
+                case 'next-page':
+                    this.refreshTransactions(this.current_page+1);
+                    break;
+                case 'last-page':
+                    this.refreshTransactions(this.last_page);
+                    break;
+            }
+        },
         refreshView(){
             console.log('refreshView');
             this.refreshTransactions();
             this.refreshPayees();
             this.refreshCategories();
         },
-        async refreshTransactions(){
+        async refreshTransactions(page=1){
             console.log('refreshTransactions');
-            const response = await axios.get('reqs/transactions', {});
+            const response = await axios.get('reqs/transactions?page='+page, {});
             if (response.status == 200){
-                console.log('received ' + response.data.length + ' transactions.');
-                this.all_trans = response.data;
+                console.log('received ' + response.data.data.length + ' transactions.');
+                this.all_trans = response.data.data;
+                this.current_page = response.data.current_page;
+                this.last_page = response.data.last_page;               
             }
         },
         async refreshPayees(){

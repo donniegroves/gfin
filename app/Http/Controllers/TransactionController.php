@@ -14,11 +14,18 @@ class TransactionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Transaction::where('user_id', Auth::user()->id)
-            ->orderBy('trans_date', 'DESC')
-            ->get();
+        if ($request->range === "all"){
+            return Transaction::where('user_id', Auth::user()->id)
+                ->orderBy('trans_date', 'DESC')
+                ->get();
+        }
+        else {
+            return Transaction::where('user_id', Auth::user()->id)
+                ->orderBy('trans_date', 'DESC')
+                ->paginate(15);
+        }  
     }
 
     /**
