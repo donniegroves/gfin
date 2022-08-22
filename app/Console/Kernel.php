@@ -15,7 +15,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule
+            ->command('cron:sendDailyNotification')
+            ->daily()
+            ->appendOutputTo(base_path().'/cron_output.txt');
     }
 
     /**

@@ -119,16 +119,15 @@ class TransactionController extends Controller
         //
     }
 
-
     /**
      * Gets and returns an array of category totals, ordered desc by their total amount, within the selected date ranges
      *
      * @param string $start_date
      * @param string $end_date
+     * @param integer $user_id
      * @return void
      */
-    private function getCategoryTotals(string $start_date, string $end_date){
-        // TODO: need to specify user_id in this query.
+    public function getCategoryTotals(string $start_date, string $end_date, int $user_id){
         $query = "
             SELECT
                 categories.`name`, 
@@ -143,6 +142,7 @@ class TransactionController extends Controller
                 transactions.trans_date >= '" . addslashes($start_date) . "'
                 AND transactions.trans_date <= '" . addslashes($end_date) . "'
                 AND transactions.approved = 1
+                AND transactions.user_id = ".addslashes($user_id) . "
             GROUP BY
                 categories.`name`
             ORDER BY `total` DESC";
@@ -157,7 +157,7 @@ class TransactionController extends Controller
         return $result_arr;
     }
 
-    public function get_stats(){
+    public function get_stats():array {
         // getting dates
         $week_start = date('Y-m-d',strtotime('last sunday'));
         $week_end = date('Y-m-d', strtotime('this saturday'));
@@ -169,10 +169,12 @@ class TransactionController extends Controller
         $year_end = date('Y-m-d', strtotime('last day of december this year'));
 
         return [
-            "week" => self::getCategoryTotals($week_start, $week_end),
-            "month" => self::getCategoryTotals($month_start, $month_end),
-            "quarter" => self::getCategoryTotals($quarter_start, $quarter_end),
-            "year" => self::getCategoryTotals($year_start, $year_end)
+            "yesterday" => self::getCategoryTotals(date('Y-m-d',strtotime('yesterday')), date('Y-m-d',strtotime('yesterday')), Auth::user()->id),
+            "today" => self::getCategoryTotals(date('Y-m-d', time()), date('Y-m-d', time()), Auth::user()->id),
+            "week" => self::getCategoryTotals($week_start, $week_end, Auth::user()->id),
+            "month" => self::getCategoryTotals($month_start, $month_end, Auth::user()->id),
+            "quarter" => self::getCategoryTotals($quarter_start, $quarter_end, Auth::user()->id),
+            "year" => self::getCategoryTotals($year_start, $year_end, Auth::user()->id)
         ];
     }
 
