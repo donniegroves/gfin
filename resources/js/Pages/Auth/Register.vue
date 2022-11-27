@@ -41,10 +41,10 @@ const submit = () => {
                 <BreezeInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="new-password" />
             </div>
 
-            <div class="mt-1">
+            <!-- <div class="mt-1">
                 <BreezeLabel for="password_confirmation" value="Confirm Password" />
                 <BreezeInput id="password_confirmation" type="password" class="mt-1 block w-full" v-model="form.password_confirmation" required autocomplete="new-password" />
-            </div>
+            </div> -->
 
             <div class="flex items-center justify-end mt-4">
 
