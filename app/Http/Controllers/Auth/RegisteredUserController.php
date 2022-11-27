@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Payee;
+use App\Models\Category;
+use App\Models\Transaction;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
@@ -44,6 +47,25 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+        ]);
+
+        // Creating default Payee, Category, and Transaction
+        $payee = Payee::create([
+            'user_id'   => $user->id,
+            'name'      => 'Acme Company'
+        ]);
+        $category = Category::create([
+            'user_id'   => $user->id,
+            'name'      => 'Groceries'
+        ]);
+        $transaction = Transaction::create([
+            'user_id'       => $user->id,
+            'trans_date'    => '2022-05-27',
+            'payee_id'      => $payee->id,
+            'category_id'   => $category->id,
+            'orig_detail'   => 'Carrots',
+            'orig_amt'      => '13.37',
+            'approved'      => 1,
         ]);
 
         event(new Registered($user));
