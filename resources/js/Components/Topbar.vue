@@ -71,6 +71,9 @@
         <!-- Nav Item - User Information -->
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown">
+                <BreezeDropdownLink :href="route('logout')" method="post" as="button">
+                    Logout
+                </BreezeDropdownLink>
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ logged_in_user.name }}</span>
                 <img class="img-profile rounded-circle"
                     src="img/undraw_profile.svg">
@@ -103,7 +106,11 @@
 </template>
 
 <script>
+    import BreezeDropdownLink from '@/Components/DropdownLink.vue';
     export default {
+        components: {
+            BreezeDropdownLink
+        },
         inject: ['logged_in_user'],
         data: function(){
             return {
