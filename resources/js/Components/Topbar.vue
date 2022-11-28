@@ -19,13 +19,13 @@
 
         <!-- Nav Item - Alerts -->
         <li class="nav-item dropdown no-arrow mx-1">
-            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-bell fa-fw"></i>
                 <!-- Counter - Alerts -->
                 <span class="badge badge-danger badge-counter">{{ notifs_quant }}</span>
             </a>
             <!-- Dropdown - Alerts -->
-            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in">
+            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"  aria-labelledby="alertsDropdown">
                 <h6 class="dropdown-header">
                     Alerts Center
                 </h6>
@@ -70,16 +70,13 @@
 
         <!-- Nav Item - User Information -->
         <li class="nav-item dropdown no-arrow">
-            <a class="nav-link dropdown-toggle" href="#" id="userDropdown">
-                <BreezeDropdownLink :href="route('logout')" method="post" as="button">
-                    Logout
-                </BreezeDropdownLink>
+            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ logged_in_user.name }}</span>
                 <img class="img-profile rounded-circle"
                     src="img/undraw_profile.svg">
             </a>
             <!-- Dropdown - User Information -->
-            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in">
+            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                 <a class="dropdown-item" href="#">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
@@ -93,10 +90,10 @@
                     Activity Log
                 </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                <BreezeDropdownLink class="dropdown-item" :href="route('logout')" method="post">
                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                     Logout
-                </a>
+                </BreezeDropdownLink>
             </div>
         </li>
 
