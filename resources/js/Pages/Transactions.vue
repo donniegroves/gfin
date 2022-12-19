@@ -1,13 +1,17 @@
 <template>
     <GFinLayout>
-        <h2>Add a Transaction:</h2>
-        <TransactionAdd
-            :all_payees="all_payees"
-            :all_categories="all_categories"
-            @transactionAdded="refreshView"
-        />
+        <div class="heading">Add transaction:</div>
+        <table class="table align-middle">
+            <tbody>
+                <TransactionAdd
+                    :all_payees="all_payees"
+                    :all_categories="all_categories"
+                    @transactionAdded="refreshView"
+                />
+            </tbody>
+        </table>
         <hr />
-        <h2>Transactions:</h2>
+        <div class="heading">Transactions:</div>
         <table class="table table-striped align-middle">
             <thead>
                 <th scope="col">Options</th>

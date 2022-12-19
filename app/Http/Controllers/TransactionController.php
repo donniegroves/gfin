@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Category;
+use App\Models\Payee;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -58,6 +60,14 @@ class TransactionController extends Controller
         $new_trans->payee_id = $request->transaction["payee_id"] ?? null;
         $new_trans->category_id = $request->transaction["category_id"] ?? null;
         $new_trans->approved = $request->transaction["approved"] ?? 0;
+
+        if (!empty($request->transaction["payee_id"]) && is_string($request->transaction["payee_id"])) {
+            $new_trans->payee_id = (new Payee())->getOrCreateFromString($request->transaction["payee_id"]);
+        }
+
+        if (!empty($request->transaction["category_id"]) && is_string($request->transaction["category_id"])) {
+            $new_trans->category_id = (new Category())->getOrCreateFromString($request->transaction["category_id"]);
+        }
         
         $new_trans->save();
 
@@ -193,10 +203,23 @@ class TransactionController extends Controller
         }
 
         if ($existing_trans){
+            if (!empty($request->transaction["payee_id"]) && is_string($request->transaction["payee_id"])) {
+                $existing_trans->payee_id = (new Payee())->getOrCreateFromString($request->transaction["payee_id"]);
+            }
+            else {
+                $existing_trans->payee_id = $request->transaction['payee_id'] ?? $existing_trans->payee_id;
+            }
+    
+            if (!empty($request->transaction["category_id"]) && is_string($request->transaction["category_id"])) {
+                $existing_trans->category_id = (new Category())->getOrCreateFromString($request->transaction["category_id"]);
+            }
+            else {
+                $existing_trans->category_id = $request->transaction['category_id'] ?? $existing_trans->category_id;
+            }
+
+
             $existing_trans->user_id =      $request->transaction['user_id']       ?? $existing_trans->user_id;
             $existing_trans->trans_date =   $request->transaction['trans_date']    ?? $existing_trans->trans_date;
-            $existing_trans->payee_id =     $request->transaction['payee_id']      ?? $existing_trans->payee_id;
-            $existing_trans->category_id =  $request->transaction['category_id']   ?? $existing_trans->category_id;
             $existing_trans->new_detail =   $request->transaction['new_detail']    ?? $existing_trans->new_detail;
             $existing_trans->new_amt =      $request->transaction['new_amt']       ?? $existing_trans->new_amt;
             $existing_trans->approved = isset($request->transaction['approved']) ? (bool) $request->transaction['approved'] : $existing_trans->approved;

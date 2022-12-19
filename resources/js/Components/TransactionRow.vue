@@ -1,8 +1,8 @@
 <template>
-    <tr class="text-center">
+    <tr class="text-left">
         <td class="options">
             <button @click="toggleApproved()" :class="['btn', 'btn-sm', row_approved ? 'btn-info' : 'btn-outline-info']">
-                <i class="fas fa-check"></i>
+                R
             </button>
             <button @click="deleteTransaction()" class="btn btn-outline-danger btn-sm ml-1">
                 <i class="fa-solid fa-trash"></i>
@@ -12,10 +12,10 @@
             <input class="form-control" type="date" v-model="row_date" @change="editTransaction"/>
         </td>
         <td class="payee-field">
-            <v-select appendToBody label="name" v-model="selected_payee" :options="all_payees" @option:selected="editTransaction"></v-select>
+            <v-select taggable appendToBody label="name" v-model="selected_payee" :options="all_payees" @option:selected="editTransaction"></v-select>
         </td>
         <td class="category-field">
-            <v-select appendToBody label="name" v-model="selected_category" :options="all_categories" @option:selected="editTransaction"></v-select>
+            <v-select taggable appendToBody label="name" v-model="selected_category" :options="all_categories" @option:selected="editTransaction"></v-select>
         </td>
         <td class="desc-field">
             <input class="form-control" type="text" v-model="row_desc" @change="editTransaction"/>
@@ -62,8 +62,8 @@ export default{
             axios.put('reqs/transactions/update/' + this.transaction.id,{
                 transaction: {
                     trans_date: this.row_date,
-                    payee_id: this.selected_payee?.id,
-                    category_id: this.selected_category?.id,
+                    payee_id: this.selected_payee?.id ?? this.selected_payee?.name,
+                    category_id: this.selected_category?.id ?? this.selected_category?.name,
                     new_detail: this.row_desc,
                     new_amt: this.row_amt_calc,
                     approved: this.row_approved
