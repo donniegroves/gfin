@@ -91,12 +91,17 @@ export default{
         refreshView(){
             console.log('refreshView');
             this.refreshTransactions();
-            this.refreshPayees();
+            this.refreshPayees();   
             this.refreshCategories();
         },
         async refreshTransactions(page=1){
             console.log('refreshTransactions');
-            const response = await axios.get('reqs/transactions?page='+page, {});
+            let q = new URL(location.href).searchParams.get('search') ?? '';
+            let path = 'reqs/transactions?page='+page;
+            if (q.length > 1) {
+                path = 'reqs/transactions?search='+q;
+            }
+            const response = await axios.get(path, {});
             if (response.status == 200){
                 console.log('received ' + response.data.data.length + ' transactions.');
                 this.all_trans = response.data.data;

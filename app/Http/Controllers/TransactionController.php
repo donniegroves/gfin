@@ -18,7 +18,21 @@ class TransactionController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->range === "all"){
+        if (!empty($request->search)) {
+            return (new Transaction())
+                ->where('user_id', Auth::user()->id)
+                ->where(function($query) use ($request) {
+                    $query
+                        ->where('orig_detail','LIKE', '%'.$request->search.'%')
+                        ->orWhere('new_detail','LIKE', '%'.$request->search.'%')
+                        ->orWhere('orig_amt','LIKE', '%'.$request->search.'%')
+                        ->orWhere('new_amt','LIKE', '%'.$request->search.'%')
+                        ->orWhere('trans_date','LIKE', '%'.$request->search.'%');
+                })
+                ->orderBy('trans_date', 'DESC')
+                ->paginate(15);
+        }
+        else if ($request->range === "all"){
             return Transaction::where('user_id', Auth::user()->id)
                 ->orderBy('trans_date', 'DESC')
                 ->get();
