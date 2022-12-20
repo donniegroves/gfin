@@ -12,6 +12,8 @@ class Transaction extends Model
         "trans_date",
         "payee_id",
         "category_id",
+        "account_id",
+        "plaid_transaction_id",
         "orig_detail",
         "orig_amt",
         "approved",

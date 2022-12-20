@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use TomorrowIdeas\Plaid\Plaid;
 use TomorrowIdeas\Plaid\Entities\User;
+use App\Models\Account;
 use App\Models\PlaidTokens;
 use App\Models\PayeePattern;
 use App\Models\CategoryPattern;
@@ -17,6 +18,7 @@ class PlaidController extends Controller
     private $payee_patterns;
     private $cat_patterns;
     private $trans;
+    private $accts;
 
     public function __construct()
     {
@@ -56,6 +58,20 @@ class PlaidController extends Controller
         return response('Token saved successfully.', 200);
     }
 
+    private function import_accounts(array $arr) {
+        foreach ($arr as $acct) {
+            Account::create([
+                "user_id"           => Auth::user()->id,
+                "plaid_account_id"  => $acct->account_id,
+                "mask"              => $acct->mask,
+                "name"              => $acct->name,
+                "official_name"     => $acct->official_name,
+                "subtype"           => $acct->subtype,
+                "type"              => $acct->type
+            ]);
+        }
+    }
+
     /**
      * 
      *
@@ -74,7 +90,11 @@ class PlaidController extends Controller
         $end_date = new \DateTime('yesterday');
 
         $transactions = $this->pclient->transactions->list($access_token, $start_date, $end_date);
-        self::prepareInitData();
+        $incoming_accts = $transactions->accounts;
+
+        $this->import_accounts($incoming_accts);
+
+        $this->prepareInitData();
 
         // separate existing from new and discard $existing_trans
         self::separateExistingTransFromNew($transactions->transactions, $existing_trans, $new_trans);
@@ -129,13 +149,15 @@ class PlaidController extends Controller
             $is_match = false;
 
             $result_tran = new Transaction([
-				"user_id"		=> Auth::user()->id,
-                "trans_date" 	=> $one_tran->date,
-                "payee_id" 		=> null,
-                "category_id" 	=> null,
-                "orig_detail" 	=> $one_tran->name,
-                "orig_amt" 		=> $one_tran->amount,
-                "approved" 		=> 0,
+				"user_id"		        => Auth::user()->id,
+                "trans_date" 	        => $one_tran->date,
+                "payee_id" 		        => null,
+                "category_id" 	        => null,
+                "account_id"            => $one_tran->account_id,
+                "plaid_transaction_id"  => $one_tran->transaction_id,
+                "orig_detail" 	        => $one_tran->name,
+                "orig_amt" 		        => $one_tran->amount,
+                "approved" 		        => 0,
             ]);
 
             // determine if payee is matchable
@@ -178,6 +200,8 @@ class PlaidController extends Controller
                 "trans_date" 	=> $tran->trans_date,
                 "payee_id" 		=> $tran->payee_id,
                 "category_id" 	=> $tran->category_id,
+                "account_id"    => $this->accts[$tran->account_id],
+                "plaid_transaction_id" => $tran->plaid_transaction_id,
                 "orig_detail" 	=> preg_replace('/\s+/',' ',$tran->orig_detail),
                 "orig_amt" 		=> $tran->orig_amt * -1,
                 "approved" 		=> ($tran->payee_id && $tran->category_id) ? 1 : 0,
@@ -206,6 +230,7 @@ class PlaidController extends Controller
     private function prepareInitData(){
         $this->payee_patterns = PayeePattern::get()->toArray();
         $this->cat_patterns = CategoryPattern::get()->toArray();
+        $this->accts = Account::where('user_id', '=', Auth::user()->id)->pluck('id', 'plaid_account_id')->toArray();
         $this->trans = Transaction::get()->toArray();
         $temp_arr = [];
         foreach ($this->trans as $tran){
