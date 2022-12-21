@@ -19,6 +19,11 @@ class Kernel extends ConsoleKernel
             ->command('cron:sendDailyNotification')
             ->daily()
             ->appendOutputTo(base_path().'/cron_output.txt');
+
+        $schedule
+            ->command('cron:dailyImportTransactions')
+            ->daily()
+            ->appendOutputTo(base_path().'/cron_output.txt');
     }
 
     /**

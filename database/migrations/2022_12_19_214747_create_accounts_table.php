@@ -27,6 +27,9 @@ return new class extends Migration
             $table->string('type');
             $table->timestamps();
         });
+        Schema::table('accounts', function (Blueprint $table) {
+            $table->unique(['user_id','plaid_account_id']);
+        });
     }
 
     /**
