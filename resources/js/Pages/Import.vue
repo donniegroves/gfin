@@ -7,45 +7,50 @@
         </div>
         <hr />
         <div class="row">
-            <UploadCard bprofile="wf" />
-            <UploadCard bprofile="chase" />
-        </div>
-        <div v-if="!isFetching" class="row">
-            <div class="col-xl-3 col-md-6 mb-4">
-                <button type="button" :data-action="this.is_account_connected ? 'unlink' : 'link'" id="link_btn" class="btn btn-primary btn-dark btn-lg" style="
-                border: 1px solid black;
-                border-radius: 5px;
-                background: black;
-                height: 48px;
-                width: 200px;
-                margin-top: 5; 
-                margin-left: 10;
-                color: white;
-                font-size: 18px;
-                ">
-                    <span v-text="this.is_account_connected ? 'Unlink Account' : 'Link Account'"></span>
-                </button>
+            <div class="col-md-6">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Automatic Transaction Import</h6>
+                    </div>
+                    <div class="card-body pb-3">
+                        <div class="row mb-1">
+                            <div v-if="is_account_connected" class="col">
+                                <div class="mb-3">
+                                    Your account is connected to these bank accounts 
+                                </div>
+                                <button type="button" data-action="unlink" id="link_btn" class="btn btn-primary btn-lg mr-3">
+                                    <span>Unlink Accounts</span>
+                                </button>
+                                <button type="button" id="get_trans_btn" class="btn btn-primary btn-lg">
+                                    <span>Get Transactions</span>
+                                </button>
+                            </div>
+                            <div v-if="!is_account_connected" class="col">
+                                <div class="mb-3">
+                                    Your account is not yet linked to any online accounts yet. 
+                                </div>
+                                <button type="button" data-action="link" id="link_btn" class="btn btn-primary btn-lg">
+                                    <span>Link Account</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div v-if="is_account_connected" class="col-xl-3 col-md-6 mb-4">
-                <button type="button" id="get_trans_btn" class="btn btn-primary btn-dark btn-lg" style="
-                border: 1px solid black;
-                border-radius: 5px;
-                background: black;
-                height: 48px;
-                width: 200px;
-                margin-top: 5; 
-                margin-left: 10;
-                color: white;
-                font-size: 18px;
-                ">
-                    <span>Get Transactions</span>
-                </button>
-                <div v-if="importResult" class="import_result">
-                    <span>Received transactions successfully.</span><br />
-                    <span>{{ importResult.total_incoming }} total transactions received.</span><br />
-                    <span>{{ importResult.existing_skipped }} skipped.</span><br />
-                    <span>{{ importResult.new_processed }} transactions imported.</span><br />
-                    <span>{{ importResult.matched_trans + '/' + importResult.new_processed }} transactions matched a pattern.</span><br />
+            <div v-if="is_account_connected" class="col-md-6">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Import History</h6>
+                    </div>
+                    <div class="card-body pb-3">
+                        <div class="row mb-1">
+                            <div v-if="is_account_connected" class="col">
+                                <div>
+                                    Import history goes here.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -53,19 +58,15 @@
 </template>
 
 <script>
-import UploadCard from "@/Components/UploadCard.vue";
 import axios from "axios";
 import GFinLayout from "../Layouts/GFinLayout.vue";
 export default{
     data(){
         return {
-            isFetching: true,
-            is_account_connected: false,
-            importResult: false
+            is_account_connected: false
         }
     },
     components: {
-        UploadCard,
         GFinLayout
     },
     methods: {
@@ -73,7 +74,6 @@ export default{
             const account = await fetch("/reqs/plaid/is_account_connected");
             const connected = await account.json();
             this.is_account_connected = Boolean(connected);
-            this.isFetching = false;
         },
         unlinkAccount: async function(){
             try{
@@ -92,7 +92,6 @@ export default{
                 const response = await axios.get('/reqs/plaid/transactions/import', {});
                 if (response.status == 200){
                     console.log('successfully retrieved transactions');
-                    this.importResult = response.data;
                 }
             }
             catch{
