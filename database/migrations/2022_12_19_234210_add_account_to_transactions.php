@@ -19,7 +19,7 @@ return new class extends Migration
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('set null');
-            $table->string('plaid_transaction_id')->default('');
+            $table->string('plaid_transaction_id')->nullable()->default(null);
         });
     }
 

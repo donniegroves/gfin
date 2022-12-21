@@ -82,7 +82,7 @@
                     Settings
                 </a>
                 <div class="dropdown-divider"></div>
-                <BreezeDropdownLink class="dropdown-item" :href="route('logout')" method="post">
+                <BreezeDropdownLink as="button" class="dropdown-item" :href="route('logout')" method="post">
                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                     Logout
                 </BreezeDropdownLink>

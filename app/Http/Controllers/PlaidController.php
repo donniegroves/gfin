@@ -97,9 +97,11 @@ class PlaidController extends Controller
     public function unlink_account()
     {
         $user_id = Auth::user()->id;
-        $deleted = PlaidTokens::where('user_id', $user_id)->delete();
+        $d_tokens = PlaidTokens::where('user_id', $user_id)->delete();
+        $d_accts = Account::where('user_id', $user_id)->delete();
+        $u_trans = Transaction::where('user_id', $user_id)->update(['plaid_transaction_id' => null]);
 
-        if (!$deleted){
+        if (!$d_tokens || !$d_accts || !$u_trans){
             return response('Problem unlinking account', 500);
         }
 

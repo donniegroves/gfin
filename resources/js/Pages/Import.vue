@@ -18,10 +18,10 @@
                                 <div class="mb-3">
                                     Your account is connected to these bank accounts 
                                 </div>
-                                <button type="button" data-action="unlink" id="link_btn" class="btn btn-primary btn-lg mr-3">
+                                <button type="button" @click="unlinkAccount" class="btn btn-primary btn-lg mr-3">
                                     <span>Unlink Accounts</span>
                                 </button>
-                                <button type="button" id="get_trans_btn" class="btn btn-primary btn-lg">
+                                <button type="button" @click="getNewTransactions" class="btn btn-primary btn-lg">
                                     <span>Get Transactions</span>
                                 </button>
                             </div>
@@ -29,7 +29,7 @@
                                 <div class="mb-3">
                                     Your account is not yet linked to any online accounts yet. 
                                 </div>
-                                <button type="button" data-action="link" id="link_btn" class="btn btn-primary btn-lg">
+                                <button type="button" id="link_btn" class="btn btn-primary btn-lg">
                                     <span>Link Account</span>
                                 </button>
                             </div>
@@ -89,6 +89,7 @@ export default{
         },
         getNewTransactions: async function(){
             try{
+                console.log('getting transactions!');
                 const response = await axios.get('/reqs/plaid/transactions/import', {});
                 if (response.status == 200){
                     console.log('successfully retrieved transactions');
@@ -146,19 +147,7 @@ export default{
             // Start Link when button is clicked
             const linkAccountButton = document.getElementById("link_btn");
             linkAccountButton.addEventListener("click", (event) => {
-                if (event.currentTarget.dataset.action == "link"){
-                    handler.open();
-                }
-                else if (event.currentTarget.dataset.action == "unlink"){
-                    this.unlinkAccount();
-                }
-            });
-
-            // Get Transactions from plaid
-            const getTransactionsButton = document.getElementById("get_trans_btn");
-            getTransactionsButton.addEventListener("click", (event) => {
-                console.log('getting transactions!');
-                this.getNewTransactions();
+                handler.open();
             });
         })(jQuery);
     }
