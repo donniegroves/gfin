@@ -38,11 +38,6 @@ class Transaction extends Model
         // getting transactions from plaid for user.
         $pclient = new Plaid(env('PLAID_CLIENT_ID'), env('PLAID_SECRET_KEY'), env('PLAID_ENVIRONMENT'));
         $transactions = $pclient->transactions->list($access_token, $start_date, $end_date);
-        $incoming_accts = $transactions->accounts;
-
-        // importing accounts into db
-        $acct_obj = new Account();
-        $acct_obj->import_accounts($incoming_accts);
 
         // prepping vars for matching process
         $cur_trans = self::where('user_id', $user_id)->get()->toArray();

@@ -51,6 +51,11 @@ class PlaidController extends Controller
         $plaid_token->user_id = Auth::user()->id;
         $saved = $plaid_token->save();
 
+        // Retrieving accounts and saving to DB
+        $avail_accts = $this->pclient->accounts->list($access_token->access_token);
+        $acct_obj = new Account();
+        $acct_obj->import_accounts($avail_accts->accounts);
+
         if (!$saved){
             return response('Problem with saving token.', 500);
         }
