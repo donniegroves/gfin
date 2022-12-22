@@ -89,6 +89,7 @@ export default{
                 if (response.status == 200){
                     console.log('successfully unlinked account');
                     this.is_account_connected = false;
+                    this.addListenerToLinkBtn();
                 }
             }
             catch{
@@ -111,7 +112,6 @@ export default{
     mounted(){
         this.getConnectedStatus();
         (async ($) => {
-
             // Grab a Link token to initialize Link
             const createLinkToken = async () => {
                 const res = await fetch("/reqs/plaid/create_link_token");
@@ -120,7 +120,6 @@ export default{
                 localStorage.setItem("link_token", linkToken);
                 return linkToken;
             };
-
 
             // Initialize Link
             const handler = Plaid.create({
@@ -133,7 +132,7 @@ export default{
                     .then ( response => {
                         if (response.status == 200){
                             console.log('received access_token successfully');
-                            this.is_account_connected = true;
+                            this.getConnectedStatus();
                         }
                         else {
                             console.log('access_token was not received.');
@@ -154,12 +153,18 @@ export default{
 
             // Start Link when button is clicked
             if (!this.is_account_connected) {
-                const linkAccountButton = document.getElementById("link_btn");
-                linkAccountButton.addEventListener("click", (event) => {
-                    handler.open();
-                });
+                addListenerToLinkBtn(handler);
             }
         })(jQuery);
+        
+        function addListenerToLinkBtn(handler) {
+            console.log('addListenerToLinkBtn ran');
+            const linkAccountButton = document.getElementById("link_btn");
+            linkAccountButton.addEventListener("click", (event) => {
+                console.log('link button clicked');
+                handler.open();
+            });
+        }
     }
 }
 </script>
