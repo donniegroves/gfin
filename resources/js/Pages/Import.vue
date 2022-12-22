@@ -18,6 +18,11 @@
                                 <div class="mb-3">
                                     Your account is connected to these bank accounts 
                                 </div>
+                                <ul>
+                                    <li v-for="acct in cur_accts">
+                                        {{ acct.name }}-{{ acct.mask }}
+                                    </li>
+                                </ul>
                                 <button type="button" @click="unlinkAccount" class="btn btn-primary btn-lg mr-3">
                                     <span>Unlink Accounts</span>
                                 </button>
@@ -63,7 +68,8 @@ import GFinLayout from "../Layouts/GFinLayout.vue";
 export default{
     data(){
         return {
-            is_account_connected: false
+            is_account_connected: false,
+            cur_accts: []
         }
     },
     components: {
@@ -71,9 +77,11 @@ export default{
     },
     methods: {
         getConnectedStatus: async function(){
+            console.log('checking account connected status.')
             const account = await fetch("/reqs/plaid/is_account_connected");
-            const connected = await account.json();
-            this.is_account_connected = Boolean(connected);
+            const response = await account.json();
+            this.is_account_connected = Boolean(response.connected);
+            this.cur_accts = response.accts;
         },
         unlinkAccount: async function(){
             try{
@@ -145,10 +153,12 @@ export default{
             });
 
             // Start Link when button is clicked
-            const linkAccountButton = document.getElementById("link_btn");
-            linkAccountButton.addEventListener("click", (event) => {
-                handler.open();
-            });
+            if (!this.is_account_connected) {
+                const linkAccountButton = document.getElementById("link_btn");
+                linkAccountButton.addEventListener("click", (event) => {
+                    handler.open();
+                });
+            }
         })(jQuery);
     }
 }

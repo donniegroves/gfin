@@ -81,12 +81,13 @@ class PlaidController extends Controller
     {
         $user_id = Auth::user()->id;
         $token_res = PlaidTokens::where('user_id', $user_id)->get();
+        $accts = Account::where('user_id', $user_id)->get()->toArray();
 
         if (count($token_res) !== 1){
-            return response('0', 200);
+            return response(["connected" => false, "accts" => []], 200);
         }
 
-        return response(1, 200);
+        return response(["connected" => true, "accts" => $accts], 200);
     }
 
     /**
@@ -97,15 +98,16 @@ class PlaidController extends Controller
     public function unlink_account()
     {
         $user_id = Auth::user()->id;
-        $d_tokens = PlaidTokens::where('user_id', $user_id)->delete();
-        $d_accts = Account::where('user_id', $user_id)->delete();
-        $u_trans = Transaction::where('user_id', $user_id)->update(['plaid_transaction_id' => null]);
 
-        if (!$d_tokens || !$d_accts || !$u_trans){
+        try {
+            $d_tokens = PlaidTokens::where('user_id', $user_id)->delete();
+            $d_accts = Account::where('user_id', $user_id)->delete();
+            $u_trans = Transaction::where('user_id', $user_id)->update(['plaid_transaction_id' => null]);
+            return response('Account unlinked successfully.', 200);
+        }
+        catch (\Throwable $e) {
             return response('Problem unlinking account', 500);
         }
-
-        return response('Account unlinked successfully.', 200);
     }
 
     /**
