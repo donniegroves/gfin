@@ -111,6 +111,39 @@ class TransactionController extends Controller
     }
 
     /**
+     * Import a user-provided file into transactions.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function import(Request $request)
+    {
+        $validated = $request->validate([
+            'file' => 'required|mimes:doc,docx,pdf,txt,csv|max:2048',
+        ]); 
+
+        return $validated;
+
+    //   if ($file = $request->file('file')) {
+    //       $path = $file->store('public/files');
+    //       $name = $file->getClientOriginalName();
+
+    //       //store your file into directory and db
+    //       $save = new File();
+    //       $save->name = $file;
+    //       $save->store_path= $path;
+    //       $save->save();
+            
+    //       return response()->json([
+    //           "success" => true,
+    //           "message" => "File successfully uploaded",
+    //           "file" => $file
+    //       ]);
+
+    //   }
+    }
+
+    /**
      * Gets and returns an array of category totals, ordered desc by their total amount, within the selected date ranges
      *
      * @param string $start_date

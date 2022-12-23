@@ -22,7 +22,7 @@ class PlaidController extends Controller
 
     public function __construct()
     {
-        $this->pclient = new Plaid(env('PLAID_CLIENT_ID'), env('PLAID_SECRET_KEY'), "sandbox");
+        $this->pclient = new Plaid(env('PLAID_CLIENT_ID'), env('PLAID_SECRET_KEY'), env('PLAID_ENVIRONMENT'));
     }
 
     /**

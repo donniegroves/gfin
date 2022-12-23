@@ -59,10 +59,15 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <UploadCard bprofile="wf" />
+            <UploadCard bprofile="chase" />
+        </div>
     </GFinLayout>
 </template>
 
 <script>
+import UploadCard from "@/Components/UploadCard.vue";
 import axios from "axios";
 import GFinLayout from "../Layouts/GFinLayout.vue";
 export default{
@@ -73,6 +78,7 @@ export default{
         }
     },
     components: {
+        UploadCard,
         GFinLayout
     },
     methods: {
