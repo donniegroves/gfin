@@ -122,25 +122,10 @@ class TransactionController extends Controller
             'file' => 'required|mimes:doc,docx,pdf,txt,csv|max:2048',
         ]); 
 
-        return $validated;
+        $trans_obj = new Transaction();
+        $result = $trans_obj->importTransactionsByCSV($validated['file']);
 
-    //   if ($file = $request->file('file')) {
-    //       $path = $file->store('public/files');
-    //       $name = $file->getClientOriginalName();
-
-    //       //store your file into directory and db
-    //       $save = new File();
-    //       $save->name = $file;
-    //       $save->store_path= $path;
-    //       $save->save();
-            
-    //       return response()->json([
-    //           "success" => true,
-    //           "message" => "File successfully uploaded",
-    //           "file" => $file
-    //       ]);
-
-    //   }
+        return $result;
     }
 
     /**

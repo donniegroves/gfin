@@ -70,11 +70,11 @@ class PlaidController extends Controller
      */
     public function import_transactions()
     {
-        $user = \App\Models\User::where('id', Auth::user()->id)->get()->first();
         $start_date = new \DateTime('1 month ago');
         $end_date = new \DateTime('today');
         
-        return Transaction::importUserTransactionsFromPlaid($user, $start_date, $end_date);
+        
+        return (new Transaction())->importUserTransactionsFromPlaid($start_date, $end_date);
     }
 
     /**
