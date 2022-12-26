@@ -30,7 +30,7 @@ class TransactionController extends Controller
                         ->orWhere('trans_date','LIKE', '%'.$request->search.'%');
                 })
                 ->orderBy('trans_date', 'DESC')
-                ->paginate(15);
+                ->paginate(50);
         }
         else if ($request->range === "all"){
             return Transaction::where('user_id', Auth::user()->id)
@@ -40,7 +40,7 @@ class TransactionController extends Controller
         else {
             return Transaction::where('user_id', Auth::user()->id)
                 ->orderBy('trans_date', 'DESC')
-                ->paginate(15);
+                ->paginate(50);
         }  
     }
 
