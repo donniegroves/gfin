@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Account;
+use App\Models\ImportHistory;
 use TomorrowIdeas\Plaid\Plaid;
 use App\Models\PayeePattern;
 use App\Models\CategoryPattern;
@@ -60,12 +61,21 @@ class Transaction extends Model
             $transaction->save();
         }
 
-        return [
+        ImportHistory::add([
+            "user_id" => Auth::user()->id,
             "total_incoming" => count($trans_from_csv),
             "existing_skipped" => count($existing_trans),
             "new_processed" => count($new_trans),
             "matched_trans" => count($matched_trans),
             "unmatched_trans" => count($unmatched_trans)
+        ]);
+
+        return [
+            "total_incoming" => count($trans_from_csv),
+            "existing_skipped" => count($existing_trans),
+            "new_processed" => count($new_trans),
+            "matched_trans" => count($matched_trans),
+            "unmatched_trans" => count($unmatched_trans),
         ];
     }
 
