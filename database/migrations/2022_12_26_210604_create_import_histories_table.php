@@ -19,6 +19,7 @@ return new class extends Migration
                 ->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+            $table->integer('import_type');
             $table->integer('total_incoming');
             $table->integer('existing_skipped');
             $table->integer('new_processed');

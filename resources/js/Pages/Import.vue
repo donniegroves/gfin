@@ -41,6 +41,10 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <UploadCard @file-uploaded="getImportHistory()" bprofile="wf" />
+                    <UploadCard @file-uploaded="getImportHistory()" bprofile="chase" />
+                </div>
             </div>
             <div v-if="is_account_connected" class="col-md-6">
                 <div class="card shadow mb-4">
@@ -50,18 +54,18 @@
                     <div class="card-body pb-3">
                         <div class="row mb-1">
                             <div v-if="is_account_connected" class="col">
-                                <div>
-                                    Import history goes here.
-                                </div>
+                                <ul>
+                                    <li v-for="hist_item in import_history">
+                                        {{ (new Date(hist_item.created_at)).toLocaleString() + ": "}}
+                                        {{  hist_item.new_processed  }} processed out of {{  hist_item.total_incoming  }} retrieved, 
+                                        {{ hist_item.matched_trans }} matched patterns via {{ hist_item.import_type }}.
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <UploadCard bprofile="wf" />
-            <UploadCard bprofile="chase" />
         </div>
     </GFinLayout>
 </template>
@@ -74,7 +78,8 @@ export default{
     data(){
         return {
             is_account_connected: false,
-            cur_accts: []
+            cur_accts: [],
+            import_history: [],
         }
     },
     components: {
@@ -88,6 +93,12 @@ export default{
             const response = await account.json();
             this.is_account_connected = Boolean(response.connected);
             this.cur_accts = response.accts;
+        },
+        getImportHistory: async function() {
+            console.log('getting import history');
+            const history = await fetch("reqs/transactions/history");
+            const response = await history.json();
+            this.import_history = response;
         },
         unlinkAccount: async function(){
             try{
@@ -108,6 +119,7 @@ export default{
                 const response = await axios.get('/reqs/plaid/transactions/import', {});
                 if (response.status == 200){
                     console.log('successfully retrieved transactions');
+                    this.getImportHistory();
                 }
             }
             catch{
@@ -117,6 +129,7 @@ export default{
     },
     mounted(){
         this.getConnectedStatus();
+        this.getImportHistory();
         (async ($) => {
             // Grab a Link token to initialize Link
             const createLinkToken = async () => {

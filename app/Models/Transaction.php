@@ -63,6 +63,7 @@ class Transaction extends Model
 
         ImportHistory::add([
             "user_id" => Auth::user()->id,
+            "import_type" => ImportHistory::TYPES['csv'],
             "total_incoming" => count($trans_from_csv),
             "existing_skipped" => count($existing_trans),
             "new_processed" => count($new_trans),
@@ -114,13 +115,23 @@ class Transaction extends Model
 
         // getting transactions from plaid for user.
         $pclient = new Plaid(env('PLAID_CLIENT_ID'), env('PLAID_SECRET_KEY'), env('PLAID_ENVIRONMENT'));
-        $transactions = $pclient->transactions->list($access_token, $start_date, $end_date);
+        $transactions = $pclient->transactions->list($access_token, $start_date, $end_date, ["count"=>500]);
 
         $this->setCurrentTransAndFingerprints();
 
         self::separateExistingTransFromNew($transactions->transactions, $existing_trans, $new_trans);
         self::separateMatchedTransFromUnmatched($new_trans, $matched_trans, $unmatched_trans);
         self::importTransactionsWithPlaid(array_merge($matched_trans,$unmatched_trans));
+
+        ImportHistory::add([
+            "user_id" => Auth::user()->id,
+            "import_type" => ImportHistory::TYPES['plaid'],
+            "total_incoming" => count($transactions->transactions),
+            "existing_skipped" => count($existing_trans),
+            "new_processed" => count($new_trans),
+            "matched_trans" => count($matched_trans),
+            "unmatched_trans" => count($unmatched_trans)
+        ]);
 
         return [
             "total_incoming" => count($transactions->transactions),

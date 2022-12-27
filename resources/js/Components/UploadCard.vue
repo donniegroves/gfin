@@ -1,5 +1,5 @@
 <template>
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-6 mb-4">
         <div :class="cardClass">
             <div @click="this.$refs.file_input_el.click();" class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -41,7 +41,7 @@ export default{
                 if( response.status == 200 ){
                     console.log('good response received');
                     // this.category_name = '';
-                    // this.$emit('fileUploaded');
+                    this.$emit('fileUploaded');
                 }
             })
             .catch( error => {

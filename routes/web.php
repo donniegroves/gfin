@@ -10,6 +10,7 @@ use App\Http\Controllers\PayeePatternsController;
 use App\Http\Controllers\PlaidController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TransactionController;
+use App\Models\ImportHistory;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,7 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
         Route::get('/transactions/stats',[TransactionController::class, 'get_stats']);
         Route::post('/transactions/store', [TransactionController::class, 'store']);
         Route::post('/transactions/import',[TransactionController::class, 'import']);
+        Route::get('/transactions/history',[ImportHistory::class, 'get']);
         Route::put('/transactions/update/{id}', [TransactionController::class, 'update']);
         Route::delete('/transactions/destroy/{id}', [TransactionController::class, 'destroy']);
 

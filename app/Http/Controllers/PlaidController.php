@@ -15,10 +15,6 @@ use Illuminate\Support\Facades\Auth;
 class PlaidController extends Controller
 {
     private $pclient;
-    private $payee_patterns;
-    private $cat_patterns;
-    private $trans;
-    private $accts;
 
     public function __construct()
     {
