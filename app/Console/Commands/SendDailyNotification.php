@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Http\Controllers\TransactionController;
 use App\Models\Settings;
+use Twilio\Rest\Client;
 
 class SendDailyNotification extends Command
 {
@@ -36,31 +37,40 @@ class SendDailyNotification extends Command
         }
 
         foreach ($recipient_arr as $recipient){
+            $timezone = 'America/New_York';
+            $yesterday = new \DateTime('yesterday', new \DateTimeZone($timezone));
+            $yesterday = $yesterday->format('Y-m-d');
+
             $tcont = new TransactionController();
             $stats = [];
             $stats['yesterday'] = $tcont->getCategoryTotals(
-                date('Y-m-d',strtotime('yesterday')), 
-                date('Y-m-d',strtotime('yesterday')), 
-                $recipient
-            );
-            $stats['week'] = $tcont->getCategoryTotals(
-                date('Y-m-d',strtotime('last sunday')), 
-                date('Y-m-d', strtotime('this saturday')), 
+                $yesterday, 
+                $yesterday, 
                 $recipient
             );
 
-            $msg  = "This is your daily budget email!\r\n";
-            $msg .= "Yesterday, you spent the following on these categories:\r\n";
+            $msg = "Yesterday, you spent the following on these categories:\r\n";
             foreach ($stats['yesterday'] as $cat_name => $amt){
-                $msg .= $cat_name . ": " . $amt ."\r\n";
-            }
-            $msg .= "\r\n";
-            $msg .= "So far, this week you've spent the following on these categories:\r\n";
-            foreach ($stats['week'] as $cat_name => $amt){
-                $msg .= $cat_name . ": " . $amt ."\r\n";
+                $msg .= $cat_name . ": " . $amt*-1 ."\r\n";
             }
 
-            // TODO: Twilio handling here.
+            $twilio_sid = env('TWILIO_SID');
+            $twilio_token = env('TWILIO_TOKEN');
+            $twilio_from_num = env('TWILIO_FROM_NUM');
+            $client = new Client($twilio_sid, $twilio_token);
+
+            $to_num = Settings::where('stg_name', 'primary_sms')
+            ->where('user_id', $recipient)
+            ->get()->first()->toArray();
+            $to_num = $to_num['stg_val'];
+
+            $client->messages->create(
+                $to_num,
+                [
+                    'from' => $twilio_from_num,
+                    'body' => $msg
+                ]
+            );
         }
     }
 }

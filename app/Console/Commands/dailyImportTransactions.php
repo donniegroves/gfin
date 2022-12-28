@@ -40,7 +40,7 @@ class dailyImportTransactions extends Command
             Auth::login($user_instance);
 
             // retrieve transactions for the user from plaid
-            $start_date = new \DateTime('1 month ago');
+            $start_date = new \DateTime('1 week ago');
             $end_date = new \DateTime('today');
             $transaction = new Transaction();
             $transaction->importUserTransactionsFromPlaid($start_date, $end_date);

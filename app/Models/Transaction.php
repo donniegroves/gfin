@@ -263,7 +263,7 @@ class Transaction extends Model
                 "plaid_transaction_id" => $tran->plaid_transaction_id,
                 "orig_detail" 	=> preg_replace('/\s+/',' ',$tran->orig_detail),
                 "orig_amt" 		=> $tran->orig_amt * -1,
-                "approved" 		=> ($tran->payee_id && $tran->category_id) ? 1 : 0,
+                "approved" 		=> 1,
             ]);
             $transaction->save();
         }

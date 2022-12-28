@@ -16,14 +16,14 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule
-            ->command('cron:sendDailyNotification')
-            ->daily()
-            ->appendOutputTo(base_path().'/cron_output.txt');
+            ->command('cron:dailyImportTransactions')
+            ->dailyAt('05:30')
+            ->appendOutputTo(storage_path('logs/scheduler.log'));
 
         $schedule
-            ->command('cron:dailyImportTransactions')
-            ->daily()
-            ->appendOutputTo(base_path().'/cron_output.txt');
+            ->command('cron:sendDailyNotification')
+            ->dailyAt('08:00')
+            ->appendOutputTo(storage_path('logs/scheduler.log'));
     }
 
     /**
