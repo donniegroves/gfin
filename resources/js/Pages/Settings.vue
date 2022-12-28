@@ -5,7 +5,6 @@
         <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <h6 class="m-0 font-weight-bold text-primary">SMS Notifications</h6>
-                <ToggleSwitch @checkboxChange="(key, value) => changeSettingData(key, value)" identifier="enable_sms_notifs" :checked="settings.enable_sms_notifs"/>
             </div>
             <!-- Card Body -->
             <div class="card-body pb-3">
@@ -35,10 +34,10 @@
                 </div>
                 <div class="row">
                     <div class="col-6">
-                        Weekly Notifications:
+                        Include Deposits in Notifs:
                     </div>
                     <div class="col-6">
-                        <ToggleSwitch @checkboxChange="(key, value) => changeSettingData(key, value)" identifier="send_weekly_sms" :checked="settings.send_weekly_sms"/>
+                        <ToggleSwitch @checkboxChange="(key, value) => changeSettingData(key, value)" identifier="include_deps_in_notifs" :checked="settings.include_deps_in_notifs"/>
                     </div>
                 </div>
                 <div class="row mt-3 mb-0 text-right">
@@ -117,11 +116,10 @@ export default{
             if (response.status == 200){
                 console.log('received original settings.');
                 this.settings = {
-                    enable_sms_notifs:  response.data.enable_sms_notifs === "1",
                     primary_sms:        response.data.primary_sms,
                     secondary_sms:      response.data.secondary_sms,
                     send_daily_sms:     response.data.send_daily_sms === "1",
-                    send_weekly_sms:    response.data.send_weekly_sms === "1",
+                    include_deps_in_notifs:    response.data.include_deps_in_notifs === "1",
                     daily_exp_budget:   response.data.daily_exp_budget,
                     weekly_exp_budget:  response.data.weekly_exp_budget
                 };
@@ -130,11 +128,10 @@ export default{
         async saveNotifSettings(){
             console.log('saveNotifSettings');
             const response = await axios.post('reqs/settings', {
-                enable_sms_notifs: this.settings.enable_sms_notifs,
                 primary_sms: this.settings.primary_sms,
                 secondary_sms: this.settings.secondary_sms,
                 send_daily_sms: this.settings.send_daily_sms,
-                send_weekly_sms: this.settings.send_weekly_sms
+                include_deps_in_notifs: this.settings.include_deps_in_notifs
             });
             if (response.status == 200){
                 console.log('saved notif settings.');

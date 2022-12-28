@@ -30,13 +30,20 @@ class SendDailyNotification extends Command
      */
     public function handle()
     {
-        $recipient_arr = [];
-        $stg_rows = Settings::where('stg_name', 'enable_sms_notifs')->get()->toArray();
+        $user_ids = [];
+        $stg_rows = Settings::where('stg_name', 'send_daily_sms')->get()->toArray();
         foreach ($stg_rows as $row){
-            $recipient_arr[] = $row['user_id'];
+            if ((bool) $row['stg_val']) {
+                $user_ids[] = $row['user_id'];
+            }
         }
 
-        foreach ($recipient_arr as $recipient){
+        foreach ($user_ids as $user_id){
+            $skip_deps = Settings::where('stg_name', 'include_deps_in_notifs')
+            ->where('user_id', $user_id)
+            ->get()->first()->toArray();
+            $skip_deps = !(bool) $skip_deps['stg_val'];
+
             $timezone = 'America/New_York';
             $yesterday = new \DateTime('yesterday', new \DateTimeZone($timezone));
             $yesterday = $yesterday->format('Y-m-d');
@@ -46,7 +53,8 @@ class SendDailyNotification extends Command
             $stats['yesterday'] = $tcont->getCategoryTotals(
                 $yesterday, 
                 $yesterday, 
-                $recipient
+                $user_id,
+                $skip_deps
             );
 
             $msg = "Yesterday, you spent the following on these categories:\r\n";
@@ -60,7 +68,7 @@ class SendDailyNotification extends Command
             $client = new Client($twilio_sid, $twilio_token);
 
             $to_num = Settings::where('stg_name', 'primary_sms')
-            ->where('user_id', $recipient)
+            ->where('user_id', $user_id)
             ->get()->first()->toArray();
             $to_num = $to_num['stg_val'];
 

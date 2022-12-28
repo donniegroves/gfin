@@ -136,7 +136,7 @@ class TransactionController extends Controller
      * @param integer $user_id
      * @return void
      */
-    public function getCategoryTotals(string $start_date, string $end_date, int $user_id){
+    public function getCategoryTotals(string $start_date, string $end_date, int $user_id, bool $skip_deps = false){
         $query = "
             SELECT
                 categories.`name`, 
@@ -151,7 +151,8 @@ class TransactionController extends Controller
                 transactions.trans_date >= '" . addslashes($start_date) . "'
                 AND transactions.trans_date <= '" . addslashes($end_date) . "'
                 AND transactions.approved = 1
-                AND transactions.user_id = ".addslashes($user_id) . "
+                AND transactions.user_id = ".addslashes($user_id)
+                .($skip_deps ? " AND (transactions.orig_amt <= 0 OR transactions.new_amt <= 0)" : "")."
             GROUP BY
                 categories.`name`
             ORDER BY `total` DESC";

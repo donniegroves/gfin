@@ -9,11 +9,10 @@ use Illuminate\Support\Facades\Auth;
 class SettingsController extends Controller
 {
     const PERMITTED_SETTINGS_ARR = [
-        'enable_sms_notifs',
         'primary_sms',
         'secondary_sms',
         'send_daily_sms',
-        'send_weekly_sms',
+        'include_deps_in_notifs',
         'daily_exp_budget',
         'weekly_exp_budget'
     ];
