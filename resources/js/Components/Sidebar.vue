@@ -14,9 +14,7 @@
         </a>
 
         <hr class="sidebar-divider">
-
-        <!-- Main -->
-        <div class="sidebar-heading">Main</div>
+        
         <li class="nav-item">
             <Link href="overview" class="nav-link">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -39,17 +37,6 @@
             <Link href="calendar" class="nav-link">
                 <i class="fa-regular fa-fw fa-calendar-days"></i>
                 <span>Calendar</span>
-            </Link>
-        </li>
-
-        <hr class="sidebar-divider">
-
-        <div class="sidebar-heading">Settings</div>
-
-        <li class="nav-item">
-            <Link href="settings" class="nav-link">
-                <i class="fa-solid fa-fw fa-gear"></i>
-                <span>General</span>
             </Link>
         </li>
 
