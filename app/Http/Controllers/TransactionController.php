@@ -128,6 +128,20 @@ class TransactionController extends Controller
         return $result;
     }
 
+    public function getDailyTotal(string $date, int $user_id, bool $skip_deps): int {
+        $query = "SELECT SUM(COALESCE ( transactions.new_amt, transactions.orig_amt )) AS total 
+        FROM transactions
+        WHERE transactions.trans_date = '" . addslashes($date) . "'
+        AND transactions.approved = 1 
+        AND transactions.user_id = ".addslashes($user_id)
+        .($skip_deps ? " AND (transactions.orig_amt <= 0 OR transactions.new_amt <= 0)" : "")."
+        ORDER BY `total` DESC";
+
+        $total = DB::select($query);
+        $total = (int) $total[0]->total;
+        return $total;
+    }
+
     /**
      * Gets and returns an array of category totals, ordered desc by their total amount, within the selected date ranges
      *

@@ -30,6 +30,7 @@ class SendDailyNotification extends Command
      */
     public function handle()
     {
+        // getting user_ids that are eligible for daily notifications
         $user_ids = [];
         $stg_rows = Settings::where('stg_name', 'send_daily_sms')->get()->toArray();
         foreach ($stg_rows as $row){
@@ -41,22 +42,23 @@ class SendDailyNotification extends Command
         foreach ($user_ids as $user_id){
             $skip_deps = !(bool) Settings::getSetting('include_deps_in_notifs', $user_id);
 
-            $timezone = 'America/New_York';
-            $yesterday = new \DateTime('yesterday', new \DateTimeZone($timezone));
-            $yesterday = $yesterday->format('Y-m-d');
+            $tz = 'America/New_York';
+            $days_to_process = [
+                (new \DateTime('now -3 days', new \DateTimeZone($tz)))->format('Y-m-d'),
+                (new \DateTime('now -2 days', new \DateTimeZone($tz)))->format('Y-m-d'),
+                (new \DateTime('now -1 days', new \DateTimeZone($tz)))->format('Y-m-d')
+            ];
 
             $tcont = new TransactionController();
             $stats = [];
-            $stats['yesterday'] = $tcont->getCategoryTotals(
-                $yesterday, 
-                $yesterday, 
-                $user_id,
-                $skip_deps
-            );
+            foreach ($days_to_process as $day) {
+                $stats[$day] = $tcont->getDailyTotal($day,$user_id,$skip_deps);
+            }
 
-            $msg = "Yesterday, you spent the following on these categories:\r\n";
-            foreach ($stats['yesterday'] as $cat_name => $amt){
-                $msg .= $cat_name . ": " . $amt*-1 ."\r\n";
+            $msg = "Spending Report:\r\n";
+            foreach ($stats as $date => $total) {
+                $total = $total*-1;
+                $msg .= "{$date}: ${$total}\r\n";
             }
 
             $twilio_sid = env('TWILIO_SID');
