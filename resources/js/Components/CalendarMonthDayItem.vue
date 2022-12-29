@@ -67,7 +67,13 @@ export default {
     },
     methods: {
         setFilteredTrans(){
-            let filter_result = this.trans.filter(tran => tran.trans_date == this.day.date && tran.approved);
+            let filter_result;
+            if (this.budget_stgs.include_deps_in_calcs) {
+                filter_result = this.trans.filter(tran => tran.trans_date == this.day.date && tran.approved);
+            }
+            else {
+                filter_result = this.trans.filter(tran => tran.trans_date == this.day.date && tran.approved && (tran.new_amt ?? tran.orig_amt < 0));
+            }
             this.filtered_trans = filter_result;
         },
         setCategoryTotals(){
@@ -101,7 +107,7 @@ export default {
             return found_name ? found_name : 'Uncategorized';
         },
         setBG(){
-            if (this.exp_total === 0){
+            if (this.exp_total === 0 || this.day_total > 0){
                 return '';
             }
             let spent = Math.abs(this.exp_total);
@@ -130,6 +136,15 @@ export default {
     computed: {
         label() {
             return dayjs(this.day.date).format("D");
+        },
+        day_total() {
+            let day_total = 0;
+            let one_cat_total = Object.values(this.cat_totals);
+            one_cat_total.forEach((one_cat) => {
+                day_total += one_cat;
+            });
+            
+            return day_total;
         }
     }
 };
