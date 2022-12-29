@@ -55,11 +55,14 @@ class SendDailyNotification extends Command
                 $stats[$day] = $tcont->getDailyTotal($day,$user_id,$skip_deps);
             }
 
-            $msg = "Spending Report:\r\n";
+            $msg = "GFin Spending Report:\r\n";
             foreach ($stats as $date => $total) {
                 $total = $total*-1;
-                $msg .= "{$date}: ".'$'."{$total}\r\n";
+                $disp_date = new \DateTime($date);
+
+                $msg .= $disp_date->format("D, M jS").": ".'$'."{$total}\r\n";
             }
+            $msg = rtrim($msg,"\r\n");
 
             $twilio_sid = env('TWILIO_SID');
             $twilio_token = env('TWILIO_TOKEN');
