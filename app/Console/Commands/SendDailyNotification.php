@@ -58,7 +58,7 @@ class SendDailyNotification extends Command
             $msg = "Spending Report:\r\n";
             foreach ($stats as $date => $total) {
                 $total = $total*-1;
-                $msg .= "{$date}: ${$total}\r\n";
+                $msg .= "{$date}: ".'$'."{$total}\r\n";
             }
 
             $twilio_sid = env('TWILIO_SID');
