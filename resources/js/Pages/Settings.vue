@@ -67,11 +67,6 @@
                         <input type="number" min="0.01" step="0.01" class="form-control" v-model="settings.daily_exp_budget">
                     </div>
                 </div>
-                <div class="row mb-1">
-                    <div class="col-6">
-                        Weekly Expense Budget
-                    </div>
-                </div>
                 <div class="row mt-3 mb-0 text-right">
                     <div class="col-12">
                         <a @click="saveCalendarSettings()" id="save_cal_stgs_btn" class="btn btn-primary btn-icon-split btn-sm">
