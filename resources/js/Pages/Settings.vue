@@ -71,9 +71,6 @@
                     <div class="col-6">
                         Weekly Expense Budget
                     </div>
-                    <div class="col-6">
-                        <input type="number" min="0.01" step="0.01" class="form-control" v-model="settings.weekly_exp_budget">
-                    </div>
                 </div>
                 <div class="row mt-3 mb-0 text-right">
                     <div class="col-12">
@@ -120,8 +117,7 @@ export default{
                     secondary_sms:      response.data.secondary_sms,
                     send_daily_sms:     response.data.send_daily_sms === "1",
                     include_deps_in_notifs:    response.data.include_deps_in_notifs === "1",
-                    daily_exp_budget:   response.data.daily_exp_budget,
-                    weekly_exp_budget:  response.data.weekly_exp_budget
+                    daily_exp_budget:   response.data.daily_exp_budget
                 };
             }
         },
@@ -140,8 +136,7 @@ export default{
         async saveCalendarSettings(){
             console.log('saveCalendarSettings');
             const response = await axios.post('reqs/settings', {
-                daily_exp_budget: this.settings.daily_exp_budget,
-                weekly_exp_budget: this.settings.weekly_exp_budget
+                daily_exp_budget: this.settings.daily_exp_budget
             });
             if (response.status == 200){
                 console.log('saved calendar settings.');

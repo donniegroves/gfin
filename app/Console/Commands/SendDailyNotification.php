@@ -39,10 +39,7 @@ class SendDailyNotification extends Command
         }
 
         foreach ($user_ids as $user_id){
-            $skip_deps = Settings::where('stg_name', 'include_deps_in_notifs')
-            ->where('user_id', $user_id)
-            ->get()->first()->toArray();
-            $skip_deps = !(bool) $skip_deps['stg_val'];
+            $skip_deps = !(bool) Settings::getSetting('include_deps_in_notifs', $user_id);
 
             $timezone = 'America/New_York';
             $yesterday = new \DateTime('yesterday', new \DateTimeZone($timezone));
@@ -67,18 +64,15 @@ class SendDailyNotification extends Command
             $twilio_from_num = env('TWILIO_FROM_NUM');
             $client = new Client($twilio_sid, $twilio_token);
 
-            $to_num = Settings::where('stg_name', 'primary_sms')
-            ->where('user_id', $user_id)
-            ->get()->first()->toArray();
-            $to_num = $to_num['stg_val'];
+            $prim_to_num = Settings::getSetting('primary_sms',$user_id);
+            $second_to_num = Settings::getSetting('secondary_sms',$user_id);
 
-            $client->messages->create(
-                $to_num,
-                [
-                    'from' => $twilio_from_num,
-                    'body' => $msg
-                ]
-            );
+            if (!empty($prim_to_num)) {
+                $client->messages->create($prim_to_num, ["from"=>$twilio_from_num,"body"=>$msg]);
+            }
+            if (!empty($second_to_num)) {
+                $client->messages->create($second_to_num, ["from"=>$twilio_from_num,"body"=>$msg]);
+            }
         }
     }
 }
