@@ -165,7 +165,8 @@
                 if (response.status == 200){
                     console.log('received budget settings.');
                     this.budget_stgs = {
-                        daily_exp_budget:   response.data.daily_exp_budget
+                        daily_exp_budget:   response.data.daily_exp_budget,
+                        include_deps_in_calcs: response.data.include_deps_in_calcs
                     };
                 }
             },

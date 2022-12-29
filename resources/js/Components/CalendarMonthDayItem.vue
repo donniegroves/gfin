@@ -31,17 +31,14 @@ export default {
             type: Object,
             required: true
         },
-
         isCurrentMonth: {
             type: Boolean,
             default: false
         },
-
         isToday: {
             type: Boolean,
             default: false
         },
-
         budget_stgs: {
             type: Object,
             required: true
@@ -79,6 +76,9 @@ export default {
                 let amt = parseInt(tran.new_amt ?? tran.orig_amt);
                 if (amt < 0){
                     this.exp_total += amt;
+                }
+                else if (this.budget_stgs.include_deps_in_calcs == 0) {
+                    return;
                 }
                 let cat_id = tran.category_id;
                 let cat_name = this.getCatNameById(cat_id);

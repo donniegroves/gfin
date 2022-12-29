@@ -40,7 +40,7 @@ class SendDailyNotification extends Command
         }
 
         foreach ($user_ids as $user_id){
-            $skip_deps = !(bool) Settings::getSetting('include_deps_in_notifs', $user_id);
+            $skip_deps = !(bool) Settings::getSetting('include_deps_in_calcs', $user_id);
 
             $tz = 'America/New_York';
             $days_to_process = [

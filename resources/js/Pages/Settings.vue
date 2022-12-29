@@ -34,10 +34,10 @@
                 </div>
                 <div class="row">
                     <div class="col-6">
-                        Include Deposits in Notifs:
+                        Include Deposits in Calcs:
                     </div>
                     <div class="col-6">
-                        <ToggleSwitch @checkboxChange="(key, value) => changeSettingData(key, value)" identifier="include_deps_in_notifs" :checked="settings.include_deps_in_notifs"/>
+                        <ToggleSwitch @checkboxChange="(key, value) => changeSettingData(key, value)" identifier="include_deps_in_calcs" :checked="settings.include_deps_in_calcs"/>
                     </div>
                 </div>
                 <div class="row mt-3 mb-0 text-right">
@@ -111,7 +111,7 @@ export default{
                     primary_sms:        response.data.primary_sms,
                     secondary_sms:      response.data.secondary_sms,
                     send_daily_sms:     response.data.send_daily_sms === "1",
-                    include_deps_in_notifs:    response.data.include_deps_in_notifs === "1",
+                    include_deps_in_calcs:    response.data.include_deps_in_calcs === "1",
                     daily_exp_budget:   response.data.daily_exp_budget
                 };
             }
@@ -122,7 +122,7 @@ export default{
                 primary_sms: this.settings.primary_sms,
                 secondary_sms: this.settings.secondary_sms,
                 send_daily_sms: this.settings.send_daily_sms,
-                include_deps_in_notifs: this.settings.include_deps_in_notifs
+                include_deps_in_calcs: this.settings.include_deps_in_calcs
             });
             if (response.status == 200){
                 console.log('saved notif settings.');

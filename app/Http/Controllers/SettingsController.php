@@ -12,7 +12,7 @@ class SettingsController extends Controller
         'primary_sms',
         'secondary_sms',
         'send_daily_sms',
-        'include_deps_in_notifs',
+        'include_deps_in_calcs',
         'daily_exp_budget'
     ];
 
