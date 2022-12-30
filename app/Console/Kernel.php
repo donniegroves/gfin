@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule
             ->command('cron:dailyImportTransactions')
-            ->dailyAt('05:30')
+            ->dailyAt('07:30')
             ->appendOutputTo(storage_path('logs/scheduler.log'));
 
         $schedule

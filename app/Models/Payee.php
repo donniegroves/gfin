@@ -18,8 +18,8 @@ class Payee extends Model
 
     public function getOrCreateFromString(string $string): int|bool {
         // search for payee
-        $all_payees = (new PayeeController())->index()->pluck("name","id")->toArray();
-        $found_payee_id = array_search($string, $all_payees);
+        $all_payees = self::get()->pluck("name","id")->toArray();
+        $found_payee_id = array_search(strtolower($string), array_map('strtolower',$all_payees));
 
         // adding payee if it doesn't exist.
         if (!$found_payee_id) {

@@ -190,7 +190,7 @@ class Transaction extends Model
      * @param array $unmatched_trans
      * @return void
      */
-    private static function separateMatchedTransFromUnmatched(array $input_trans, ?array &$matched_trans, ?array &$unmatched_trans){
+    private static function separateMatchedTransFromUnmatched(array $input_trans, ?array &$matched_trans, ?array &$unmatched_trans, bool $auto_add_payee = true){
         // determine if input transactions are from plaid or csv
         $input_type = is_array(reset($input_trans)) ? 'csv' : 'plaid';
 
@@ -204,10 +204,17 @@ class Transaction extends Model
             $orig_detail = $input_type == 'csv' ? $one_tran['description'] : $one_tran->name;
             $orig_amt = $input_type == 'csv' ? $one_tran['amount'] : $one_tran->amount;
 
+            if (is_null($one_tran->merchant_name) || !$auto_add_payee) {
+                $payee_id = null;
+            }
+            else {
+                $payee_id = (new Payee())->getOrCreateFromString($one_tran->merchant_name);
+            }
+
             $result_tran = new Transaction([
 				"user_id"		        => Auth::user()->id,
                 "trans_date" 	        => $trans_date,
-                "payee_id" 		        => null,
+                "payee_id" 		        => $payee_id,
                 "category_id" 	        => null,
                 "account_id"            => $account_id,
                 "plaid_transaction_id"  => $plaid_transaction_id,

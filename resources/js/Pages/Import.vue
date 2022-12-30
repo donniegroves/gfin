@@ -57,8 +57,7 @@
                                 <ul>
                                     <li v-for="hist_item in import_history">
                                         {{ (new Date(hist_item.created_at)).toLocaleString() + ": "}}
-                                        {{  hist_item.new_processed  }} processed out of {{  hist_item.total_incoming  }} retrieved, 
-                                        {{ hist_item.matched_trans }} matched patterns via {{ hist_item.import_type }}.
+                                        {{  hist_item.new_processed  }} new trans processed out of {{  hist_item.total_incoming  }} via {{ hist_item.import_type }}.
                                     </li>
                                 </ul>
                             </div>
