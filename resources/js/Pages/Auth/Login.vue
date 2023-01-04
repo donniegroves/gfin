@@ -6,7 +6,6 @@ import BreezeInput from '@/Components/Input.vue';
 import BreezeLabel from '@/Components/Label.vue';
 import BreezeValidationErrors from '@/Components/ValidationErrors.vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
-import '../../../css/tailwind.css';
 
 defineProps({
     canResetPassword: Boolean,
@@ -37,13 +36,13 @@ const submit = () => {
 
         <form @submit.prevent="submit">
             <div>
-                <BreezeLabel for="email" value="Email" />
-                <BreezeInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autofocus autocomplete="username" />
+                <label for="email" class="form-label">Email address</label>
+                <input v-model="form.email" required autocomplete="username" type="email" class="form-control" id="email">
             </div>
 
             <div class="mt-1">
-                <BreezeLabel for="password" value="Password" />
-                <BreezeInput id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="current-password" />
+                <label for="password" class="form-label">Password</label>
+                <input v-model="form.password" required autocomplete="current-password" type="password" class="form-control" id="password">
             </div>
 
             <div class="block mt-1">
