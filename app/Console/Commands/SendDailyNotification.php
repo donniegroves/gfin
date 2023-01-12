@@ -3,12 +3,13 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Http\Controllers\TransactionController;
 use App\Models\Settings;
 use Twilio\Rest\Client;
 
 class SendDailyNotification extends Command
 {
+    use \App\Traits\Calendar;
+
     /**
      * The name and signature of the console command.
      *
@@ -40,29 +41,17 @@ class SendDailyNotification extends Command
         }
 
         foreach ($user_ids as $user_id){
-            $skip_deps = !(bool) Settings::getSetting('include_deps_in_calcs', $user_id);
-
             $tz = 'America/New_York';
-            $days_to_process = [
+            $date_ar = [
+                (new \DateTime('now -5 days', new \DateTimeZone($tz)))->format('Y-m-d'),
+                (new \DateTime('now -4 days', new \DateTimeZone($tz)))->format('Y-m-d'),
                 (new \DateTime('now -3 days', new \DateTimeZone($tz)))->format('Y-m-d'),
                 (new \DateTime('now -2 days', new \DateTimeZone($tz)))->format('Y-m-d'),
                 (new \DateTime('now -1 days', new \DateTimeZone($tz)))->format('Y-m-d')
             ];
 
-            $tcont = new TransactionController();
-            $stats = [];
-            foreach ($days_to_process as $day) {
-                $stats[$day] = $tcont->getDailyTotal($day,$user_id,$skip_deps);
-            }
-
-            $msg = "GFin Spending Report:\r\n";
-            foreach ($stats as $date => $total) {
-                $total = $total*-1;
-                $disp_date = new \DateTime($date);
-
-                $msg .= $disp_date->format("D, M jS").": ".'$'."{$total}\r\n";
-            }
-            $msg = rtrim($msg,"\r\n");
+            $image = $this->generateCalendarImage($user_id, $date_ar);
+            $mediaUrl = url('storage/'.$image);
 
             $twilio_sid = env('TWILIO_SID');
             $twilio_token = env('TWILIO_TOKEN');
@@ -72,11 +61,13 @@ class SendDailyNotification extends Command
             $prim_to_num = Settings::getSetting('primary_sms',$user_id);
             $second_to_num = Settings::getSetting('secondary_sms',$user_id);
 
+            $msg = "GFin:\r\n";
+
             if (!empty($prim_to_num)) {
-                $client->messages->create($prim_to_num, ["from"=>$twilio_from_num,"body"=>$msg]);
+                $client->messages->create($prim_to_num, ["from"=>$twilio_from_num,"body"=>$msg,'mediaUrl' => $mediaUrl]);
             }
             if (!empty($second_to_num)) {
-                $client->messages->create($second_to_num, ["from"=>$twilio_from_num,"body"=>$msg]);
+                $client->messages->create($second_to_num, ["from"=>$twilio_from_num,"body"=>$msg,'mediaUrl' => $mediaUrl]);
             }
         }
     }
