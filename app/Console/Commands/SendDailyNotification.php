@@ -43,6 +43,15 @@ class SendDailyNotification extends Command
         foreach ($user_ids as $user_id){
             $tz = 'America/New_York';
             $date_ar = [
+                (new \DateTime('now -14 days', new \DateTimeZone($tz)))->format('Y-m-d'),
+                (new \DateTime('now -13 days', new \DateTimeZone($tz)))->format('Y-m-d'),
+                (new \DateTime('now -12 days', new \DateTimeZone($tz)))->format('Y-m-d'),
+                (new \DateTime('now -11 days', new \DateTimeZone($tz)))->format('Y-m-d'),
+                (new \DateTime('now -10 days', new \DateTimeZone($tz)))->format('Y-m-d'),
+                (new \DateTime('now -9 days', new \DateTimeZone($tz)))->format('Y-m-d'),
+                (new \DateTime('now -8 days', new \DateTimeZone($tz)))->format('Y-m-d'),
+                (new \DateTime('now -7 days', new \DateTimeZone($tz)))->format('Y-m-d'),
+                (new \DateTime('now -6 days', new \DateTimeZone($tz)))->format('Y-m-d'),
                 (new \DateTime('now -5 days', new \DateTimeZone($tz)))->format('Y-m-d'),
                 (new \DateTime('now -4 days', new \DateTimeZone($tz)))->format('Y-m-d'),
                 (new \DateTime('now -3 days', new \DateTimeZone($tz)))->format('Y-m-d'),
@@ -61,13 +70,11 @@ class SendDailyNotification extends Command
             $prim_to_num = Settings::getSetting('primary_sms',$user_id);
             $second_to_num = Settings::getSetting('secondary_sms',$user_id);
 
-            $msg = "GFin:\r\n";
-
             if (!empty($prim_to_num)) {
-                $client->messages->create($prim_to_num, ["from"=>$twilio_from_num,"body"=>$msg,'mediaUrl' => $mediaUrl]);
+                $client->messages->create($prim_to_num, ["from"=>$twilio_from_num,"body"=>'','mediaUrl' => $mediaUrl]);
             }
             if (!empty($second_to_num)) {
-                $client->messages->create($second_to_num, ["from"=>$twilio_from_num,"body"=>$msg,'mediaUrl' => $mediaUrl]);
+                $client->messages->create($second_to_num, ["from"=>$twilio_from_num,"body"=>'','mediaUrl' => $mediaUrl]);
             }
         }
     }
