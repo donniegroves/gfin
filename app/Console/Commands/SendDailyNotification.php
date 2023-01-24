@@ -42,22 +42,15 @@ class SendDailyNotification extends Command
 
         foreach ($user_ids as $user_id){
             $tz = 'America/New_York';
-            $date_ar = [
-                (new \DateTime('now -14 days', new \DateTimeZone($tz)))->format('Y-m-d'),
-                (new \DateTime('now -13 days', new \DateTimeZone($tz)))->format('Y-m-d'),
-                (new \DateTime('now -12 days', new \DateTimeZone($tz)))->format('Y-m-d'),
-                (new \DateTime('now -11 days', new \DateTimeZone($tz)))->format('Y-m-d'),
-                (new \DateTime('now -10 days', new \DateTimeZone($tz)))->format('Y-m-d'),
-                (new \DateTime('now -9 days', new \DateTimeZone($tz)))->format('Y-m-d'),
-                (new \DateTime('now -8 days', new \DateTimeZone($tz)))->format('Y-m-d'),
-                (new \DateTime('now -7 days', new \DateTimeZone($tz)))->format('Y-m-d'),
-                (new \DateTime('now -6 days', new \DateTimeZone($tz)))->format('Y-m-d'),
-                (new \DateTime('now -5 days', new \DateTimeZone($tz)))->format('Y-m-d'),
-                (new \DateTime('now -4 days', new \DateTimeZone($tz)))->format('Y-m-d'),
-                (new \DateTime('now -3 days', new \DateTimeZone($tz)))->format('Y-m-d'),
-                (new \DateTime('now -2 days', new \DateTimeZone($tz)))->format('Y-m-d'),
-                (new \DateTime('now -1 days', new \DateTimeZone($tz)))->format('Y-m-d')
-            ];
+
+            $i=0;
+            $date_ar = [];
+            while ($i < env('NUM_DAYS_OF_DAILY_NOTIF')) {
+                $i++;
+                echo 'now -'.$i.' days' . "\r\n";
+                $date_ar[] = (new \DateTime('now -'.$i.' days', new \DateTimeZone($tz)))->format('Y-m-d');
+            }
+            $date_ar = array_reverse($date_ar);
 
             $image = $this->generateCalendarImage($user_id, $date_ar);
             $mediaUrl = url('storage/'.$image);
