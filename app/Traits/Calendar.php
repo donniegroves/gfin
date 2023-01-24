@@ -28,7 +28,7 @@ trait Calendar
         .container {
             display: flex;
             flex-wrap: wrap;
-            margin-top: 100px;
+            margin-top: 0px;
             margin-bottom: 100px;
         }
 
@@ -103,7 +103,7 @@ trait Calendar
     private function saveScreenshotFromHTML($html, $file_path) {
         $browserFactory = new BrowserFactory();
         $browser = $browserFactory->createBrowser([
-            'windowSize'   => [650,400],
+            'windowSize'   => [630,450],
             "noSandbox" => true
         ]);
 
