@@ -1,5 +1,6 @@
 <?php
 
+use App\Console\Commands\SendDailyNotification;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -45,6 +46,8 @@ Route::group(['middleware' => ['auth:sanctum']], function(){
 
         Route::get('/settings',[SettingsController::class, 'index']);
         Route::post('/settings', [SettingsController::class, 'store']);
+
+        Route::get('/senddailynotif',[SendDailyNotification::class, 'sendUserDailyNotification']);
 
         Route::get('/payees',[PayeeController::class, 'index']);
         Route::post('/payees/store', [PayeeController::class, 'store']);

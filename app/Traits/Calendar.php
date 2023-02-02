@@ -95,7 +95,7 @@ trait Calendar
         }
         $html .= '</div></body></html>';
 
-        $this->saveScreenshotFromHtml($html, "storage/app/public/notifs/{$user_id}.png");
+        $this->saveScreenshotFromHtml($html, __DIR__."/../../storage/app/public/notifs/{$user_id}.png");
 
         return "notifs/{$user_id}.png";
     }

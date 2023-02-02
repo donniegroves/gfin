@@ -42,6 +42,12 @@
                 </div>
                 <div class="row mt-3 mb-0 text-right">
                     <div class="col-12">
+                        <a @click="sendDailyNotif()" id="send_daily" class="btn btn-primary btn-icon-split btn-sm mr-2">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-paper-plane"></i>
+                            </span>
+                            <span class="text">Send Daily</span>
+                        </a>
                         <a @click="saveNotifSettings()" id="save_notifs_btn" class="btn btn-primary btn-icon-split btn-sm">
                             <span class="icon text-white-50">
                                 <i class="fas fa-check"></i>
@@ -126,6 +132,13 @@ export default{
             });
             if (response.status == 200){
                 console.log('saved notif settings.');
+            }
+        },
+        async sendDailyNotif() {
+            console.log('sendDailyNotif');
+            const response = await axios.get('reqs/senddailynotif');
+            if (response.status == 200){
+                console.log('sent daily notif.');
             }
         },
         async saveCalendarSettings(){

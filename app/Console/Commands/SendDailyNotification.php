@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Settings;
+use Illuminate\Support\Facades\Auth;
 use Twilio\Rest\Client;
 
 class SendDailyNotification extends Command
@@ -41,34 +42,44 @@ class SendDailyNotification extends Command
         }
 
         foreach ($user_ids as $user_id){
-            $tz = 'America/New_York';
+            self::sendUserDailyNotification($user_id);
+        }
+    }
 
-            $i=0;
-            $date_ar = [];
-            while ($i < env('NUM_DAYS_OF_DAILY_NOTIF')) {
-                $i++;
-                echo 'now -'.$i.' days' . "\r\n";
-                $date_ar[] = (new \DateTime('now -'.$i.' days', new \DateTimeZone($tz)))->format('Y-m-d');
+    public function sendUserDailyNotification($user_id = null) {
+        if (empty($user_id)){
+            $user_id = Auth::user()->id;
+            if (empty($user_id)) {
+                throw new \Exception("Error Processing Request", 1);
             }
-            $date_ar = array_reverse($date_ar);
+        }
 
-            $image = $this->generateCalendarImage($user_id, $date_ar);
-            $mediaUrl = url('storage/'.$image);
+        $tz = 'America/New_York';
 
-            $twilio_sid = env('TWILIO_SID');
-            $twilio_token = env('TWILIO_TOKEN');
-            $twilio_from_num = env('TWILIO_FROM_NUM');
-            $client = new Client($twilio_sid, $twilio_token);
+        $i=0;
+        $date_ar = [];
+        while ($i < env('NUM_DAYS_OF_DAILY_NOTIF')) {
+            $i++;
+            $date_ar[] = (new \DateTime('now -'.$i.' days', new \DateTimeZone($tz)))->format('Y-m-d');
+        }
+        $date_ar = array_reverse($date_ar);
 
-            $prim_to_num = Settings::getSetting('primary_sms',$user_id);
-            $second_to_num = Settings::getSetting('secondary_sms',$user_id);
+        $image = $this->generateCalendarImage($user_id, $date_ar);
+        $mediaUrl = url('storage/'.$image);
 
-            if (!empty($prim_to_num)) {
-                $client->messages->create($prim_to_num, ["from"=>$twilio_from_num,"body"=>'','mediaUrl' => $mediaUrl]);
-            }
-            if (!empty($second_to_num)) {
-                $client->messages->create($second_to_num, ["from"=>$twilio_from_num,"body"=>'','mediaUrl' => $mediaUrl]);
-            }
+        $twilio_sid = env('TWILIO_SID');
+        $twilio_token = env('TWILIO_TOKEN');
+        $twilio_from_num = env('TWILIO_FROM_NUM');
+        $client = new Client($twilio_sid, $twilio_token);
+
+        $prim_to_num = Settings::getSetting('primary_sms',$user_id);
+        $second_to_num = Settings::getSetting('secondary_sms',$user_id);
+
+        if (!empty($prim_to_num)) {
+            $client->messages->create($prim_to_num, ["from"=>$twilio_from_num,"body"=>'','mediaUrl' => $mediaUrl]);
+        }
+        if (!empty($second_to_num)) {
+            $client->messages->create($second_to_num, ["from"=>$twilio_from_num,"body"=>'','mediaUrl' => $mediaUrl]);
         }
     }
 }
