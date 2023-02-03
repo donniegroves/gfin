@@ -24,3 +24,19 @@ sudo update-alternatives --config iptables (EDIT: enter 1)
 
 # Problems with loading vue
 Referred to https://www.webdesignvista.com/vue-hot-reload-with-laravel-mix/
+
+# Problems with displays not changing:
+```bash
+sudo service mysql stop
+php artisan down
+npm run build
+sudo service mysql start
+php artisan up
+sudo chown -R www-data:www-data storage/
+```
+
+# To Fix permission issues in Production:
+```bash
+sudo chown -R www-data:www-data /var/www/gfin/storage
+sudo chown -R ubuntu:ubuntu /var/www/gfin/storage/app/
+```
