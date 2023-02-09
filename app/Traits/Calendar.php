@@ -5,6 +5,7 @@ namespace App\Traits;
 use App\Models\Settings;
 use App\Http\Controllers\TransactionController;
 use HeadlessChromium\BrowserFactory;
+use Aws\S3\S3Client;
 
 trait Calendar
 {
@@ -95,9 +96,9 @@ trait Calendar
         }
         $html .= '</div></body></html>';
 
-        $this->saveScreenshotFromHtml($html, __DIR__."/../../storage/app/public/notifs/{$user_id}.png");
+        $url = $this->saveScreenshotFromHtml($html, __DIR__."/../../storage/app/public/notifs/{$user_id}.png");
 
-        return "notifs/{$user_id}.png";
+        return $url;
     }
 
     private function saveScreenshotFromHTML($html, $file_path) {
@@ -108,14 +109,36 @@ trait Calendar
         ]);
 
         try {
+            if (!is_writable($file_path)) {
+                throw new Exception($file_path . " is not writable.");
+            }
             $page = $browser->createPage();
             $page->setHtml($html);
             $page->screenshot()->saveToFile($file_path);
-        } finally {
             $browser->close();
+        } catch (Exception $e) {
+            echo "An exception has occurred: " . $e->getMessage();
         }
 
-        return $file_path;
+        $s3 = new S3Client([
+            'version' => 'latest',
+            'region' => config('services.aws.region'),
+            'credentials' => [
+                'key' => config('services.aws.key'),
+                'secret' => config('services.aws.secret'),
+            ],
+        ]);
+
+        $key = basename($file_path);
+        $result = $s3->putObject([
+            'Bucket' => config('services.aws.bucket'),
+            'Key' => $key,
+            'SourceFile' => $file_path,
+            'ACL' => 'public-read',
+        ]);
+        $url = $s3->getObjectUrl(config('services.aws.bucket'), $key);
+
+        return $url;
     }
 }
 

@@ -1,6 +1,9 @@
 ## mysql configuration path
 /etc/mysql/mysql.conf.d/mysqld.cnf
 
+## AWS S3 setup
+- bucket must be set up to be publicly accessible, as Twilio needs to reference it.
+
 ## On AWS, storage folder has to have www-data:www-data permissions
 # Install Docker on WSL2 Ubuntu 22.04
 ```

@@ -64,8 +64,7 @@ class SendDailyNotification extends Command
         }
         $date_ar = array_reverse($date_ar);
 
-        $image = $this->generateCalendarImage($user_id, $date_ar);
-        $mediaUrl = url('storage/'.$image);
+        $mediaUrl = $this->generateCalendarImage($user_id, $date_ar);
 
         $twilio_sid = env('TWILIO_SID');
         $twilio_token = env('TWILIO_TOKEN');
