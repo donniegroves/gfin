@@ -109,14 +109,14 @@ trait Calendar
         ]);
 
         try {
-            if (!is_writable($file_path)) {
-                throw new Exception($file_path . " is not writable.");
+            if (!is_writable(dirname($file_path))) {
+                throw new \Exception($file_path . " is not writable.");
             }
             $page = $browser->createPage();
             $page->setHtml($html);
             $page->screenshot()->saveToFile($file_path);
             $browser->close();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo "An exception has occurred: " . $e->getMessage();
         }
 
