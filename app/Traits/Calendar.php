@@ -105,7 +105,8 @@ trait Calendar
         $browserFactory = new BrowserFactory();
         $browser = $browserFactory->createBrowser([
             'windowSize'   => [630,530],
-            "noSandbox" => true
+            "noSandbox" => true,
+            "sendSyncDefaultTimeout" => 30000
         ]);
 
         try {
