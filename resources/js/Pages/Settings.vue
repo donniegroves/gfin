@@ -42,13 +42,13 @@
                 </div>
                 <div class="row mt-3 mb-0 text-right">
                     <div class="col-12">
-                        <a @click="sendDailyNotif()" id="send_daily" class="btn btn-primary btn-icon-split btn-sm mr-2">
+                        <a @click="sendDailyNotif($event)" id="send_daily" data-done="Sent" class="btn btn-primary btn-icon-split btn-sm mr-2">
                             <span class="icon text-white-50">
                                 <i class="fas fa-paper-plane"></i>
                             </span>
                             <span class="text">Send Daily</span>
                         </a>
-                        <a @click="saveNotifSettings()" id="save_notifs_btn" class="btn btn-primary btn-icon-split btn-sm">
+                        <a @click="saveNotifSettings($event)" id="save_notifs_btn" data-done="Saved" class="btn btn-primary btn-icon-split btn-sm">
                             <span class="icon text-white-50">
                                 <i class="fas fa-check"></i>
                             </span>
@@ -75,7 +75,7 @@
                 </div>
                 <div class="row mt-3 mb-0 text-right">
                     <div class="col-12">
-                        <a @click="saveCalendarSettings()" id="save_cal_stgs_btn" class="btn btn-primary btn-icon-split btn-sm">
+                        <a @click="saveCalendarSettings($event)" data-done="Saved" id="save_cal_stgs_btn" class="btn btn-primary btn-icon-split btn-sm">
                             <span class="icon text-white-50">
                                 <i class="fas fa-check"></i>
                             </span>
@@ -122,8 +122,9 @@ export default{
                 };
             }
         },
-        async saveNotifSettings(){
+        async saveNotifSettings(event){
             console.log('saveNotifSettings');
+            this.animateButton(event);
             const response = await axios.post('reqs/settings', {
                 primary_sms: this.settings.primary_sms,
                 secondary_sms: this.settings.secondary_sms,
@@ -134,21 +135,38 @@ export default{
                 console.log('saved notif settings.');
             }
         },
-        async sendDailyNotif() {
+        async sendDailyNotif(event) {
             console.log('sendDailyNotif');
+            this.animateButton(event);
             const response = await axios.get('reqs/senddailynotif');
             if (response.status == 200){
                 console.log('sent daily notif.');
             }
         },
-        async saveCalendarSettings(){
+        async saveCalendarSettings(event){
             console.log('saveCalendarSettings');
+            this.animateButton(event);
             const response = await axios.post('reqs/settings', {
                 daily_exp_budget: this.settings.daily_exp_budget
             });
             if (response.status == 200){
                 console.log('saved calendar settings.');
             }
+        },
+        animateButton(event){
+            var clicked_btn = $(event.currentTarget);
+            var orig_text = clicked_btn.find("span.text").text();
+            var orig_width = clicked_btn.find("span.text").width();
+            clicked_btn.find("span.text").fadeOut(100,() => {
+                $(event.target).width(orig_width).text(event.target.parentElement.dataset.done).addClass("font-weight-bold").fadeIn(750,() => {
+                    setTimeout(() => {
+                        $(event.target).fadeOut(750,()=>{
+                            $(event.target).removeClass("font-weight-bold").text(orig_text).fadeIn(750,() => {
+                            });
+                        });
+                    }, 1500);
+                });
+            });
         },
         changeSettingData(key,value){
             console.log ('changing ' + key + ' to ' + value);
@@ -162,6 +180,9 @@ export default{
 </script>
 
 <style scoped>
+.btn .text{
+    min-width: 65px;
+}
 input{
     width: 100%;
 }

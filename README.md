@@ -38,6 +38,10 @@ php artisan up
 sudo chown -R www-data:www-data storage/
 ```
 
+## Setting up file permissions
+`sudo chown -R www-data:www-data storage`
+everything else can be owned by ubuntu.
+
 # To Fix permission issues in Production:
 ```bash
 sudo chown -R www-data:www-data /var/www/gfin/storage
