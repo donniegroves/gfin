@@ -15,6 +15,9 @@ class SettingsController extends Controller
         'include_deps_in_calcs',
         'daily_exp_budget'
     ];
+    const NULL_ALLOWED_STGS = [
+        'primary_sms','secondary_sms'
+    ];
 
     /**
      * Display a listing of the resource.
@@ -51,14 +54,14 @@ class SettingsController extends Controller
     public function store(Request $request)
     {
         foreach (self::PERMITTED_SETTINGS_ARR AS $one_stg){
-            if (!is_null($request->$one_stg)){
+            if (!is_null($request->$one_stg) || in_array($one_stg, self::NULL_ALLOWED_STGS)){
                 Settings::updateOrCreate(
                     [
                         'user_id'   => Auth::user()->id,
                         'stg_name'  => $one_stg
                     ],
                     [
-                        'stg_val'   => $request->$one_stg
+                        'stg_val'   => $request->$one_stg ?? ""
                     ]
                 );
             }
