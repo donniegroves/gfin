@@ -41,7 +41,7 @@ class TransactionController extends Controller
             return Transaction::where('user_id', Auth::user()->id)
                 ->orderBy('trans_date', 'DESC')
                 ->paginate(50);
-        }  
+        }
     }
 
     /**
@@ -82,7 +82,7 @@ class TransactionController extends Controller
         if (!empty($request->transaction["category_id"]) && is_string($request->transaction["category_id"])) {
             $new_trans->category_id = (new Category())->getOrCreateFromString($request->transaction["category_id"]);
         }
-        
+
         $new_trans->save();
 
         return $new_trans;
@@ -120,7 +120,7 @@ class TransactionController extends Controller
     {
         $validated = $request->validate([
             'file' => 'required|mimes:doc,docx,pdf,txt,csv|max:2048',
-        ]); 
+        ]);
 
         $trans_obj = new Transaction();
         $result = $trans_obj->importTransactionsByCSV($validated['file']);
@@ -129,10 +129,10 @@ class TransactionController extends Controller
     }
 
     public function getDailyTotal(string $date, int $user_id, bool $skip_deps): int {
-        $query = "SELECT SUM(COALESCE ( transactions.new_amt, transactions.orig_amt )) AS total 
+        $query = "SELECT SUM(COALESCE ( transactions.new_amt, transactions.orig_amt )) AS total
         FROM transactions
         WHERE transactions.trans_date = '" . addslashes($date) . "'
-        AND transactions.approved = 1 
+        AND transactions.approved = 1
         AND transactions.user_id = ".addslashes($user_id)
         .($skip_deps ? " AND (transactions.orig_amt <= 0 OR transactions.new_amt <= 0)" : "")."
         ORDER BY `total` DESC";
@@ -153,13 +153,13 @@ class TransactionController extends Controller
     public function getCategoryTotals(string $start_date, string $end_date, int $user_id, bool $skip_deps = false){
         $query = "
             SELECT
-                categories.`name`, 
+                categories.`name`,
                 SUM(COALESCE(transactions.new_amt, transactions.orig_amt)) AS total
             FROM
                 transactions
                 LEFT JOIN
                 categories
-                ON 
+                ON
                     transactions.category_id = categories.id
             WHERE
                 transactions.trans_date >= '" . addslashes($start_date) . "'
@@ -169,15 +169,15 @@ class TransactionController extends Controller
                 .($skip_deps ? " AND (transactions.orig_amt <= 0 OR transactions.new_amt <= 0)" : "")."
             GROUP BY
                 categories.`name`
-            ORDER BY `total` DESC";
-        
+            ORDER BY `total`";
+
         $cat_totals = DB::select($query);
         $result_arr = [];
         foreach ($cat_totals as $cat_row){
             $cat_row->name = $cat_row->name ?? 'Uncategorized';
             $result_arr[$cat_row->name] = $cat_row->total;
         }
-        
+
         return $result_arr;
     }
 
@@ -223,7 +223,7 @@ class TransactionController extends Controller
             else {
                 $existing_trans->payee_id = $request->transaction['payee_id'] ?? $existing_trans->payee_id;
             }
-    
+
             if (!empty($request->transaction["category_id"]) && is_string($request->transaction["category_id"])) {
                 $existing_trans->category_id = (new Category())->getOrCreateFromString($request->transaction["category_id"]);
             }

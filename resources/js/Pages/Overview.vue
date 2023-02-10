@@ -45,8 +45,8 @@
             cDates(){
                 let today = new Date();
                 let curYear = today.getFullYear();
-                let curMonth = today.getMonth();
-                let curQuarter = Math.floor(curMonth / 3 + 1);
+                let curMonthIndex = today.getMonth();
+                let curQuarter = Math.floor(curMonthIndex / 3 + 1);
                 let quarters = {
                     1: {
                         start: curYear + '-01-01',
@@ -65,10 +65,10 @@
                         end: curYear + '-12-31'
                     }
                 }
-                let firstDayOfMonth = new Date(curYear,curMonth,1);
-                let lastDayOfMonth = new Date(curYear,curMonth+1,0);
-                let firstDayOfWeek = new Date(curYear,curMonth,today.getDate()-today.getDay());
-                let lastDayOfWeek = new Date(curYear,curMonth,today.getDate()-today.getDay()+6);
+                let firstDayOfMonth = new Date(curYear,curMonthIndex,1);
+                let lastDayOfMonth = new Date(curYear,curMonthIndex+1,0);
+                let firstDayOfWeek = new Date(curYear,curMonthIndex,today.getDate()-today.getDay());
+                let lastDayOfWeek = new Date(curYear,curMonthIndex,today.getDate()-today.getDay()+6);
 
                 return {
                     ytd: {
@@ -81,22 +81,18 @@
                     },
                     month: {
                         start:
-                            firstDayOfMonth.getFullYear() + '-'
-                            + (firstDayOfMonth.getMonth() > 9 ? firstDayOfMonth.getMonth() : ('0' + firstDayOfMonth.getMonth()) ) + '-'
+                            today.getFullYear() + '-' + ((curMonthIndex+1)<9?("0"+(curMonthIndex+1)):(curMonthIndex+1)) + '-'
                             + (firstDayOfMonth.getDate() > 9 ? firstDayOfMonth.getDate() : ('0' + firstDayOfMonth.getDate()) ),
                         end:
-                            lastDayOfMonth.getFullYear() + '-'
-                            + (lastDayOfMonth.getMonth() > 9 ? lastDayOfMonth.getMonth() : ('0' + lastDayOfMonth.getMonth()) ) + '-'
+                            lastDayOfMonth.getFullYear() + '-' + ((curMonthIndex+1)<9?("0"+(curMonthIndex+1)):(curMonthIndex+1)) + '-'
                             + (lastDayOfMonth.getDate() > 9 ? lastDayOfMonth.getDate() : ('0' + lastDayOfMonth.getDate()) )
                     },
                     week: {
                         start:
-                            firstDayOfWeek.getFullYear() + '-'
-                            + (firstDayOfWeek.getMonth() > 9 ? firstDayOfWeek.getMonth() : ('0' + firstDayOfWeek.getMonth()) ) + '-'
+                            firstDayOfWeek.getFullYear() + '-' + ((firstDayOfWeek.getMonth()+1)<9?("0"+(firstDayOfWeek.getMonth()+1)):(firstDayOfWeek.getMonth()+1)) + '-'
                             + (firstDayOfWeek.getDate() > 9 ? firstDayOfWeek.getDate() : ('0' + firstDayOfWeek.getDate()) ),
                         end:
-                            lastDayOfWeek.getFullYear() + '-'
-                            + (lastDayOfWeek.getMonth() > 9 ? lastDayOfWeek.getMonth() : ('0' + lastDayOfWeek.getMonth()) ) + '-'
+                            lastDayOfWeek.getFullYear() + '-' + ((lastDayOfWeek.getMonth()+1)<9?("0"+(lastDayOfWeek.getMonth()+1)):(lastDayOfWeek.getMonth()+1)) + '-'
                             + (lastDayOfWeek.getDate() > 9 ? lastDayOfWeek.getDate() : ('0' + lastDayOfWeek.getDate()) )
                     }
                 }
