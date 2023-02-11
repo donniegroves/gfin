@@ -4,6 +4,10 @@
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Overview</h1>
 </div>
+<div class="row">
+    <OverviewChart v-if="stats !== null" range="month" :stats="stats" />
+    <OverviewChart v-if="stats !== null" range="quarter" :stats="stats" />
+</div>
 
 <!-- Content Row -->
 <div v-if="stats" class="row">
@@ -18,10 +22,12 @@
 <script>
     import GFinLayout from "@/Layouts/GFinLayout.vue";
     import StatCard from "@/Components/StatCard.vue";
+    import OverviewChart from "@/Components/OverviewChart.vue";
     export default {
         components: {
     GFinLayout,
-    StatCard
+    StatCard,
+    OverviewChart
 },
         data: function(){
             return {

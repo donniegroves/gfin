@@ -27,7 +27,7 @@
     --vs-dropdown-bg: #fff;
     --vs-dropdown-color: inherit;
     --vs-dropdown-z-index: 1000;
-    --vs-dropdown-min-width: 160px;
+    --vs-dropdown-min-width: 100px;
     --vs-dropdown-max-height: 350px;
     --vs-dropdown-box-shadow: 0px 3px 6px 0px var(--vs-colors--darkest);
     --vs-dropdown-option-bg: #000;
