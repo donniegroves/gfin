@@ -5,8 +5,8 @@
     <h1 class="h3 mb-0 text-gray-800">Overview</h1>
 </div>
 <div class="row">
-    <OverviewChart v-if="stats !== null" range="month" :stats="stats" />
-    <OverviewChart v-if="stats !== null" range="quarter" :stats="stats" />
+    <OverviewChart v-if="stats !== null" startingRange="month" :all_stats="stats" />
+    <OverviewChart v-if="stats !== null" startingRange="quarter" :all_stats="stats" />
 </div>
 
 <!-- Content Row -->

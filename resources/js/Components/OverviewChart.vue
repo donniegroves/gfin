@@ -3,7 +3,7 @@
     <div class="card shadow mb-3">
         <div class="card-header">
             <h6>Bar Chart!</h6>
-            <v-select v-model="cur_range" @option:selected="changeRange($event)" :searchable=false :options="vselect_opts" :clearable="false"></v-select>
+            <v-select v-model="selected_range" @option:selected="changeRange($event)" :searchable=false :options="vselect_opts" :clearable="false"></v-select>
         </div>
         <div class="card-body">
             <Bar :data="chart_data" :options="chart_options" />
@@ -31,50 +31,49 @@ export default {
         Bar, vSelect
     },
     data() {
+        let vselect_opts = [
+            { label: 'Weekly', rangeVal: "week" },
+            { label: 'Monthly', rangeVal: "month" },
+            { label: 'Quarterly', rangeVal: "quarter" },
+            { label: 'Yearly', rangeVal: "year" }
+        ];
+
         return {
-            chart_data: this.removeUncategorized(),
+            chart_data: this.removeUncategorized(this.startingRange),
             chart_options: {
                 responsive: true,
                 backgroundColor: "#4e73df",
                 barThickness: 35
             },
-            cur_range: this.range,
+            selected_range: vselect_opts.find(o => o.rangeVal === this.startingRange).label,
+            cur_stats: this.all_stats[this.startingRange],
             vselect_opts: [
                 { label: 'Weekly', rangeVal: "week" },
                 { label: 'Monthly', rangeVal: "month" },
                 { label: 'Quarterly', rangeVal: "quarter" },
                 { label: 'Yearly', rangeVal: "year" }
-            ],
-            // vselect_opts: [
-            //     "week", "month", "quarter", "year"
-            // ]
+            ]
         }
     },
     props: {
-        range: {
+        startingRange: {
             type: String,
             required: true,
             validator: function(value) {
                 return ['week', 'month', 'quarter', 'year'].includes(value)
             }
         },
-        stats: {
+        all_stats: {
             type: [Object, null],
             required: true
         }
     },
     methods: {
         changeRange(x){
-            this.chart_data = this.removeUncategorized();
+            this.chart_data = this.removeUncategorized(x.rangeVal);
         },
-        removeUncategorized(){
-            let chart_stats;
-            if (typeof(this?.cur_range?.rangeVal) == "undefined"){
-                chart_stats = this.stats[this.range];
-            }
-            else {
-                chart_stats = this.stats[this.cur_range.rangeVal];
-            }
+        removeUncategorized(range){
+            let chart_stats = this.all_stats[range];
             let sorted_stats = {};
             Object.keys(chart_stats).sort().forEach(function(key) {
                 sorted_stats[key] = chart_stats[key];
