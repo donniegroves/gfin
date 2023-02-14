@@ -22,7 +22,7 @@
                 <th scope="col">Withdrawl / Deposit</th>
             </thead>
             <tbody>
-                <TransactionRow v-for="(tran, index) in all_trans" 
+                <TransactionRow v-for="(tran, index) in all_trans"
                     :transaction="tran"
                     :all_payees="all_payees"
                     :all_categories="all_categories"
@@ -35,9 +35,9 @@
             </tbody>
         </table>
         <div class="page-turner">
-            <a href="#" @click="changePage" class="paginate first-page">First Page</a> ... 
-            <a href="#" @click="changePage" class="paginate prev-page">Previous Page</a> ... 
-            <a href="#" @click="changePage" class="paginate next-page">Next Page</a> ... 
+            <a href="#" @click="changePage" class="paginate first-page">First Page</a> ...
+            <a href="#" @click="changePage" class="paginate prev-page">Previous Page</a> ...
+            <a href="#" @click="changePage" class="paginate next-page">Next Page</a> ...
             <a href="#" @click="changePage" class="paginate last-page">Last Page</a>
         </div>
     </GFinLayout>
@@ -90,8 +90,8 @@ export default{
         },
         refreshView(){
             console.log('refreshView');
-            this.refreshTransactions();
-            this.refreshPayees();   
+            this.refreshTransactions(this.current_page);
+            this.refreshPayees();
             this.refreshCategories();
         },
         async refreshTransactions(page=1){
@@ -106,7 +106,7 @@ export default{
                 console.log('received ' + response.data.data.length + ' transactions.');
                 this.all_trans = response.data.data;
                 this.current_page = response.data.current_page;
-                this.last_page = response.data.last_page;               
+                this.last_page = response.data.last_page;
             }
         },
         async refreshPayees(){
@@ -130,7 +130,7 @@ export default{
             if (this.all_payees == null){
                 return final_arr;
             }
-            
+
             this.all_payees.forEach(function(payee){
                 if (payee.id == search_payee_id){
                     final_arr.push(payee);
@@ -143,7 +143,7 @@ export default{
             if (this.all_categories == null){
                 return final_arr;
             }
-            
+
             this.all_categories.forEach(function(category){
                 if (category.id == search_category_id){
                     final_arr.push(category);
