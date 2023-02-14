@@ -178,7 +178,11 @@ class TransactionController extends Controller
             $result_arr[$cat_row->name] = $cat_row->total;
         }
 
-        return $result_arr;
+        return [
+            "start_date" => $start_date,
+            "end_date" => $end_date,
+            "cat_totals" => $result_arr
+        ];
     }
 
     public function get_stats():array {

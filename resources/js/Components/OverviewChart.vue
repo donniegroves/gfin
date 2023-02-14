@@ -2,7 +2,7 @@
 <div class="col-6">
     <div class="card shadow mb-3">
         <div class="card-header">
-            <h6>Bar Chart!</h6>
+            <h6>{{ displayDate(cur_stats.start_date) }} - {{  displayDate(cur_stats.end_date) }}</h6>
             <v-select v-model="selected_range" @option:selected="changeRange($event)" :searchable=false :options="vselect_opts" :clearable="false"></v-select>
         </div>
         <div class="card-body">
@@ -43,7 +43,21 @@ export default {
             chart_options: {
                 responsive: true,
                 backgroundColor: "#4e73df",
-                barThickness: 35
+                barThickness: 35,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: function(context){
+                                return "";
+                            }
+                        },
+                        displayColors: false,
+                        padding: 10,
+                        bodyFont: {
+                            size: 18
+                        }
+                    }
+                },
             },
             selected_range: vselect_opts.find(o => o.rangeVal === this.startingRange).label,
             cur_stats: this.all_stats[this.startingRange],
@@ -69,11 +83,18 @@ export default {
         }
     },
     methods: {
+        displayDate(date_string){
+            let [year, month, day] = date_string.split('-');
+            let proper_date = new Date(year, month - 1, day);
+            return proper_date.toLocaleDateString('en-US', { month: 'short', day: 'numeric'});
+        },
         changeRange(x){
-            this.chart_data = this.removeUncategorized(x.rangeVal);
+            let range_to_change_to = x.rangeVal;
+            this.chart_data = this.removeUncategorized(range_to_change_to);
         },
         removeUncategorized(range){
-            let chart_stats = this.all_stats[range];
+            this.cur_stats = this.all_stats[range];
+            let chart_stats = this.all_stats[range].cat_totals;
             let sorted_stats = {};
             Object.keys(chart_stats).sort().forEach(function(key) {
                 sorted_stats[key] = chart_stats[key];

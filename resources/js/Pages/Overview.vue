@@ -11,10 +11,10 @@
 
 <!-- Content Row -->
 <div v-if="stats" class="row">
-    <StatCard title="This Week" :date_start="cDates.week.start" :date_end="cDates.week.end" :stats="stats.week"/>
-    <StatCard title="This Month" :date_start="cDates.month.start" :date_end="cDates.month.end" :stats="stats.month"/>
-    <StatCard title="This Quarter" :date_start="cDates.quarter.start" :date_end="cDates.quarter.end" :stats="stats.quarter"/>
-    <StatCard title="YTD" :date_start="cDates.ytd.start" :date_end="cDates.ytd.end" :stats="stats.year"/>
+    <StatCard title="This Week" :date_start="cDates.week.start" :date_end="cDates.week.end" :stats="stats.week.cat_totals"/>
+    <StatCard title="This Month" :date_start="cDates.month.start" :date_end="cDates.month.end" :stats="stats.month.cat_totals"/>
+    <StatCard title="This Quarter" :date_start="cDates.quarter.start" :date_end="cDates.quarter.end" :stats="stats.quarter.cat_totals"/>
+    <StatCard title="YTD" :date_start="cDates.ytd.start" :date_end="cDates.ytd.end" :stats="stats.year.cat_totals"/>
 </div>
 </GFinLayout>
 </template>
