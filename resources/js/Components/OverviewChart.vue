@@ -100,13 +100,9 @@ export default {
                 sorted_stats[key] = chart_stats[key];
             });
             delete sorted_stats.Uncategorized;
-            let cat_labels = Object.keys(sorted_stats);
-            let cat_values = Object.values(sorted_stats);
-            let inv_cat_values = {data: cat_values.map(value => value * -1)};
-
             return {
-                labels: cat_labels,
-                datasets: [inv_cat_values]
+                labels: Object.keys(sorted_stats),
+                datasets: [{data: Object.values(sorted_stats).map(value => value * -1)}]
             }
         }
     }

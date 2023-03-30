@@ -42,7 +42,6 @@ class CategoryController extends Controller
         $new_cat->user_id = Auth::user()->id;
         $new_cat->name = $request->category["name"];
         $new_cat->save();
-
         return $new_cat;
     }
 
@@ -78,6 +77,7 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         $existing_cat = Category::find($id);
+
         if ($existing_cat->user_id !== Auth::user()->id){
             return 'Permissions problem.';
         }

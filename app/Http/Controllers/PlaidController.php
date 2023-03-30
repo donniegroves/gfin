@@ -22,45 +22,41 @@ class PlaidController extends Controller
     }
 
     /**
-     * 
+     *
      *
      * @return \Illuminate\Http\Response
      */
     public function create_link_token()
     {
         $token_user = new User(Auth::user()->id);
-        
+
         return $this->pclient->tokens->create(env('APP_NAME'),'en',['US','CA'], $token_user, ['transactions']);
     }
 
     /**
-     * 
+     *
      *
      * @return \Illuminate\Http\Response
      */
     public function exchange_public_token(Request $request)
     {
         $access_token = $this->pclient->items->exchangeToken($request->input('public_token'));
-
         $plaid_token = new PlaidTokens();
         $plaid_token->token = $access_token->access_token;
         $plaid_token->user_id = Auth::user()->id;
         $saved = $plaid_token->save();
-
         // Retrieving accounts and saving to DB
         $avail_accts = $this->pclient->accounts->list($access_token->access_token);
         $acct_obj = new Account();
         $acct_obj->import_accounts($avail_accts->accounts);
-
         if (!$saved){
             return response('Problem with saving token.', 500);
         }
-
         return response('Token saved successfully.', 200);
     }
 
     /**
-     * 
+     *
      *
      * @return \Illuminate\Http\Response
      */
@@ -68,13 +64,13 @@ class PlaidController extends Controller
     {
         $start_date = new \DateTime('1 month ago');
         $end_date = new \DateTime('today');
-        
-        
+
+
         return (new Transaction())->importUserTransactionsFromPlaid($start_date, $end_date);
     }
 
     /**
-     * 
+     *
      *
      * @return \Illuminate\Http\Response
      */
@@ -92,7 +88,7 @@ class PlaidController extends Controller
     }
 
     /**
-     * 
+     *
      *
      * @return \Illuminate\Http\Response
      */

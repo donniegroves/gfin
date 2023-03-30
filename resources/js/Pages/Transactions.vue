@@ -95,7 +95,6 @@ export default{
             this.refreshCategories();
         },
         async refreshTransactions(page=1){
-            console.log('refreshTransactions');
             let q = new URL(location.href).searchParams.get('search') ?? '';
             let path = 'reqs/transactions?page='+page;
             if (q.length > 1) {
@@ -103,52 +102,50 @@ export default{
             }
             const response = await axios.get(path, {});
             if (response.status == 200){
-                console.log('received ' + response.data.data.length + ' transactions.');
                 this.all_trans = response.data.data;
                 this.current_page = response.data.current_page;
                 this.last_page = response.data.last_page;
             }
         },
         async refreshPayees(){
-            console.log('refreshPayees');
             const response = await axios.get('reqs/payees', {});
             if (response.status == 200){
-                console.log('received ' + response.data.length + ' payees.');
                 this.all_payees = response.data;
             }
         },
         async refreshCategories(){
-            console.log('refreshCategories');
             const response = await axios.get('reqs/categories', {});
-            if (response.status == 200){
-                console.log('received ' + response.data.length + ' categories.');
-                this.all_categories = response.data;
-            }
+            // only update categories if the response is successful
+            if (response.status == 200) this.all_categories = response.data;
         },
-        filteredPayee(search_payee_id){
-            let final_arr = [];
+        filteredPayee(id){
+            // return an array of payees that have the id of search_payee_id
+            let payee_array = [];
             if (this.all_payees == null){
-                return final_arr;
+                return payee_array;
             }
 
             this.all_payees.forEach(function(payee){
-                if (payee.id == search_payee_id){
-                    final_arr.push(payee);
+                if (payee.id == id){
+                    payee_array.push(payee);
                 }
             });
-            return final_arr[0];
+            return payee_array[0];
         },
         filteredCategory(search_category_id){
+            // if the categories haven't been loaded, return an empty array
             let final_arr = [];
             if (this.all_categories == null){
                 return final_arr;
             }
 
+            // loop through all the categories and find the one that matches the search id
             this.all_categories.forEach(function(category){
                 if (category.id == search_category_id){
                     final_arr.push(category);
                 }
             });
+            // return the first item in the array (should be the only item)
             return final_arr[0];
         },
     }
