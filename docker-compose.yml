@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+  gfin:
+    build:
+      dockerfile: Dockerfile
+      args:
+        ENVIRONMENT: $ENVIRONMENT # Passes argument into build time environment
+    container_name: gfin
+    env_file:
+      - .env # Passes entire .env into the runtime environment
+    extra_hosts:
+        - "host.docker.internal:host-gateway" # needed for xdebug
+    image: gfin
+    networks:
+      - sandbox-network
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www
+
+networks:
+  sandbox-network:
+    external: true

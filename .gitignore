@@ -17,7 +17,3 @@ yarn-error.log
 # misc
 /.idea
 /.vscode
-
-# for docker
-docker-compose.yml
-/data/
