@@ -40,11 +40,4 @@ RUN if [ "$ENVIRONMENT" = "development" ]; then \
         touch /tmp/xdebug.log && chown www-data:www-data /tmp/xdebug.log; \
     fi
 
-RUN chmod 0644 /etc/cron.d/my-cron && \
-    touch /var/log/cron.log && \
-    crontab /etc/cron.d/my-cron
-
-# Start crond and Apache
-CMD ["sh", "-c", "cron && apache2-foreground"]
-
 EXPOSE 80
