@@ -2,7 +2,12 @@ FROM php:8.1-apache
 ARG ENVIRONMENT
 WORKDIR /var/www
 COPY . .
-COPY crontab /etc/cron.d/my-cron
+
+# Accept build arguments
+ARG TESTBYDG
+
+# Set environment variables
+ENV TESTBYDG=$TESTBYDG
 
 # Install any needed PHP extensions
 RUN docker-php-ext-install mysqli pdo_mysql sockets && \
