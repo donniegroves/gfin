@@ -3,23 +3,15 @@ ARG ENVIRONMENT
 WORKDIR /var/www
 COPY . .
 
-# Accept build arguments
-ARG TESTBYDG
-
-# Set environment variables
-ENV TESTBYDG=$TESTBYDG
-
 # Install any needed PHP extensions
 RUN docker-php-ext-install mysqli pdo_mysql sockets && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
-    apt-get update && apt-get install -y unzip cron && \
+    apt-get update && apt-get install -y unzip && \
     composer install --no-interaction --no-progress --prefer-dist && \
     sed -i 's|DocumentRoot.*|DocumentRoot /var/www/public|' /etc/apache2/sites-available/000-default.conf && \
     sed -i 's|<Directory.*|<Directory /var/www/public>|' /etc/apache2/apache2.conf && \
     a2enmod rewrite && \
-    chown -R www-data:www-data /var/www && \
-    chmod 0644 /etc/cron.d/my-cron && \
-    touch /var/log/cron.log
+    chown -R www-data:www-data /var/www
 
 # Install Node.js,
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \

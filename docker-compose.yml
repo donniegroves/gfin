@@ -6,7 +6,6 @@ services:
       dockerfile: Dockerfile
       args:
         ENVIRONMENT: $ENVIRONMENT # Passes argument into build time environment
-        TESTBYDG: ${TESTBYDG}
     container_name: gfin
     env_file:
       - .env # Passes entire .env into the runtime environment
