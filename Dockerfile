@@ -37,4 +37,9 @@ RUN if [ "$ENVIRONMENT" = "development" ]; then \
         touch /tmp/xdebug.log && chown www-data:www-data /tmp/xdebug.log; \
     fi
 
+# Starting Laravel's scheduled notifications and daily import
+COPY crontab /etc/cron.d/my-cron
+RUN chmod 0644 /etc/cron.d/my-cron && \
+    touch /var/log/cron.log 
+
 EXPOSE 80
