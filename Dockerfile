@@ -2,16 +2,19 @@ FROM php:8.1-apache
 ARG ENVIRONMENT
 WORKDIR /var/www
 COPY . .
+COPY crontab /etc/cron.d/my-cron
 
-# Install any needed PHP extensions and Xdebug if in development
+# Install any needed PHP extensions
 RUN docker-php-ext-install mysqli pdo_mysql sockets && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
-    apt-get update && apt-get install -y unzip && \
+    apt-get update && apt-get install -y unzip cron && \
     composer install --no-interaction --no-progress --prefer-dist && \
     sed -i 's|DocumentRoot.*|DocumentRoot /var/www/public|' /etc/apache2/sites-available/000-default.conf && \
     sed -i 's|<Directory.*|<Directory /var/www/public>|' /etc/apache2/apache2.conf && \
     a2enmod rewrite && \
-    chown -R www-data:www-data /var/www
+    chown -R www-data:www-data /var/www && \
+    chmod 0644 /etc/cron.d/my-cron && \
+    touch /var/log/cron.log
 
 # Install Node.js,
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
@@ -37,9 +40,11 @@ RUN if [ "$ENVIRONMENT" = "development" ]; then \
         touch /tmp/xdebug.log && chown www-data:www-data /tmp/xdebug.log; \
     fi
 
-# Starting Laravel's scheduled notifications and daily import
-COPY crontab /etc/cron.d/my-cron
 RUN chmod 0644 /etc/cron.d/my-cron && \
-    touch /var/log/cron.log 
+    touch /var/log/cron.log && \
+    crontab /etc/cron.d/my-cron
+
+# Start crond and Apache
+CMD ["sh", "-c", "cron && apache2-foreground"]
 
 EXPOSE 80
