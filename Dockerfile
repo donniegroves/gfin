@@ -6,12 +6,15 @@ COPY . .
 # Install any needed PHP extensions
 RUN docker-php-ext-install mysqli pdo_mysql sockets && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
-    apt-get update && apt-get install -y unzip && \
+    apt-get update && apt-get install -y unzip wget && \
     composer install --no-interaction --no-progress --prefer-dist && \
     sed -i 's|DocumentRoot.*|DocumentRoot /var/www/public|' /etc/apache2/sites-available/000-default.conf && \
     sed -i 's|<Directory.*|<Directory /var/www/public>|' /etc/apache2/apache2.conf && \
     a2enmod rewrite && \
     chown -R www-data:www-data /var/www
+
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
 
 # Install Node.js,
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
