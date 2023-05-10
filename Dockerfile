@@ -11,7 +11,7 @@ RUN docker-php-ext-install mysqli pdo_mysql sockets && \
     sed -i 's|DocumentRoot.*|DocumentRoot /var/www/public|' /etc/apache2/sites-available/000-default.conf && \
     sed -i 's|<Directory.*|<Directory /var/www/public>|' /etc/apache2/apache2.conf && \
     a2enmod rewrite && \
-    mkdir /var/www/storage/app/public/notifs && \
+    mkdir -p /var/www/storage/app/public/notifs && \
     chown -R www-data:www-data /var/www
 
 # Install Node.js
@@ -39,3 +39,7 @@ RUN if [ "$ENVIRONMENT" = "development" ]; then \
     fi
 
 EXPOSE 80
+
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+CMD ["/start.sh"]
