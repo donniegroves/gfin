@@ -11,9 +11,10 @@ RUN docker-php-ext-install mysqli pdo_mysql sockets && \
     sed -i 's|DocumentRoot.*|DocumentRoot /var/www/public|' /etc/apache2/sites-available/000-default.conf && \
     sed -i 's|<Directory.*|<Directory /var/www/public>|' /etc/apache2/apache2.conf && \
     a2enmod rewrite && \
+    mkdir /var/www/storage/app/public/notifs && \
     chown -R www-data:www-data /var/www
 
-# Install Node.js,
+# Install Node.js
 RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - && \
     apt-get install -y nodejs && \
     npm i && npm run build
