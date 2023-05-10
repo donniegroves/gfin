@@ -102,7 +102,7 @@ trait Calendar
     }
 
     private function saveScreenshotFromHTML($html, $file_path) {
-        $browserFactory = new BrowserFactory();
+        $browserFactory = new BrowserFactory('chromium');
         $browser = $browserFactory->createBrowser([
             'windowSize'   => [630,530],
             "noSandbox" => true,
